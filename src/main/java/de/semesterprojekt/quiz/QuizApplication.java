@@ -1,3 +1,6 @@
+/* Semesterprojekt 2021/22
+		Gruppe B */
+
 package de.semesterprojekt.quiz;
 
 import org.springframework.boot.SpringApplication;
