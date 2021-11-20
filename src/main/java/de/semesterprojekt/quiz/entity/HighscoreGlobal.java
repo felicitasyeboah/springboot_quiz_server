@@ -12,9 +12,9 @@ import javax.persistence.Id;
 public class HighscoreGlobal {
 
     @Id
-    private int highscoreID;
+    private int highscoreId;
 
-    private int gameID;
+    private int gameId;
 
-    private int userID;
+    private int userId;
 }

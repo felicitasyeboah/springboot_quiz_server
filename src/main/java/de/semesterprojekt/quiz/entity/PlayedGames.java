@@ -14,15 +14,15 @@ public class PlayedGames {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int gameID;
+    private int gameId;
 
     private Date timeStamp;
 
-    private int user1ID;
+    private int userId1;
 
-    private int user2ID;
+    private int userId2;
 
-    private int user1Score;
+    private int userScore1;
 
-    private int user2Score;
+    private int userScore2;
 }

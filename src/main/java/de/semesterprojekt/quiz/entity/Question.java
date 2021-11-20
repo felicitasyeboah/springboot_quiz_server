@@ -10,9 +10,9 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int questionID;
+    private int questionId;
 
-    private int categoryID;
+    private int categoryId;
 
     private String questionText;
 
