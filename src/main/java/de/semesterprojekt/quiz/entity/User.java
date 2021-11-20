@@ -1,5 +1,7 @@
 package de.semesterprojekt.quiz.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -7,23 +9,22 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int userID;
-
-    @Column(unique = true)
+    private int userId;
+    @Column (unique = true)
     private String userName;
 
+    @JsonIgnore
     private String password;
 
-    private String profileImage;
-
+    private String profilImage;
     private boolean isOnline;
 
-    public int getUserID() {
-        return userID;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUserID(int userID) {
-        this.userID = userID;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getUserName() {
@@ -42,12 +43,12 @@ public class User {
         this.password = password;
     }
 
-    public String getProfileImage() {
-        return profileImage;
+    public String getProfilImage() {
+        return profilImage;
     }
 
-    public void setProfileImage(String profileImage) {
-        this.profileImage = profileImage;
+    public void setProfilImage(String profilImage) {
+        this.profilImage = profilImage;
     }
 
     public boolean isOnline() {
