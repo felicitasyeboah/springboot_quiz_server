@@ -12,7 +12,7 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int questionId;
 
-    private int categoryId;
+    //private int categoryId;
 
     private String questionText;
 
@@ -23,4 +23,7 @@ public class Question {
     private String answerWrong2;
 
     private String answerWrong3;
+
+    @ManyToOne @JoinColumn(name = "category_id",nullable = false)
+    Category category;
 }
