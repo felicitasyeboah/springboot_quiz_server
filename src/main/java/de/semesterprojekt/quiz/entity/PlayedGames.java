@@ -2,10 +2,7 @@ package de.semesterprojekt.quiz.entity;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Data
@@ -18,11 +15,15 @@ public class PlayedGames {
 
     private Date timeStamp;
 
-    private int userId1;
-
-    private int userId2;
+    @ManyToOne
+    @JoinColumn(name = "user_id1",nullable = false)
+    User user1;
 
     private int userScore1;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id2",nullable = false)
+    User user2;
 
     private int userScore2;
 }

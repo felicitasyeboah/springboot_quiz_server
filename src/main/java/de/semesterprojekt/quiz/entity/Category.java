@@ -16,8 +16,4 @@ public class Category {
     @Column(unique = true)
     private String categoryName;
 
-    /* work in progress
-    @OneToMany(mappedBy = "category")
-    Set<Question> questions;
-    */
 }

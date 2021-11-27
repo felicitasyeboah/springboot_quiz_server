@@ -12,8 +12,6 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int questionId;
 
-    //private int categoryId;
-
     private String questionText;
 
     private String answerCorrect;
