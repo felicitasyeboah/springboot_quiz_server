@@ -4,6 +4,7 @@ import de.semesterprojekt.quiz.entity.User;
 import de.semesterprojekt.quiz.repository.UserRepository;
 import de.semesterprojekt.quiz.request.AuthRequest;
 import de.semesterprojekt.quiz.security.JwtTokenProvider;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,19 +17,30 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
+/**
+ * The class controls the register and login process
+ */
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
     private UserRepository userRepository;
 
-    // Interface zum Encoden  des PW
+    //Interface for encoding the password
     private PasswordEncoder passwordEncoder;
 
     private AuthenticationManager authenticationManager;
 
     private JwtTokenProvider jwtTokenProvider;
 
+    /**
+     * AuthContructor
+     *
+     * @param userRepository
+     * @param passwordEncoder
+     * @param authenticationManager
+     * @param jwtTokenProvider
+     */
     public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -37,36 +49,67 @@ public class AuthController {
     }
 
     /**
-     * Registerit einen neuen Nutzer in der DB
-     * @param authRequest
+     * Registers a new user to the system
+     * @param authRequest request
      * @return
      */
-
-    @PostMapping(value = "/register") // /register route
+    //register route
+    @PostMapping(value = "/register")
     public ResponseEntity<User> register(@RequestBody AuthRequest authRequest) {
         Optional<User> userOptional = userRepository.findByUserName((authRequest.getUserName()));
 
-        if(userOptional.isPresent()) {
-            return ResponseEntity.badRequest().build(); //User ist bereits vorhanden
+
+        //return bad request when username is not available
+        if (userOptional.isPresent()) {
+            System.out.println("Username \"" + authRequest.getUserName() + "\" is occupied.");
+            return ResponseEntity.badRequest().build();
         }
 
-        User user = new User();
-        user.setUserName(authRequest.getUserName());
-        user.setPassword(passwordEncoder.encode(authRequest.getPassword())); //password verschluessseln
 
-        User created = userRepository.save(user);
+            //create new user
+            User newUser = new User();
+            newUser.setUserName(authRequest.getUserName());
+            newUser.setPassword(passwordEncoder.encode(authRequest.getPassword()));
 
-        return ResponseEntity.ok(created);
+            //save new user to database
+            User createdUser = userRepository.save(newUser);
+
+            //return created user object
+            System.out.println("Username \"" + authRequest.getUserName() + "\" has been created.");
+            return ResponseEntity.ok(createdUser);
     }
 
-    @PostMapping(value = "/login") // /login route
+
+    /**
+     * Logs in a new user
+     * @param authRequest request
+     * @return JW-Token
+     */
+    //login route
+    @PostMapping(value = "/login")
     public ResponseEntity<String>login(@RequestBody AuthRequest authRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        authRequest.getUserName(),
-                        authRequest.getPassword()
-                )
-        );
-        return ResponseEntity.ok(jwtTokenProvider.generateToken(authentication));
+
+        //create an authentication
+        Authentication authentication = null;
+
+        try {
+            authentication = authenticationManager.authenticate(
+
+                    new UsernamePasswordAuthenticationToken(
+                            authRequest.getUserName(),
+                            authRequest.getPassword()
+                    )
+            );
+
+            //returns JW-Token when user is authenticated
+            System.out.println("User \"" + authRequest.getUserName() + "\" successfully logged in.");
+            return ResponseEntity.ok(jwtTokenProvider.generateToken(authentication));
+
+        } catch(Exception exception) {
+
+            //returns bad request otherwise
+            System.out.println("User \"" + authRequest.getUserName() + "\" failed to log in.");
+            return ResponseEntity.badRequest().build();
+        }
     }
 }
