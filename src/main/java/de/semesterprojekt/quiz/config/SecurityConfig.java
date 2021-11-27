@@ -47,7 +47,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jede Session ist unique
+
+                //makes every session unique
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
+                //allow a user to view the api documentation without login
+                .and()
+                .authorizeRequests()
+                .antMatchers("/swagger-ui/**") // /swagger-ui
+                .permitAll()
+
+                //allow a user to register and login
                 .and()
                 .authorizeRequests()
                 .antMatchers("/auth/**") // /auth/register, /auth/login

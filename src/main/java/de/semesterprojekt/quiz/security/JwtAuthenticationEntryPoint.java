@@ -9,13 +9,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
-//TODO: Spaeter auf Loginscreen verweisen
+/**
+ * The class...
+ * TODO: Refer to login screen later
+ */
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
+
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-        /* Es wird der Status 401 zurueckgegeben */
+        //return HTTP Status 401
         httpServletResponse.sendError((HttpServletResponse.SC_UNAUTHORIZED));
     }
 }
