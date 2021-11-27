@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * The class controls the REST-mapping for the Question-entity
+ */
 @RestController
 @RequestMapping("/question")
 public class QuestionController {
@@ -18,6 +21,7 @@ public class QuestionController {
         this.questionRepository = questionRepository;
     }
 
+    //Returns a list of all questions
     @GetMapping("")
     public List<Question> Index(){
         return questionRepository.findAll();

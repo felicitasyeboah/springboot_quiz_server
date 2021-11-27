@@ -5,6 +5,9 @@ import lombok.Data;
 import javax.persistence.*;
 import java.util.Date;
 
+/**
+ * The class represents a played game for two users
+ */
 @Data
 @Entity
 public class PlayedGames {

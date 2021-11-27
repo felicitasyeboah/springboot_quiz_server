@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * The class controls the REST-mapping for the Category-entity
+ */
 @RestController
 @RequestMapping("/category")
 public class CategoryController {
@@ -18,6 +21,7 @@ public class CategoryController {
         this.categoryRepository = categoryRepository;
     }
 
+    //Returns a list of all categories
     @GetMapping("")
     public List<Category> Index(){
         return categoryRepository.findAll();

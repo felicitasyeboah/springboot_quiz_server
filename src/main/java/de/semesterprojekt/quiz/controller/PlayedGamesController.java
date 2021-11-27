@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * The class controls the REST-mapping for the PlayedGames-entity
+ */
 @RestController
 @RequestMapping("/playedGames")
 public class PlayedGamesController {
@@ -18,6 +21,7 @@ public class PlayedGamesController {
         this.playedGamesRepository = playedGamesRepository;
     }
 
+    //Returns a list of all played games
     @GetMapping("")
     public List<PlayedGames> Index(){
         return playedGamesRepository.findAll();

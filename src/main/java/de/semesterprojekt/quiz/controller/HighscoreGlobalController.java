@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * The class controls the REST-mapping for the HighscoreGlobal-entity
+ */
 @RestController
 @RequestMapping("/highscoreGlobal")
 public class HighscoreGlobalController {
@@ -18,6 +21,7 @@ public class HighscoreGlobalController {
         this.highscoreGlobalRepository = highscoreGlobalRepository;
     }
 
+    //Returns a list of the highscore entries
     @GetMapping("")
     public List<HighscoreGlobal> Index(){
         return highscoreGlobalRepository.findAll();

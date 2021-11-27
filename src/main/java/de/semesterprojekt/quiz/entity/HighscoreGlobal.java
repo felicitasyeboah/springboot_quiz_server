@@ -4,6 +4,9 @@ import lombok.Data;
 
 import javax.persistence.*;
 
+/**
+ * The class represents a highscore-list for the played games of the users
+ */
 @Data
 @Entity
 public class HighscoreGlobal {

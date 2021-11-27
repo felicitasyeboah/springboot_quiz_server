@@ -5,6 +5,9 @@ import lombok.Data;
 
 import javax.persistence.*;
 
+/**
+ * The class represents a user
+ */
 @Data
 @Entity
 public class User {
@@ -18,7 +21,7 @@ public class User {
     @JsonIgnore
     private String password;
 
-    private String profilImage;
-    private boolean isOnline;
+    private String profileImage;
 
+    private boolean isOnline;
 }

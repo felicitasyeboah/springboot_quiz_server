@@ -6,9 +6,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * The class implements the repository for the entity User
+ */
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 
     Optional<User> findByUserName(String username);
-
 }

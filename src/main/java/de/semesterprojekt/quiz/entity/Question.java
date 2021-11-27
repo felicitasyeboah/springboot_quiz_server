@@ -4,6 +4,9 @@ import lombok.Data;
 
 import javax.persistence.*;
 
+/**
+ * The class represents a question
+ */
 @Data
 @Entity
 public class Question {

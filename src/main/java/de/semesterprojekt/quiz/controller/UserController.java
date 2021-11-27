@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * The class controls the REST-mapping for the User-entity
+ */
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -18,6 +21,7 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
+    //Returns a list of all Users
     @GetMapping("")
     public List<User> Index(){
         return userRepository.findAll();

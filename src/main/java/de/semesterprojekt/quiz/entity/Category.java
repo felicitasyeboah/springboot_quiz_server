@@ -5,6 +5,9 @@ import lombok.Data;
 import javax.persistence.*;
 import java.util.Set;
 
+/**
+ * The class represents a category for a question
+ */
 @Data
 @Entity
 public class Category {
@@ -15,5 +18,4 @@ public class Category {
 
     @Column(unique = true)
     private String categoryName;
-
 }
