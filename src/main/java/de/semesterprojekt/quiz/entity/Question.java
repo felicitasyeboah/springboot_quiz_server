@@ -1,5 +1,6 @@
 package de.semesterprojekt.quiz.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -26,5 +27,6 @@ public class Question {
     private String answerWrong3;
 
     @ManyToOne @JoinColumn(name = "category_id",nullable = false)
+    @JsonIgnoreProperties("categoryId")
     Category category;
 }

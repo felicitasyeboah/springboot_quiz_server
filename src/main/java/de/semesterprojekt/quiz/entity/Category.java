@@ -1,8 +1,10 @@
 package de.semesterprojekt.quiz.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -18,4 +20,8 @@ public class Category {
 
     @Column(unique = true)
     private String categoryName;
+
+    @OneToMany(mappedBy = "category")
+    @JsonIgnore
+    List<Question> questionListM;
 }
