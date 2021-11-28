@@ -23,5 +23,5 @@ public class User {
 
     private String profileImage;
 
-    private boolean isOnline;
+    private boolean isReady;
 }

@@ -32,40 +32,40 @@ public class UserController {
      * @return All users
      */
     @GetMapping("")
-    public List<User> Index(){
+    public List<User> index(){
 
         return userRepository.findAll();
     }
 
     /**
-     * Returns a list of all online users
-     * @return List of online users
+     * Returns a list of all ready users
+     * @return List of ready users
      */
-    @GetMapping("online")
-    public List<User> getOnlineUsers(){
+    @GetMapping("ready")
+    public List<User> getReadyUsers(){
 
-        List<User> userOnlineList = new ArrayList<>();
+        List<User> userReadyList = new ArrayList<>();
 
         //Extracts all online users
-        for(User user : Index()) {
-            if(user.isOnline() == true) {
-                userOnlineList.add(user);
+        for(User user : index()) {
+            if(user.isReady() == true) {
+                userReadyList.add(user);
             }
         }
 
-        return userOnlineList;
+        return userReadyList;
     }
 
     /**
-     * Returns a list of the online usernames
-     * @return List of online usernames
+     * Returns a list of the ready usernames
+     * @return List of ready usernames
      */
-    @GetMapping("onlineUsername")
-    public List<String> getOnlineUsernames(){
+    @GetMapping("readyUsername")
+    public List<String> getReadyUsernames(){
 
         List<String> usernameList = new ArrayList<>();
 
-        for(User user : getOnlineUsers()) {
+        for(User user : getReadyUsers()) {
             usernameList.add(user.getUserName());
         }
 
