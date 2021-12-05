@@ -1,20 +1,15 @@
 package de.semesterprojekt.quiz.controller;
 
+import de.semesterprojekt.quiz.QuizApplication;
 import de.semesterprojekt.quiz.entity.User;
 import de.semesterprojekt.quiz.repository.UserRepository;
-import de.semesterprojekt.quiz.security.JwtAuthenticationFilter;
-import de.semesterprojekt.quiz.security.JwtTokenProvider;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * The class controls the REST-mapping for the User-entity
@@ -81,8 +76,8 @@ public class UserController {
     /**
      * Sets the ready-status of a player
      */
-    @PatchMapping( path = "/isReady")
-    public ResponseEntity<User> setReadyStatus(){
+    @PatchMapping( path = "/setReadyStatus")
+    public ResponseEntity<User> setReadyStatus(@RequestParam boolean toggle){
 
         String username;
 
@@ -105,17 +100,64 @@ public class UserController {
             if (user.getUserName().equals(username)) {
 
                 //Set the new status
-                user.setReady(true);
+                user.setReady(toggle);
 
                 //Save the new status to the database
                 User readyUser = userRepository.save(user);
 
-                System.out.println(username + " is ready to play.");
+                //Print status
+                System.out.println("Set " + username + "'s ready status to " + toggle + ".");
+
+                //check the ready player count when toggled to ready
+                if(toggle){
+                    checkForTwoReadyPlayers();
+                }
+
+                //Return toggled user
                 return ResponseEntity.ok(readyUser);
             }
         }
 
         //User not found
         return ResponseEntity.badRequest().build();
+    }
+
+    /**
+     * The class checks, if there are two ready players and starts a game
+     */
+    private void checkForTwoReadyPlayers() {
+
+        //Create two users
+        User user1 = null;
+        User user2 = null;
+
+        //Finds two online users and invokes startGame method
+        for(User user : index()) {
+            if(user.isReady() == true) {
+                if(user1 == null) {
+                    user1 = user;
+                } else if(user2 == null) {
+                    user2 = user;
+
+                    //Resets the ready status
+                    user1.setReady(false);
+                    user2.setReady(false);
+                    userRepository.save(user1);
+                    userRepository.save(user2);
+
+                    //Starts a new game
+                    //TODO: write methods to start a game
+                    System.out.println(user1.getUserName() + " vs. " + user2.getUserName());
+
+
+
+
+
+
+
+
+                }
+            }
+        }
     }
 }
