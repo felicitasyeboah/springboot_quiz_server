@@ -28,11 +28,6 @@ public class GameFactory {
 
         Game newGame = new Game(user1, user2, questionCount);
 
-        //Defines the minimum number of questions to 1
-        if(questionCount < 1) {
-            questionCount = 1;
-        }
-
         Question[] questionList = questionRandomizer.getQuestions(questionCount);
         newGame.setQuestions(questionList);
 
