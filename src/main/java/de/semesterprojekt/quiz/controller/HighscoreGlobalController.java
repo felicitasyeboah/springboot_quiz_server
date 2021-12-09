@@ -21,7 +21,10 @@ public class HighscoreGlobalController {
         this.highscoreGlobalRepository = highscoreGlobalRepository;
     }
 
-    //Returns a list of the highscore entries
+    /**
+     * Returns the Highscore list
+     * @return List of HighscoreGlobal
+     */
     @GetMapping("")
     public List<HighscoreGlobal> Index(){
         return highscoreGlobalRepository.findAll();

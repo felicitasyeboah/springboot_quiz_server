@@ -21,7 +21,10 @@ public class CategoryController {
         this.categoryRepository = categoryRepository;
     }
 
-    //Returns a list of all categories
+    /**
+     * Returns a list of all categories
+     * @return List of categories
+     */
     @GetMapping("")
     public List<Category> Index(){
         return categoryRepository.findAll();

@@ -21,7 +21,10 @@ public class PlayedGamesController {
         this.playedGamesRepository = playedGamesRepository;
     }
 
-    //Returns a list of all played games
+    /**
+     * Returns a list of all played games
+     * @return
+     */
     @GetMapping("")
     public List<PlayedGames> Index(){
         return playedGamesRepository.findAll();
