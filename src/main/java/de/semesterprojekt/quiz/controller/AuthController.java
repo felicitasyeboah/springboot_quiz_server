@@ -4,6 +4,7 @@ import de.semesterprojekt.quiz.entity.User;
 import de.semesterprojekt.quiz.repository.UserRepository;
 import de.semesterprojekt.quiz.request.AuthRequest;
 import de.semesterprojekt.quiz.security.JwtTokenProvider;
+import netscape.javascript.JSObject;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -50,6 +53,7 @@ public class AuthController {
 
     /**
      * Registers a new user to the system
+     *
      * @param authRequest request
      * @return
      */
@@ -66,30 +70,31 @@ public class AuthController {
         }
 
 
-            //create new user
-            User newUser = new User();
-            newUser.setUserName(authRequest.getUserName());
-            newUser.setPassword(passwordEncoder.encode(authRequest.getPassword()));
+        //create new user
+        User newUser = new User();
+        newUser.setUserName(authRequest.getUserName());
+        newUser.setPassword(passwordEncoder.encode(authRequest.getPassword()));
 
-            //save new user to database
-            User createdUser = userRepository.save(newUser);
+        //save new user to database
+        User createdUser = userRepository.save(newUser);
 
-            //return created user object
-            System.out.println("Username \"" + authRequest.getUserName() + "\" has been created.");
-            return ResponseEntity.ok(createdUser);
+        //return created user object
+        System.out.println("Username \"" + authRequest.getUserName() + "\" has been created.");
+        return ResponseEntity.ok(createdUser);
     }
 
 
     /**
-     * Logs in a new user
+     * Logs in a user
+     *
      * @param authRequest request
      * @return JW-Token
      */
     //login route
     @PostMapping(value = "/login")
-    public ResponseEntity<String>login(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody AuthRequest authRequest) {
 
-        //create an authentication
+        //creates an authentication
         Authentication authentication = null;
 
         try {
@@ -103,9 +108,11 @@ public class AuthController {
 
             //returns JW-Token when user is authenticated
             System.out.println("User \"" + authRequest.getUserName() + "\" successfully logged in.");
-            return ResponseEntity.ok(jwtTokenProvider.generateToken(authentication));
+            Map<String, String> token = new HashMap<>();
+            token.put("token", jwtTokenProvider.generateToken(authentication));
+            return ResponseEntity.ok(token);
 
-        } catch(Exception exception) {
+        } catch (Exception exception) {
 
             //returns bad request otherwise
             System.out.println("User \"" + authRequest.getUserName() + "\" failed to log in.");

@@ -43,6 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             authentication.setDetails((new WebAuthenticationDetailsSource().buildDetails(request)));
 
+            // geben dem Securitycontext von Spring mit, dass wir einen Authentifizeirten Benutzer haben
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
