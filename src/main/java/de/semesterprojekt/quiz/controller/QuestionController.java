@@ -23,21 +23,33 @@ public class QuestionController {
         this.questionRepository = questionRepository;
     }
 
-    //Returns a list of all questions
+    /**
+     * Returns a list of all questions
+     * @return List of questions
+     */
     @GetMapping("")
     public List<Question> index(){
+
         return questionRepository.findAll();
     }
 
+    /**
+     * Returns a random question
+     * @return question
+     */
     @GetMapping("/random")
     public Question getRandom() {
+
+        //Create a new random instance
         Random random = new Random();
 
-
+        //Get all questions
         List<Question> questionList = index();
-        int max = questionList.size();
-        int randomNumber = random.nextInt(max);
 
+        //Generate a random index
+        int randomNumber = random.nextInt(questionList.size());
+
+        //Return the random Question object
         return questionList.get(randomNumber);
     }
 }
