@@ -117,4 +117,32 @@ public class Game {
     public void setQuestions(Question[] questionList) {
         this.question = questionList;
     }
+
+    /**
+     * The method returns a GameMessage object for the specified user
+     * @param round game round. First round is 0
+     * @param user the requested user
+     * @return GameMessage Object
+     */
+    public GameMessage getGameMessage(int round, User user) {
+
+        //Return null if the requested index is out of bound
+        if(round >= this. countQuestions) {
+            return null;
+        }
+
+        //Return the GameMessage object for the specified user
+        if(user == this.user1) {
+
+            return new GameMessage(this.user1, this.user2, this.scoreUser1, this.scoreUser2, this.question[round]);
+
+        } else if (user == this.user2) {
+
+            return new GameMessage(this.user2, this.user1, this.scoreUser2, this.scoreUser1, this.question[round]);
+
+        }
+
+        //Return null if the user is wrong
+        return null;
+    }
 }
