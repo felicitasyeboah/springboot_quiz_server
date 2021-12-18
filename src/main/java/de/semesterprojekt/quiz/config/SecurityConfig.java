@@ -3,6 +3,8 @@ package de.semesterprojekt.quiz.config;
 import de.semesterprojekt.quiz.security.JwtAuthenticationEntryPoint;
 import de.semesterprojekt.quiz.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -51,11 +53,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //makes every session unique
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-                //allows a user to view the api documentation without login
+                //TODO: allows a user to view the api documentation without login
                 .and()
                 .authorizeRequests()
                 .antMatchers("/swagger-ui/**") // /swagger-ui
                 .permitAll()
+
+                //TODO: Allow use of websockets without authentication
+                .and()
+                .authorizeRequests()
+                .antMatchers("/app","/ws","/hello","/topic","/websocket","/resources/**","/topic/user","/app/user","/websocket/**","/topic/**","/app/**","/webjars/**","/app.js") // /Websockets
+                .permitAll()
+                .and()
+                .authorizeRequests()
+                .antMatchers("/").permitAll()
+                .requestMatchers(PathRequest
+                        .toStaticResources()
+                        .atCommonLocations())
+                .permitAll()
+
 
                 //allows a user to register and login
                 .and()
