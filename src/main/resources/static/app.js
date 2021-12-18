@@ -37,12 +37,12 @@ function questionRequest() {
 }
 
 function showQuestion(message) {
-    var question = JSON.parse(message);
-    $("#userinfo").append("<tr><td>" + "Frage: " + question.questionText + "<br>" +
-                                       "Antwort 1: " + question.answerCorrect + "<br>" +
-                                       "Antwort 2: " + question.answerWrong1 + "<br>" +
-                                       "Antwort 3: " + question.answerWrong2 + "<br>" +
-                                       "Antwort 4: " + question.answerWrong3 + "</td></tr>");
+    var gameMessage = JSON.parse(message);
+    $("#userinfo").append("<tr><td>" + "Frage: " + gameMessage.question + "<br>" +
+                                       "Antwort 1: " + gameMessage.answer[0] + "<br>" +
+                                       "Antwort 2: " + gameMessage.answer[1] + "<br>" +
+                                       "Antwort 3: " + gameMessage.answer[2] + "<br>" +
+                                       "Antwort 4: " + gameMessage.answer[3] + "</td></tr>");
 }
 
 $(function () {
