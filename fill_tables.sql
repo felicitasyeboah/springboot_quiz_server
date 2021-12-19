@@ -1,4 +1,4 @@
-INSERT INTO PaF_GruppeB.user (user_name, password, is_online)
+INSERT INTO PaF_GruppeB.user (user_name, password, is_ready)
 	VALUES
 		('user1', 'password1', false),
         ('user2', 'password2', false),
