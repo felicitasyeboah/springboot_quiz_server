@@ -1,5 +1,7 @@
-package de.semesterprojekt.quiz.entity;
+package de.semesterprojekt.quiz.model;
 
+import de.semesterprojekt.quiz.entity.Question;
+import de.semesterprojekt.quiz.entity.User;
 import de.semesterprojekt.quiz.repository.CategoryRepository;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package de.semesterprojekt.quiz.request;
+package de.semesterprojekt.quiz.model;
 
 import lombok.Data;
 

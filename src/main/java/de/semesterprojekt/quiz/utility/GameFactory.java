@@ -1,8 +1,8 @@
-package de.semesterprojekt.quiz.factory;
+package de.semesterprojekt.quiz.utility;
 
 import de.semesterprojekt.quiz.repository.QuestionRepository;
 import de.semesterprojekt.quiz.utility.QuestionRandomizer;
-import de.semesterprojekt.quiz.entity.Game;
+import de.semesterprojekt.quiz.model.Game;
 import de.semesterprojekt.quiz.entity.Question;
 import de.semesterprojekt.quiz.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
