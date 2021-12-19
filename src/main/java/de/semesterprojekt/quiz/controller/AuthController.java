@@ -6,6 +6,7 @@ import de.semesterprojekt.quiz.request.AuthRequest;
 import de.semesterprojekt.quiz.security.JwtTokenProvider;
 import netscape.javascript.JSObject;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -115,7 +116,7 @@ public class AuthController {
 
             //returns bad request otherwise
             System.out.println("User \"" + authRequest.getUserName() + "\" failed to log in.");
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();//badRequest().build();
         }
     }
 }
