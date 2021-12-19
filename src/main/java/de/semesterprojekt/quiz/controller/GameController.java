@@ -40,6 +40,5 @@ public class GameController implements ApplicationListener<ContextRefreshedEvent
         for(String item : newGameMessage.getAnswer()) {
             System.out.println(item);
         }
-
     }
 }

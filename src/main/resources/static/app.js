@@ -38,7 +38,8 @@ function questionRequest() {
 
 function showQuestion(message) {
     var gameMessage = JSON.parse(message);
-    $("#userinfo").append("<tr><td>" + "Frage: " + gameMessage.question + "<br>" +
+    $("#userinfo").append("<tr><td>" + "Kategorie: " + gameMessage.category + "<br>" +
+                                       "Frage: " + gameMessage.question + "<br>" +
                                        "Antwort 1: " + gameMessage.answer[0] + "<br>" +
                                        "Antwort 2: " + gameMessage.answer[1] + "<br>" +
                                        "Antwort 3: " + gameMessage.answer[2] + "<br>" +

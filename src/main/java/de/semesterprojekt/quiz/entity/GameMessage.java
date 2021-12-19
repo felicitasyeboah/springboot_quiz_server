@@ -1,6 +1,8 @@
 package de.semesterprojekt.quiz.entity;
 
+import de.semesterprojekt.quiz.repository.CategoryRepository;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,9 +20,7 @@ public class GameMessage {
         this.userScore = userScore;
         this.opponentScore = opponentScore;
         this.question = question.getQuestionText();
-
-        //TODO: Kategorie zuordnern -> this.category = ?
-        this.category = "category";
+        this.category = question.getCategory().getCategoryName();
 
         //Add the answers
         this.answer = new ArrayList<>();
