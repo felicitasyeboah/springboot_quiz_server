@@ -21,6 +21,7 @@ import java.util.Optional;
 /**
  * The class controls the register and login process
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
