@@ -2,6 +2,7 @@ package de.semesterprojekt.quiz.controller;
 
 import de.semesterprojekt.quiz.entity.Category;
 import de.semesterprojekt.quiz.repository.CategoryRepository;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,6 +12,7 @@ import java.util.List;
 /**
  * The class controls the REST-mapping for the Category-entity
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/category")
 public class CategoryController {

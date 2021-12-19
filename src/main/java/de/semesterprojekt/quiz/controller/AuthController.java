@@ -12,10 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +21,7 @@ import java.util.Optional;
 /**
  * The class controls the register and login process
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -59,6 +57,7 @@ public class AuthController {
      * @return
      */
     //register route
+    @CrossOrigin
     @PostMapping(value = "/register")
     public ResponseEntity<User> register(@RequestBody AuthRequest authRequest) {
         Optional<User> userOptional = userRepository.findByUserName((authRequest.getUserName()));
@@ -92,6 +91,7 @@ public class AuthController {
      * @return JW-Token
      */
     //login route
+
     @PostMapping(value = "/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody AuthRequest authRequest) {
 

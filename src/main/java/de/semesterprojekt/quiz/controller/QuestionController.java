@@ -2,10 +2,7 @@ package de.semesterprojekt.quiz.controller;
 
 import de.semesterprojekt.quiz.entity.Question;
 import de.semesterprojekt.quiz.repository.QuestionRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Random;
@@ -13,6 +10,7 @@ import java.util.Random;
 /**
  * The class controls the REST-mapping for the Question-entity
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/question")
 public class QuestionController {
@@ -37,6 +35,7 @@ public class QuestionController {
      * Returns a random question
      * @return question
      */
+    @CrossOrigin
     @GetMapping("/random")
     public Question getRandom() {
 
