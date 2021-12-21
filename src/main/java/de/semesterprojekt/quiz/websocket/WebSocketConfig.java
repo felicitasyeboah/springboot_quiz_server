@@ -1,4 +1,4 @@
-package de.semesterprojekt.quiz.config;
+package de.semesterprojekt.quiz.websocket;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

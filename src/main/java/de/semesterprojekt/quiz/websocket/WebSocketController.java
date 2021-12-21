@@ -1,10 +1,10 @@
 package de.semesterprojekt.quiz.websocket;
 
 import de.semesterprojekt.quiz.controller.QuestionController;
-import de.semesterprojekt.quiz.model.Game;
-import de.semesterprojekt.quiz.model.GameMessage;
+import de.semesterprojekt.quiz.entity.Game;
+import de.semesterprojekt.quiz.entity.GameMessage;
 import de.semesterprojekt.quiz.entity.User;
-import de.semesterprojekt.quiz.utility.GameFactory;
+import de.semesterprojekt.quiz.factory.GameFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
