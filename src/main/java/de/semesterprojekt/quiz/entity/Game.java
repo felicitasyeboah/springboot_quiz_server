@@ -1,8 +1,4 @@
-package de.semesterprojekt.quiz.model;
-
-import de.semesterprojekt.quiz.entity.Question;
-import de.semesterprojekt.quiz.entity.User;
-import de.semesterprojekt.quiz.model.GameMessage;
+package de.semesterprojekt.quiz.entity;
 
 /**
  * The class represents a game session
