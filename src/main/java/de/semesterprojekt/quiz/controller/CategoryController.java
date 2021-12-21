@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * The class controls the REST-mapping for the Category-entity
  */
-
+@CrossOrigin(origins = "http://localhost:4001")
 @RestController
 @RequestMapping("/category")
 public class CategoryController {

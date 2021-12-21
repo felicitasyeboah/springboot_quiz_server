@@ -4,8 +4,6 @@ import de.semesterprojekt.quiz.entity.User;
 import de.semesterprojekt.quiz.repository.UserRepository;
 import de.semesterprojekt.quiz.request.AuthRequest;
 import de.semesterprojekt.quiz.security.JwtTokenProvider;
-import netscape.javascript.JSObject;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,7 +19,7 @@ import java.util.Optional;
 /**
  * The class controls the register and login process
  */
-
+@CrossOrigin
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -57,7 +55,7 @@ public class AuthController {
      * @return
      */
     //register route
-
+    @CrossOrigin
     @PostMapping(value = "/register")
     public ResponseEntity<User> register(@RequestBody AuthRequest authRequest) {
         Optional<User> userOptional = userRepository.findByUserName((authRequest.getUserName()));
@@ -91,7 +89,7 @@ public class AuthController {
      * @return JW-Token
      */
     //login route
-
+    @CrossOrigin
     @PostMapping(value = "/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody AuthRequest authRequest) {
 

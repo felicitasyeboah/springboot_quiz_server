@@ -1,6 +1,5 @@
 package de.semesterprojekt.quiz.controller;
 
-import de.semesterprojekt.quiz.QuizApplication;
 import de.semesterprojekt.quiz.entity.User;
 import de.semesterprojekt.quiz.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +13,7 @@ import java.util.List;
 /**
  * The class controls the REST-mapping for the User-entity
  */
-
+@CrossOrigin("http://localhost:8080")
 @RestController
 @RequestMapping("/user")
 public class UserController {

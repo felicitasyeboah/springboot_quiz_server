@@ -3,7 +3,6 @@ package de.semesterprojekt.quiz.config;
 import de.semesterprojekt.quiz.security.JwtAuthenticationEntryPoint;
 import de.semesterprojekt.quiz.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,14 +15,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
@@ -36,6 +27,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter();
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -46,10 +38,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-/* Resolves CORS-Problem in Chrome
-    Source: https://stackoverflow.com/questions/44697883/can-you-completely-disable-cors-support-in-spring*/
+//Resolves CORS-Problem in Chrome
+//    Source: https://stackoverflow.com/questions/44697883/can-you-completely-disable-cors-support-in-spring
 
-    @Component
+    /*@Component
     public class CorsFilter extends OncePerRequestFilter {
 
         @Override
@@ -63,7 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             response.addIntHeader("Access-Control-Max-Age", 10);
             filterChain.doFilter(request, response);
         }
-    }
+    }*/
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
