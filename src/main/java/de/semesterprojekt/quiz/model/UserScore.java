@@ -1,5 +1,6 @@
-package de.semesterprojekt.quiz.entity;
+package de.semesterprojekt.quiz.model;
 
+import de.semesterprojekt.quiz.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

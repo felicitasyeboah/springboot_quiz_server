@@ -2,10 +2,8 @@ package de.semesterprojekt.quiz.controller;
 
 import de.semesterprojekt.quiz.entity.User;
 import de.semesterprojekt.quiz.repository.UserRepository;
-import de.semesterprojekt.quiz.request.AuthRequest;
+import de.semesterprojekt.quiz.model.AuthRequest;
 import de.semesterprojekt.quiz.security.JwtTokenProvider;
-import netscape.javascript.JSObject;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
