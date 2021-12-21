@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * The class controls the REST-mapping for the PlayedGames-entity
  */
-@CrossOrigin
+
 @RestController
 @RequestMapping("/playedGames")
 public class PlayedGamesController {

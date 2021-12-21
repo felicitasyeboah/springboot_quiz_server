@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * The class controls the REST-mapping for the HighscoreGlobal-entity
  */
-@CrossOrigin
+
 @RestController
 @RequestMapping("/highscoreGlobal")
 public class HighscoreGlobalController {

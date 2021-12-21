@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * The class controls the REST-mapping for the User-entity
  */
-@CrossOrigin
+
 @RestController
 @RequestMapping("/user")
 public class UserController {

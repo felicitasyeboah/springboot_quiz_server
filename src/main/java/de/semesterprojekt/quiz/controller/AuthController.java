@@ -21,7 +21,7 @@ import java.util.Optional;
 /**
  * The class controls the register and login process
  */
-@CrossOrigin
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -57,7 +57,7 @@ public class AuthController {
      * @return
      */
     //register route
-    @CrossOrigin
+
     @PostMapping(value = "/register")
     public ResponseEntity<User> register(@RequestBody AuthRequest authRequest) {
         Optional<User> userOptional = userRepository.findByUserName((authRequest.getUserName()));
@@ -74,7 +74,7 @@ public class AuthController {
         User newUser = new User();
         newUser.setUserName(authRequest.getUserName());
         newUser.setPassword(passwordEncoder.encode(authRequest.getPassword()));
-
+        newUser.setProfileImage("irgendeinbild");
         //save new user to database
         User createdUser = userRepository.save(newUser);
 

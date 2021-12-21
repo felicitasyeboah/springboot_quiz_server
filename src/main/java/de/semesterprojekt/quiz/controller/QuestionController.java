@@ -10,7 +10,7 @@ import java.util.Random;
 /**
  * The class controls the REST-mapping for the Question-entity
  */
-@CrossOrigin
+
 @RestController
 @RequestMapping("/question")
 public class QuestionController {
@@ -35,7 +35,7 @@ public class QuestionController {
      * Returns a random question
      * @return question
      */
-    @CrossOrigin
+
     @GetMapping("/random")
     public Question getRandom() {
 
