@@ -78,18 +78,23 @@ public class WebSocketController {
     }
 
     @MessageMapping("/game")
-    @SendToUser("/topic/game")
-    public ResponseMessage getPrivateGameMessage(SimpMessageHeaderAccessor headerAccessor, @Header("token") String token, @RequestParam String message, Principal principal){
+    //@SendToUser("/topic/game")
+    public void getPrivateGameMessage(SimpMessageHeaderAccessor headerAccessor, @Header("token") String token, @RequestParam String message, Principal principal){
 
+        //Get sessionId from the request
         String sessionId = principal.getName();
+
+        System.out.println("\n");
         if(tokenProvider.validateToken(token)) {
-            System.out.println("Valid token");
             System.out.println("Message from: " + tokenProvider.getUserNameFromToken(token));
+            System.out.println("JWT: valid");
             System.out.println("sessionID: " + sessionId);
             System.out.println("Message: " + message);
         } else {
-            System.out.println("Invalid token. Please log in again.");
+            System.out.println("JWT: invalid Please log in again.");
+            System.out.println("Please log in again.");
         }
+        System.out.println("\n");
 
         //TEST DATA
         User user1 = new User();
@@ -105,6 +110,8 @@ public class WebSocketController {
 
         Gson gson = new Gson();
         String object = gson.toJson(newGameMessage);
+
+        template.convertAndSendToUser(sessionId, "/topic/game", new ResponseMessage(object));
 
         /*
         Thread newThread = new Thread() {
@@ -131,6 +138,7 @@ public class WebSocketController {
         newThread.start();
         */
 
-        return new ResponseMessage(object);
+        //Send a GameMessage to the user
+        //return new ResponseMessage(object);
     }
 }

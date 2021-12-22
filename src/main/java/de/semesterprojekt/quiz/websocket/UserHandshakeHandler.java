@@ -15,7 +15,7 @@ public class UserHandshakeHandler extends DefaultHandshakeHandler {
 
         //Create Session IDs for the users
         String sessionId = UUID.randomUUID().toString();
-        System.out.println("User with ID '" + sessionId + "' connected");
+        System.out.println("User connected with websocket-sessionId: " + sessionId);
 
         return new UserPrincipal(sessionId);
     }
