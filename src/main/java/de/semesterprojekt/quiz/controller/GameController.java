@@ -26,26 +26,26 @@ public class GameController implements ApplicationListener<ContextRefreshedEvent
     public void onApplicationEvent(ContextRefreshedEvent event) {
 
         //TEST DATA
-        User user1 = new User();
-        user1.setUserName("Bernd");
+        //User user1 = new User();
+        //user1.setUserName("Bernd");
 
-        User user2 = new User();
-        user2.setUserName("Beate");
+        //User user2 = new User();
+        //user2.setUserName("Beate");
 
-        Game newGame = gamefactory.createGame(user1, user2);
+        //Game newGame = gamefactory.createGame(user1, user2);
 
         //Get all questions of the game
-        System.out.println(newGame.getQuestionCount());
-        System.out.println(newGame.getQuestion(0).getQuestionText());
-        System.out.println(newGame.getQuestion(1).getQuestionText());
-        System.out.println(newGame.getQuestion(2).getQuestionText());
+        //System.out.println(newGame.getQuestionCount());
+        //System.out.println(newGame.getQuestion(0).getQuestionText());
+        //System.out.println(newGame.getQuestion(1).getQuestionText());
+        //System.out.println(newGame.getQuestion(2).getQuestionText());
 
 
         //Get the gamemessage for user 1 for the first round -> print all answers
-        GameMessage newGameMessage = newGame.getGameMessage(user1, 0);
+        //GameMessage newGameMessage = newGame.getGameMessage(user1, 0);
 
-        for(String item : newGameMessage.getAnswer()) {
-            System.out.println(item);
-        }
+        //for(String item : newGameMessage.getAnswer()) {
+        //    System.out.println(item);
+        //}
     }
 }
