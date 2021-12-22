@@ -111,7 +111,7 @@ public class WebSocketController {
         Gson gson = new Gson();
         String object = gson.toJson(newGameMessage);
 
-        template.convertAndSendToUser(sessionId, "/topic/game", new ResponseMessage(object));
+        template.convertAndSendToUser(sessionId, "/topic/game", object);
 
         /*
         Thread newThread = new Thread() {
