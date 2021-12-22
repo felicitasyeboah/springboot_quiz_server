@@ -22,15 +22,21 @@ public class GameMessage {
         this.question = question.getQuestionText();
         this.category = question.getCategory().getCategoryName();
 
-        //Add the answers
-        this.answer = new ArrayList<>();
-        this.answer.add(question.getAnswerCorrect());
-        this.answer.add(question.getAnswerWrong1());
-        this.answer.add(question.getAnswerWrong2());
-        this.answer.add(question.getAnswerWrong3());
+        //Add the answers to a Collection
+        List<String> answer = new ArrayList<>();
+        answer.add(question.getAnswerCorrect());
+        answer.add(question.getAnswerWrong1());
+        answer.add(question.getAnswerWrong2());
+        answer.add(question.getAnswerWrong3());
 
         //Shuffle the answers
-        Collections.shuffle(this.answer);
+        Collections.shuffle(answer);
+
+        //Store the answers in the variables
+        answer1 = answer.get(0);
+        answer2 = answer.get(1);
+        answer3 = answer.get(2);
+        answer4 = answer.get(3);
     }
 
     //Stores the category
@@ -40,7 +46,13 @@ public class GameMessage {
     private String question;
 
     //Stores 4 answers in random order
-    private List<String> answer;
+
+
+    //Stores 4 answers
+    private String answer1;
+    private String answer2;
+    private String answer3;
+    private String answer4;
 
     //Stores the score of the user
     private int userScore;
