@@ -30,8 +30,8 @@ public class JwtTokenProvider {
         //Generates a generation date
         Instant now = Instant.now();
 
-        //Generates a expiration date (7 days in the future)
-        Instant expiration = now.plus(7, ChronoUnit.DAYS);
+        //Generates an expiration date (7 days in the future)
+        Instant expiration = now.plus(2, ChronoUnit.HOURS);
 
         //Returns the JW-Token (algorithm: HS512)
         return Jwts.builder()
