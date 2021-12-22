@@ -38,25 +38,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-//Resolves CORS-Problem in Chrome
-//    Source: https://stackoverflow.com/questions/44697883/can-you-completely-disable-cors-support-in-spring
-
-    /*@Component
-    public class CorsFilter extends OncePerRequestFilter {
-
-        @Override
-        protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response,
-                                        final FilterChain filterChain) throws ServletException, IOException {
-            response.addHeader("Access-Control-Allow-Origin", "*");
-            response.addHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, PATCH, HEAD");
-            response.addHeader("Access-Control-Allow-Headers", "Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
-            response.addHeader("Access-Control-Expose-Headers", "Access-Control-Allow-Origin, Access-Control-Allow-Credentials");
-            response.addHeader("Access-Control-Allow-Credentials", "true");
-            response.addIntHeader("Access-Control-Max-Age", 10);
-            filterChain.doFilter(request, response);
-        }
-    }*/
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -76,6 +57,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/swagger-ui/**") // /swagger-ui
+                .permitAll()
+
+                //TODO: allows a user to view the uploaded files without token
+                .and()
+                .authorizeRequests()
+                .antMatchers("/files/**") // /upload
                 .permitAll()
 
                 //TODO: Allow use of websockets without authentication
