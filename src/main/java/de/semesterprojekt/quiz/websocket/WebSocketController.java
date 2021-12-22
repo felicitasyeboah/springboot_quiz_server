@@ -12,6 +12,7 @@ import de.semesterprojekt.quiz.utility.GameFactory;
 import nonapi.io.github.classgraph.json.JSONSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.GsonJsonParser;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.messaging.MessageHeaders;
@@ -22,10 +23,19 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.socket.CloseStatus;
+import org.springframework.web.socket.WebSocketHandler;
+import org.springframework.web.socket.WebSocketMessage;
+import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.messaging.SessionConnectEvent;
+import org.springframework.web.socket.messaging.SessionConnectedEvent;
+import org.springframework.web.socket.messaging.SessionDisconnectEvent;
+import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.http.HttpSession;
@@ -84,17 +94,14 @@ public class WebSocketController {
         //Get sessionId from the request
         String sessionId = principal.getName();
 
-        System.out.println("\n");
         if(tokenProvider.validateToken(token)) {
             System.out.println("Message from: " + tokenProvider.getUserNameFromToken(token));
             System.out.println("JWT: valid");
             System.out.println("sessionID: " + sessionId);
             System.out.println("Message: " + message);
         } else {
-            System.out.println("JWT: invalid Please log in again.");
-            System.out.println("Please log in again.");
+            System.out.println("User has an invalid token.");
         }
-        System.out.println("\n");
 
         //TEST DATA
         User user1 = new User();
@@ -112,33 +119,54 @@ public class WebSocketController {
         String object = gson.toJson(newGameMessage);
 
         template.convertAndSendToUser(sessionId, "/topic/game", object);
+    }
 
-        /*
-        Thread newThread = new Thread() {
-            public void run() {
-                try{
-                    System.out.println("5");
-                    sleep(1000);
-                    System.out.println("4");
-                    sleep(1000);
-                    System.out.println("3");
-                    sleep(1000);
-                    System.out.println("2");
-                    sleep(1000);
-                    System.out.println("1");
-                    sleep(1000);
-                    System.out.println("0");
+    /**
+     * The Eventlistener is called when a client connects
+     * @param event connect event
+     */
+    @EventListener
+    public void handleWebSocketConnectListener(SessionSubscribeEvent event) {
 
-                    template.convertAndSendToUser(sessionId, "/topic/game", new ResponseMessage(HtmlUtils.htmlEscape(object)));
-                } catch(Exception e) {
+        System.out.println("User \"" + getUserFromHeaderString(event.getMessage().getHeaders().toString())+ "\" connected. Session ID: " + event.getUser());
 
-                }
-            }
-        };
-        newThread.start();
-        */
+    }
 
-        //Send a GameMessage to the user
-        //return new ResponseMessage(object);
+    /**
+     * The Eventlistener is called when a client disconnects
+     * @param event disconnect event
+     */
+    @EventListener
+    public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
+
+        System.out.println("User \"" + getUserFromHeaderString(event.getMessage().getHeaders().toString())+ "\" disconnected. Session ID: " + event.getUser());
+
+    }
+
+    /**
+     * The method extracts the token out of the event header
+     * @param headerString header String
+     * @return token
+     */
+    private String getTokenFromHeaderString(String headerString) {
+
+        String token = headerString.substring(headerString.indexOf("token=") + 7,headerString.indexOf("token=") + 186);
+
+        return token;
+    }
+
+    /**
+     * The method extracts the username out of the event header
+     * @param headerString header String
+     * @return username
+     */
+    private String getUserFromHeaderString(String headerString) {
+
+        String token = getTokenFromHeaderString(headerString);
+        if(tokenProvider.validateToken(token)) {
+            return tokenProvider.getUserNameFromToken(token);
+        } else {
+            return null;
+        }
     }
 }
