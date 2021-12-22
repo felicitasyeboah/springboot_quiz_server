@@ -1,9 +1,9 @@
 package de.semesterprojekt.quiz.controller;
 
-import de.semesterprojekt.quiz.entity.Game;
-import de.semesterprojekt.quiz.entity.GameMessage;
+import de.semesterprojekt.quiz.model.Game;
+import de.semesterprojekt.quiz.model.GameMessage;
 import de.semesterprojekt.quiz.entity.User;
-import de.semesterprojekt.quiz.factory.GameFactory;
+import de.semesterprojekt.quiz.utility.GameFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -34,12 +34,18 @@ public class GameController implements ApplicationListener<ContextRefreshedEvent
 
         Game newGame = gamefactory.createGame(user1, user2);
 
-        //Get the gamemessage for user 1 for the first round
-        GameMessage newGameMessage = newGame.getGameMessage(0,user1);
+        //Get all questions of the game
+        System.out.println(newGame.getQuestionCount());
+        System.out.println(newGame.getQuestion(0).getQuestionText());
+        System.out.println(newGame.getQuestion(1).getQuestionText());
+        System.out.println(newGame.getQuestion(2).getQuestionText());
+
+
+        //Get the gamemessage for user 1 for the first round -> print all answers
+        GameMessage newGameMessage = newGame.getGameMessage(user1, 0);
 
         for(String item : newGameMessage.getAnswer()) {
             System.out.println(item);
         }
-
     }
 }

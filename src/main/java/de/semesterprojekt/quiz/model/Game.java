@@ -1,4 +1,10 @@
-package de.semesterprojekt.quiz.entity;
+package de.semesterprojekt.quiz.model;
+
+import de.semesterprojekt.quiz.entity.Question;
+import de.semesterprojekt.quiz.entity.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The class represents a game session
@@ -12,23 +18,23 @@ public class Game {
     private User user2;
     private int scoreUser1;
     private int scoreUser2;
-    private Question[] question;
+    private List<Question> question;
 
     /**
      * The contructor generates a new game session
      * @param user1 User 1
      * @param user2 User 2
-     * @param countQuestions Count of the questions
+     * @param question Array of questions
      */
-    public Game(User user1, User user2, int countQuestions) {
+    public Game(User user1, User user2, List<Question> question) {
         //generates a new gameId
         this.gameId = gameIdGenerator++;
         this.user1 = user1;
         this.user2 = user2;
         this.scoreUser1 = 0;
         this.scoreUser2 = 0;
-        this.countQuestions = countQuestions;
-        this.question = new Question[countQuestions];
+        this.countQuestions = question.size();
+        this.question = question;
     }
 
     /**
@@ -99,7 +105,7 @@ public class Game {
         if(index < 0 || index >= countQuestions) {
             index = 0;
         }
-        return question[index];
+        return question.get(index);
     }
 
     /**
@@ -111,20 +117,12 @@ public class Game {
     }
 
     /**
-     * Sets the questions
-     * @param questionList question array
-     */
-    public void setQuestions(Question[] questionList) {
-        this.question = questionList;
-    }
-
-    /**
      * The method returns a GameMessage object for the specified user
      * @param round game round. First round is 0
      * @param user the requested user
      * @return GameMessage Object
      */
-    public GameMessage getGameMessage(int round, User user) {
+    public GameMessage getGameMessage(User user, int round) {
 
         //Return null if the requested index is out of bound
         if(round >= this. countQuestions) {
@@ -134,11 +132,11 @@ public class Game {
         //Return the GameMessage object for the specified user
         if(user == this.user1) {
 
-            return new GameMessage(this.user1, this.user2, this.scoreUser1, this.scoreUser2, this.question[round]);
+            return new GameMessage(this.user1, this.user2, this.scoreUser1, this.scoreUser2, this.question.get(round));
 
         } else if (user == this.user2) {
 
-            return new GameMessage(this.user2, this.user1, this.scoreUser2, this.scoreUser1, this.question[round]);
+            return new GameMessage(this.user2, this.user1, this.scoreUser2, this.scoreUser1, this.question.get(round));
 
         }
 

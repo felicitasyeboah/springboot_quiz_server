@@ -1,9 +1,9 @@
-package de.semesterprojekt.quiz.factory;
+package de.semesterprojekt.quiz.utility;
 
-import de.semesterprojekt.quiz.utility.QuestionRandomizer;
-import de.semesterprojekt.quiz.entity.Game;
+import de.semesterprojekt.quiz.model.Game;
 import de.semesterprojekt.quiz.entity.Question;
 import de.semesterprojekt.quiz.entity.User;
+import de.semesterprojekt.quiz.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +18,9 @@ public class GameFactory {
     @Autowired
     private QuestionRandomizer questionRandomizer;
 
+    @Autowired
+    QuestionRepository questionRepository;
+
     /**
      * The method creates a Game session object
      * @param user1 User 1
@@ -26,10 +29,7 @@ public class GameFactory {
      */
     public Game createGame(User user1, User user2) {
 
-        Game newGame = new Game(user1, user2, questionCount);
-
-        Question[] questionList = questionRandomizer.getQuestions(questionCount);
-        newGame.setQuestions(questionList);
+        Game newGame = new Game(user1, user2, questionRandomizer.getQuestions(questionCount));
 
         return newGame;
     }

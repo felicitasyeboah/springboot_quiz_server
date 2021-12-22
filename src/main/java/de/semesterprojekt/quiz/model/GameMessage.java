@@ -1,5 +1,7 @@
-package de.semesterprojekt.quiz.entity;
+package de.semesterprojekt.quiz.model;
 
+import de.semesterprojekt.quiz.entity.Question;
+import de.semesterprojekt.quiz.entity.User;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -18,9 +20,7 @@ public class GameMessage {
         this.userScore = userScore;
         this.opponentScore = opponentScore;
         this.question = question.getQuestionText();
-
-        //TODO: Kategorie zuordnern -> this.category = ?
-        this.category = "category";
+        this.category = question.getCategory().getCategoryName();
 
         //Add the answers
         this.answer = new ArrayList<>();

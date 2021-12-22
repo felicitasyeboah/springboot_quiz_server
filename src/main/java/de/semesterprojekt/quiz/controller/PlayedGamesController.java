@@ -2,7 +2,7 @@ package de.semesterprojekt.quiz.controller;
 
 import de.semesterprojekt.quiz.entity.PlayedGames;
 import de.semesterprojekt.quiz.entity.User;
-import de.semesterprojekt.quiz.entity.UserScore;
+import de.semesterprojekt.quiz.model.UserScore;
 import de.semesterprojekt.quiz.repository.PlayedGamesRepository;
 import de.semesterprojekt.quiz.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

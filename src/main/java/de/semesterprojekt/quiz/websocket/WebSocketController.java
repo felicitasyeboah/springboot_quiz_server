@@ -1,10 +1,10 @@
 package de.semesterprojekt.quiz.websocket;
 
 import de.semesterprojekt.quiz.controller.QuestionController;
-import de.semesterprojekt.quiz.entity.Game;
-import de.semesterprojekt.quiz.entity.GameMessage;
+import de.semesterprojekt.quiz.model.Game;
+import de.semesterprojekt.quiz.model.GameMessage;
 import de.semesterprojekt.quiz.entity.User;
-import de.semesterprojekt.quiz.factory.GameFactory;
+import de.semesterprojekt.quiz.utility.GameFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -40,8 +40,8 @@ public class WebSocketController {
 
         Game newGame = gamefactory.createGame(user1, user2);
 
-        //Get the gamemessage for user 1 for the first round
-        GameMessage newGameMessage = newGame.getGameMessage(0,user1);
+        //Get the gameMessage for user 1 for the first round
+        GameMessage newGameMessage = newGame.getGameMessage(user1, 0);
 
         template.convertAndSend("/topic/game", newGameMessage);
 
