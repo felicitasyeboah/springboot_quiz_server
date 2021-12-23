@@ -40,10 +40,13 @@ public class WebSocketController {
         System.out.println("Token: " + sessionToken);
         System.out.println("Message: " + message);
         System.out.println("Send the following data to " + username + "\n");
-        System.out.println(getTestGameMessage());
+
+        String testGameMessage = getTestGameMessage();
+
+        System.out.println(testGameMessage);
 
         //Send Data to user
-        template.convertAndSendToUser(sessionToken , "/topic/game", getTestGameMessage());
+        template.convertAndSendToUser(sessionToken , "/topic/game", testGameMessage);
     }
 
     /**
