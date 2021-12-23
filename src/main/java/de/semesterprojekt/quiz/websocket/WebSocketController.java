@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
@@ -43,16 +44,6 @@ public class WebSocketController {
 
         //Send Data to user
         template.convertAndSendToUser(sessionToken , "/topic/game", getTestGameMessage());
-    }
-
-    /**
-     * Method for empty messages
-     * @param principal
-     */
-    @MessageMapping("/getTestData")
-    public void getTestData(Principal principal) {
-
-        this.getGameMessage("", principal);
     }
 
     /**

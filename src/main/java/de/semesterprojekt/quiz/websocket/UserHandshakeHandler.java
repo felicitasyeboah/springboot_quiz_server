@@ -16,11 +16,19 @@ public class UserHandshakeHandler extends DefaultHandshakeHandler {
     @Override
     protected Principal determineUser(ServerHttpRequest request, WebSocketHandler wsHandler, Map<String, Object> attributes) {
 
-        //Get the token from the header
-        String headerString = request.getHeaders().toString();
-        String token = headerString.substring(headerString.indexOf("token:\"") + 7,headerString.indexOf("token:\"") + 186);
+        //Check if the Principal is already set
+        if(request.getPrincipal() == null) {
 
-        //Set the token as Principal
-        return new UserPrincipal(token);
+            //Get the token from the header
+            String headerString = request.getHeaders().toString();
+            String token = headerString.substring(headerString.indexOf("token:\"") + 7,headerString.indexOf("token:\"") + 186);
+
+            //Set the token as Principal
+            return new UserPrincipal(token);
+        } else {
+
+            //Return already set value
+            return new UserPrincipal(request.getPrincipal().getName());
+        }
     }
 }
