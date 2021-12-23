@@ -21,10 +21,15 @@ public class UserHandshakeHandler extends DefaultHandshakeHandler {
 
             //Get the token from the header
             String headerString = request.getHeaders().toString();
-            String token = headerString.substring(headerString.indexOf("token:\"") + 7,headerString.indexOf("token:\"") + 186);
 
-            //Set the token as Principal
-            return new UserPrincipal(token);
+            //Create a substring beginning with the token
+            headerString = headerString.substring(headerString.indexOf("token:\"") + 7);
+
+            //find the last character of the string
+            headerString = headerString.substring(0, headerString.indexOf("\""));
+
+            //Return the token
+            return new UserPrincipal(headerString);
         } else {
 
             //Return already set value
