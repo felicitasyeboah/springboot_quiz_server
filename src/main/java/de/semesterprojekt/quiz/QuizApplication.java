@@ -15,6 +15,8 @@ public class QuizApplication implements CommandLineRunner {
 	public static void main(String[] args) {
 
 		SpringApplication.run(QuizApplication.class, args);
+
+		//TODO: A player is able to login twice with the same login data
 	}
 
 	@Override
