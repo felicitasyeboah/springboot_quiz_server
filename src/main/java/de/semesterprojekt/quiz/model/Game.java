@@ -16,6 +16,8 @@ public class Game {
     private int countQuestions;
     private User user1;
     private User user2;
+    private String tokenUser1;
+    private String tokenUser2;
     private int scoreUser1;
     private int scoreUser2;
     private List<Question> question;
@@ -26,11 +28,13 @@ public class Game {
      * @param user2 User 2
      * @param question Array of questions
      */
-    public Game(User user1, User user2, List<Question> question) {
+    public Game(User user1, String tokenUser1, User user2, String tokenUser2, List<Question> question) {
         //generates a new gameId
         this.gameId = gameIdGenerator++;
         this.user1 = user1;
         this.user2 = user2;
+        this.tokenUser1 = tokenUser1;
+        this.tokenUser2 = tokenUser2;
         this.scoreUser1 = 0;
         this.scoreUser2 = 0;
         this.countQuestions = question.size();
@@ -46,7 +50,7 @@ public class Game {
     }
 
     /**
-     * Returns user 1
+     * Returns user1
      * @return user1
      */
     public User getUser1(){
@@ -54,11 +58,27 @@ public class Game {
     }
 
     /**
-     * Returns user 2
+     * Returns user2
      * @return user2
      */
     public User getUser2(){
         return this.user2;
+    }
+
+    /**
+     * Returns token of user1
+     * @return token of user1
+     */
+    public String getTokenUser1(){
+        return this.tokenUser1;
+    }
+
+    /**
+     * Returns token of user2
+     * @return token of user2
+     */
+    public String getTokenUser2(){
+        return this.tokenUser2;
     }
 
     /**
