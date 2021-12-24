@@ -56,37 +56,18 @@ public class WebSocketController {
         System.out.println("Message from: " + username);
         System.out.println("Message: " + message);
 
-        //0s Timer
-        int delay = 2;
-        Thread sendMessage = new Thread() {
-            @Override
-            public void run(){
-                try {
+        System.out.println("Send the following data to \"" + username + "\"");
 
-                    //Timer with "delay" seconds
-                    for(int i = delay; i>2 ; i--) {
-                        System.out.println("Wait for another player... " + i + "s left.");
-                        sleep(1000);
-                    }
+        //Get the User and create the test GameMessage
+        Optional<User> userOptional = userRepository.findByUserName(username);
+        User user = (User) userOptional.get();
+        String testGameMessage = getTestGameMessage(user, token);
 
-                    System.out.println("Send the following data to \"" + username + "\"");
+        //Print the data
+        System.out.println(testGameMessage);
 
-                    //Get the User and create the test GameMessage
-                    Optional<User> userOptional = userRepository.findByUserName(username);
-                    User user = (User) userOptional.get();
-                    String testGameMessage = getTestGameMessage(user, token);
-
-                    //Print the data
-                    System.out.println(testGameMessage);
-
-                    //Send Data to user
-                    template.convertAndSendToUser(token , "/topic/game", testGameMessage);
-
-                } catch (Exception e) {
-                }
-            }
-        };
-        sendMessage.run();
+        //Send Data to user
+        template.convertAndSendToUser(token , "/topic/game", testGameMessage);
     }
 
     /**
