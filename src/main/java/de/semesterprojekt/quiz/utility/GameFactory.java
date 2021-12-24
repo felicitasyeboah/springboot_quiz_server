@@ -27,9 +27,9 @@ public class GameFactory {
      * @param user2 User 2
      * @return Game session
      */
-    public Game createGame(User user1, User user2) {
+    public Game createGame(User user1, String tokenUser1, User user2, String tokenUser2) {
 
-        Game newGame = new Game(user1, user2, questionRandomizer.getQuestions(questionCount));
+        Game newGame = new Game(user1, tokenUser1, user2, tokenUser2, questionRandomizer.getQuestions(questionCount));
 
         return newGame;
     }
