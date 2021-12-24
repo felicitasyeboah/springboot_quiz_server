@@ -1,10 +1,7 @@
-package de.semesterprojekt.quiz.controller;
+package de.semesterprojekt.quiz;
 
-import de.semesterprojekt.quiz.model.Game;
-import de.semesterprojekt.quiz.model.GameMessage;
 import de.semesterprojekt.quiz.entity.User;
 import de.semesterprojekt.quiz.repository.UserRepository;
-import de.semesterprojekt.quiz.utility.GameFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -12,14 +9,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-/**
- * The class controls the game
- */
 @Component
-public class GameController implements ApplicationListener<ContextRefreshedEvent> {
-
-    @Autowired
-    private GameFactory gamefactory;
+public class OnStartUp implements ApplicationListener<ContextRefreshedEvent> {
 
     @Autowired
     UserRepository userRepository;
