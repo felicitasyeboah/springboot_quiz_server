@@ -12,6 +12,7 @@ import java.util.List;
 /**
  * The class controls the REST-mapping for the Category-entity
  */
+
 @CrossOrigin(origins = "http://localhost:4001")
 @RestController
 @RequestMapping("/category")
@@ -24,11 +25,13 @@ public class CategoryController {
     }
 
     /**
+     * TODO: DELETE
      * Returns a list of all categories
      * @return List of categories
      */
     @GetMapping("")
-    public List<Category> Index(){
+    public List<Category> index(){
+
         return categoryRepository.findAll();
     }
 }

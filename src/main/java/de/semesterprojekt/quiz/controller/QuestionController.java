@@ -26,6 +26,7 @@ public class QuestionController {
     }
 
     /**
+     * TODO: DELETE
      * Returns a list of all questions
      * @return List of questions
      */
@@ -36,6 +37,7 @@ public class QuestionController {
     }
 
     /**
+     * TODO: DELETE
      * Returns a random question
      * @return question
      */
