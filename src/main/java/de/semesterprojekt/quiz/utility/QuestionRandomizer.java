@@ -1,5 +1,6 @@
 package de.semesterprojekt.quiz.utility;
 
+import de.semesterprojekt.quiz.config.GameConfig;
 import de.semesterprojekt.quiz.entity.Question;
 import de.semesterprojekt.quiz.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +22,9 @@ public class QuestionRandomizer {
 
     /**
      * The method returns a random list of Question objects
-     * @param questionCount
-     * @return
+     * @return a list of questions
      */
-    public List<Question> getQuestions(int questionCount) {
+    public List<Question> getQuestions() {
 
         //Get a list of all available questions
         List<Question> questionList = questionRepository.findAll();
@@ -33,7 +33,7 @@ public class QuestionRandomizer {
         Collections.shuffle(questionList);
 
         //get the first questions out of the shuffled list
-        questionList = questionList.subList(0,questionCount);
+        questionList = questionList.subList(0, GameConfig.QUESTION_COUNT);
 
         //Return the list
         return questionList;
