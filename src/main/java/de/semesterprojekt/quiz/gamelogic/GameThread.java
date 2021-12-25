@@ -33,8 +33,10 @@ public class GameThread implements Runnable{
 
         }
 
-        //Send the first GameMessage to both users
+        //Send the first GameMessage to both users, print the correct answer for both users
         System.out.println("First question: " + game.getQuestion(0).getQuestionText());
+        System.out.println("Correct answer for \"" + game.getUser1().getUserName() + "\": answer" + game.getGameMessage(game.getUser1(),0).getCorrectAnswer());
+        System.out.println("Correct answer for \"" + game.getUser2().getUserName() + "\": answer" + game.getGameMessage(game.getUser2(),0).getCorrectAnswer());
         messageSender.sendMessage(game.getTokenUser1(),gson.toJson(game.getGameMessage(game.getUser1(),0)));
         messageSender.sendMessage(game.getTokenUser2(),gson.toJson(game.getGameMessage(game.getUser2(),0)));
     }
