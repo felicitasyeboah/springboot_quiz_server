@@ -62,9 +62,6 @@ public class GameMessage {
         //Set the index for the correct answer
         this.correctAnswer = answer.indexOf(question.getAnswerCorrect()) + 1;
 
-        //Print the correct answer TODO: DELETE
-        System.out.println("Correct Answer: answer" + this.correctAnswer);
-
         //Store the answers in the variables
         answer1 = answer.get(0);
         answer2 = answer.get(1);
