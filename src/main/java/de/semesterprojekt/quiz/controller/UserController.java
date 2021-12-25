@@ -149,13 +149,6 @@ public class UserController {
                     //TODO: write methods to start a game
                     System.out.println(user1.getUserName() + " vs. " + user2.getUserName());
 
-
-
-
-
-
-
-
                 }
             }
         }

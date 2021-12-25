@@ -59,9 +59,10 @@ public class GameMessage {
         //Shuffle the answers
         Collections.shuffle(answer);
 
+        //Set the index for the correct answer
         this.correctAnswer = answer.indexOf(question.getAnswerCorrect()) + 1;
 
-        //Print the correct answer
+        //Print the correct answer TODO: DELETE
         System.out.println("Correct Answer: answer" + this.correctAnswer);
 
         //Store the answers in the variables
