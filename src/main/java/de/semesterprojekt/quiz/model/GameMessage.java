@@ -14,9 +14,36 @@ import java.util.List;
 @Getter
 public class GameMessage {
 
+    //Stores the category
+    private String category;
+
+    //Stores the question
+    private String question;
+
+    //Stores 4 answers in random order
+    private String answer1;
+    private String answer2;
+    private String answer3;
+    private String answer4;
+
+    //the index of the correct answer '1' -> answer1, '2' -> answer2,...
+    private int correctAnswer;
+
+    //Stores the score of the user
+    private int userScore;
+
+    //Stores the score of the opponent
+    private int opponentScore;
+
+    //Store the user and opponent
+    private SimpleUser user;
+    private SimpleUser opponent;
+
+
     public GameMessage(User user, User opponent, int userScore, int opponentScore, Question question) {
-        this.user = user;
-        this.opponent = opponent;
+
+        this.user = user.getSimpleUser();
+        this.opponent = opponent.getSimpleUser();
         this.userScore = userScore;
         this.opponentScore = opponentScore;
         this.question = question.getQuestionText();
@@ -32,37 +59,15 @@ public class GameMessage {
         //Shuffle the answers
         Collections.shuffle(answer);
 
+        this.correctAnswer = answer.indexOf(question.getAnswerCorrect()) + 1;
+
+        //Print the correct answer
+        System.out.println("Correct Answer: answer" + this.correctAnswer);
+
         //Store the answers in the variables
         answer1 = answer.get(0);
         answer2 = answer.get(1);
         answer3 = answer.get(2);
         answer4 = answer.get(3);
     }
-
-    //Stores the category
-    private String category;
-
-    //Stores the question
-    private String question;
-
-    //Stores 4 answers in random order
-
-
-    //Stores 4 answers
-    private String answer1;
-    private String answer2;
-    private String answer3;
-    private String answer4;
-
-    //Stores the score of the user
-    private int userScore;
-
-    //Stores the score of the opponent
-    private int opponentScore;
-
-    //Stores the user
-    private User user;
-
-    //Stores the opponent
-    private User opponent;
 }
