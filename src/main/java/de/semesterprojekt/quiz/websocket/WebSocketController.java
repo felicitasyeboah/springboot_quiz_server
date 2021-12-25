@@ -50,31 +50,32 @@ public class WebSocketController {
     public void getGameMessage(String message, Principal principal){
 
         //Get sessionId from the request
-        String token = principal.getName().toString();
-        String username = tokenProvider.getUserNameFromToken(token);
+        //String token = principal.getName().toString();
+        //String username = tokenProvider.getUserNameFromToken(token);
 
-        System.out.println("Message from: " + username);
-        System.out.println("Message: " + message);
+        //System.out.println("Message from: " + username);
+        //System.out.println("Message: " + message);
 
-        System.out.println("Send the following data to \"" + username + "\"");
+        //System.out.println("Send the following data to \"" + username + "\"");
 
         //Get the User and create the test GameMessage
-        Optional<User> userOptional = userRepository.findByUserName(username);
-        User user = (User) userOptional.get();
-        String testGameMessage = getTestGameMessage(user, token);
+        //Optional<User> userOptional = userRepository.findByUserName(username);
+        //User user = (User) userOptional.get();
+        //String testGameMessage = getTestGameMessage(user, token);
 
         //Print the data
-        System.out.println(testGameMessage);
+        //System.out.println(testGameMessage);
 
         //Send Data to user
-        template.convertAndSendToUser(token , "/topic/game", testGameMessage);
+        //template.convertAndSendToUser(token , "/topic/game", testGameMessage);
     }
 
     /**
-     * The method checks if two new players are ready to play and starts a game with them
+     * The method prints the connected users that are ready to play
      */
-    private void checkMatch() {
+    private void printConnectedUsers() {
 
+        //Set the userListSize
         int userListSize = userList.size();
 
         //Print the connected usernames
@@ -89,6 +90,15 @@ public class WebSocketController {
                 System.out.println("");
             }
         }
+    }
+
+    /**
+     * The method checks if two new players are ready to play and starts a game with them
+     */
+    private void checkMatch() {
+
+        //Set the userListSize
+        int userListSize = userList.size();
 
         //Try to match players, when there are sets of two ready to play
         if(userListSize % 2 == 0) {
@@ -131,7 +141,10 @@ public class WebSocketController {
         userList.add(user);
 
         //Print text
-        System.out.println("\"" + username + "\" is ready to play. Token: \"" + token + "\"");
+        System.out.println("User \"" + username + "\" is ready to play.");
+
+        //Print the connected users
+        printConnectedUsers();
 
         //Check for player match
         checkMatch();
@@ -167,7 +180,10 @@ public class WebSocketController {
         }
 
         //Print text
-        System.out.println("\"" + username + "\" is not ready to play.");
+        System.out.println("User \"" + username + "\" disconnected.");
+
+        //Print the connected users
+        printConnectedUsers();
     }
 
     /**
