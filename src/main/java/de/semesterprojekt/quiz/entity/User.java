@@ -25,8 +25,6 @@ public class User {
 
     private String profileImage;
 
-    private boolean isReady;
-
     public SimpleUser getSimpleUser () {
 
         return new SimpleUser(this);

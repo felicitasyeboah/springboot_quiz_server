@@ -106,7 +106,6 @@ public class WebSocketController {
 
     /**
      * The Eventlistener is called when a client connects
-     * - change the isReady status of the calling user to true
      * - puts the username and token on the userTokenMap
      * - adds the User to the userList
      * - print a connect message
@@ -125,12 +124,6 @@ public class WebSocketController {
         //Get the user
         User user = (User) userRepository.findByUserName(username).get();
 
-        //Set isReady status of the user to true
-        user.setReady(true);
-
-        //Store the user object
-        userRepository.save(user);
-
         //Store username and token in userTokenMap
         userTokenMap.put(username, token);
 
@@ -146,7 +139,6 @@ public class WebSocketController {
 
     /**
      * The Eventlistener is called when a client disconnects
-     * - change the isReady status of the calling user to false
      * - removes the username and token from the userTokenMap
      * - removes the User from the userList
      * - print a disconnect message
@@ -163,12 +155,6 @@ public class WebSocketController {
 
         //Get the user
         User user = (User) userRepository.findByUserName(username).get();
-
-        //Set isReady status of the user to true
-        user.setReady(false);
-
-        //Store the user object
-        userRepository.save(user);
 
         //Delete username and token from userTokenMap
         if(userTokenMap.containsKey(username)) {

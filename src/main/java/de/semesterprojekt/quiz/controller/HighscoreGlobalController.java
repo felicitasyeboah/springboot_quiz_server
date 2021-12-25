@@ -28,7 +28,7 @@ public class HighscoreGlobalController {
      * @return List of HighscoreGlobal
      */
     @GetMapping("")
-    public List<HighscoreGlobal> Index(){
+    public List<HighscoreGlobal> index(){
         return highscoreGlobalRepository.findAll();
     }
 }
