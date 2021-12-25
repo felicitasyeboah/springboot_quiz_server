@@ -1,6 +1,7 @@
 package de.semesterprojekt.quiz.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.semesterprojekt.quiz.model.SimpleUser;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -25,4 +26,9 @@ public class User {
     private String profileImage;
 
     private boolean isReady;
+
+    public SimpleUser getSimpleUser () {
+
+        return new SimpleUser(this);
+    }
 }
