@@ -1,7 +1,9 @@
 package de.semesterprojekt.quiz.model;
 
+import de.semesterprojekt.quiz.config.GameConfig;
 import de.semesterprojekt.quiz.entity.Question;
 import de.semesterprojekt.quiz.entity.User;
+import de.semesterprojekt.quiz.utility.QuestionRandomizer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +15,6 @@ public class Game {
 
     private static int gameIdGenerator = 0;
     private int gameId;
-    private int countQuestions;
     private User user1;
     private User user2;
     private String tokenUser1;
@@ -26,9 +27,9 @@ public class Game {
      * The contructor generates a new game session
      * @param user1 User 1
      * @param user2 User 2
-     * @param question Array of questions
+     * @param questionRandomizer Instance of the QuestionRandomizer
      */
-    public Game(User user1, String tokenUser1, User user2, String tokenUser2, List<Question> question) {
+    public Game(User user1, String tokenUser1, User user2, String tokenUser2, QuestionRandomizer questionRandomizer) {
         //generates a new gameId
         this.gameId = gameIdGenerator++;
         this.user1 = user1;
@@ -37,8 +38,7 @@ public class Game {
         this.tokenUser2 = tokenUser2;
         this.scoreUser1 = 0;
         this.scoreUser2 = 0;
-        this.countQuestions = question.size();
-        this.question = question;
+        this.question = questionRandomizer.getQuestions();
     }
 
     /**
@@ -122,18 +122,10 @@ public class Game {
      * @return question
      */
     public Question getQuestion(int index) {
-        if(index < 0 || index >= countQuestions) {
+        if(index < 0 || index >= GameConfig.QUESTION_COUNT) {
             index = 0;
         }
         return question.get(index);
-    }
-
-    /**
-     * Returns the count of the questions
-     * @return questionCount
-     */
-    public int getQuestionCount() {
-        return this.countQuestions;
     }
 
     /**
@@ -145,7 +137,7 @@ public class Game {
     public GameMessage getGameMessage(User user, int round) {
 
         //Return null if the requested index is out of bound
-        if(round >= this. countQuestions) {
+        if(round >= GameConfig.QUESTION_COUNT) {
             return null;
         }
 
