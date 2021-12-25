@@ -8,7 +8,7 @@ import de.semesterprojekt.quiz.model.GameMessage;
 import de.semesterprojekt.quiz.entity.User;
 import de.semesterprojekt.quiz.repository.UserRepository;
 import de.semesterprojekt.quiz.security.JwtTokenProvider;
-import de.semesterprojekt.quiz.utility.GameFactory;
+import de.semesterprojekt.quiz.utility.QuestionRandomizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -26,9 +26,6 @@ public class WebSocketController {
     SimpMessagingTemplate template;
 
     @Autowired
-    GameFactory gamefactory;
-
-    @Autowired
     JwtTokenProvider tokenProvider;
 
     @Autowired
@@ -36,6 +33,9 @@ public class WebSocketController {
 
     @Autowired
     WebsocketMessageSender messageSender;
+
+    @Autowired
+    QuestionRandomizer questionRandomizer;
 
     //Map to store username and token
     private Map<String,String> userTokenMap = new HashMap<>();
@@ -98,7 +98,7 @@ public class WebSocketController {
             User user2 = userList.get(userListSize - 1);
 
             //Create the game and start it
-            Game newGame = gamefactory.createGame(user1,userTokenMap.get(user1.getUserName()),user2,userTokenMap.get(user2.getUserName()));
+            Game newGame = new Game(user1, userTokenMap.get(user1.getUserName()), user2, userTokenMap.get(user2.getUserName()), questionRandomizer);
             GameThread newGameThread = new GameThread(newGame, messageSender);
             newGameThread.run();
         }
@@ -196,7 +196,7 @@ public class WebSocketController {
         String tokenUser2 = "testToken";
 
         //Create test data with user1 (real user) and user2 (test user)
-        Game newGame = gamefactory.createGame(user1, tokenUser1, user2, tokenUser2);
+        Game newGame = new Game(user1, tokenUser1, user2, tokenUser2, questionRandomizer);
 
         //Get the gameMessage for user 1 for the first round
         GameMessage newGameMessage = newGame.getGameMessage(user1, 0);
