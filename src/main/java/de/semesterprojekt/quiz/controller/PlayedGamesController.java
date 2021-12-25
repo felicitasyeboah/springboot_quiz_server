@@ -35,22 +35,9 @@ public class PlayedGamesController {
     }
 
     /**
-     * Returns a list of all played games
-     * @return
-     */
-    @GetMapping("")
-    public List<PlayedGames> index(){
-
-        return playedGamesRepository.findAll();
-    }
-
-    /**
      * Returns a list of all played games of the calling user
      */
-    /**
-     * Sets the ready-status of a player
-     */
-    @GetMapping( path = "/getAllPlayedGames")
+    @GetMapping( path = "")
     public ResponseEntity<List<UserScore>> getAllPlayedGames(){
 
         String username;
@@ -82,7 +69,7 @@ public class PlayedGamesController {
                 List<UserScore> userGameList = new ArrayList<>();
 
                 //Check all played games and create UserScore objects
-                for(PlayedGames playedGame : index()) {
+                for(PlayedGames playedGame : playedGamesRepository.findAll()) {
 
                     if(playedGame.getUser1().getUserId() == userId) {
 
