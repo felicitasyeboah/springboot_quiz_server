@@ -8,7 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import javax.annotation.Resource;
 
 @SpringBootApplication
-public class QuizApplication implements CommandLineRunner {
+public class QuizApplication  {
+/*public class QuizApplication implements CommandLineRunner {*/
 	@Resource
 	FilesStorageService storageService;
 
@@ -19,11 +20,13 @@ public class QuizApplication implements CommandLineRunner {
 		//TODO: A player is able to login twice with the same login data
 	}
 
-	@Override
+	//Uncomment to delete image folder
+
+	/*@Override
 	public void run(String... arg) throws Exception {
 		storageService.deleteAll();
 		storageService.init();
-	}
+	}*/
 }
 
 
