@@ -2,7 +2,6 @@ package de.semesterprojekt.quiz.websocket;
 
 import com.google.gson.Gson;
 import de.semesterprojekt.quiz.game.controller.GameThread;
-import de.semesterprojekt.quiz.websocket.message.WebsocketMessageSender;
 import de.semesterprojekt.quiz.game.model.Game;
 import de.semesterprojekt.quiz.game.message.GameMessage;
 import de.semesterprojekt.quiz.database.entity.User;
