@@ -1,7 +1,7 @@
-package de.semesterprojekt.quiz.controller;
+package de.semesterprojekt.quiz.database.controller;
 
-import de.semesterprojekt.quiz.entity.Category;
-import de.semesterprojekt.quiz.repository.CategoryRepository;
+import de.semesterprojekt.quiz.database.entity.Category;
+import de.semesterprojekt.quiz.database.repository.CategoryRepository;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

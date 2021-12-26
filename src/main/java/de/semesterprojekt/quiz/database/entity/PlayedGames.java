@@ -1,4 +1,4 @@
-package de.semesterprojekt.quiz.entity;
+package de.semesterprojekt.quiz.database.entity;
 
 import lombok.Data;
 

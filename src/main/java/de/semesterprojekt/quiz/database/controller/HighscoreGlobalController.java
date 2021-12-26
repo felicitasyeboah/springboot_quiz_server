@@ -1,7 +1,7 @@
-package de.semesterprojekt.quiz.controller;
+package de.semesterprojekt.quiz.database.controller;
 
-import de.semesterprojekt.quiz.entity.HighscoreGlobal;
-import de.semesterprojekt.quiz.repository.HighscoreGlobalRepository;
+import de.semesterprojekt.quiz.database.entity.HighscoreGlobal;
+import de.semesterprojekt.quiz.database.repository.HighscoreGlobalRepository;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +29,8 @@ public class HighscoreGlobalController {
      */
     @GetMapping("")
     public List<HighscoreGlobal> index(){
+
+        //TODO: Return top 5 highscores (define the count in gameConfig)
         return highscoreGlobalRepository.findAll();
     }
 }

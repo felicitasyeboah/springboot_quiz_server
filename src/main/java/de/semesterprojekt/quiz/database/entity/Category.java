@@ -1,11 +1,10 @@
-package de.semesterprojekt.quiz.entity;
+package de.semesterprojekt.quiz.database.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 
 /**
  * The class represents a category for a question

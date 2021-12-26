@@ -1,13 +1,9 @@
-package de.semesterprojekt.quiz.controller;
+package de.semesterprojekt.quiz.database.controller;
 
-import de.semesterprojekt.quiz.entity.User;
-import de.semesterprojekt.quiz.repository.UserRepository;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import de.semesterprojekt.quiz.database.entity.User;
+import de.semesterprojekt.quiz.database.repository.UserRepository;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,6 +31,8 @@ public class UserController {
      */
     @GetMapping("")
     public List<User> index(){
+
+        //TODO: return own user object
 
         return userRepository.findAll();
     }

@@ -1,6 +1,6 @@
-package de.semesterprojekt.quiz.repository;
+package de.semesterprojekt.quiz.database.repository;
 
-import de.semesterprojekt.quiz.entity.PlayedGames;
+import de.semesterprojekt.quiz.database.entity.PlayedGames;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

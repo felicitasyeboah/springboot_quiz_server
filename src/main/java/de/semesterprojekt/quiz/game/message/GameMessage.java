@@ -1,7 +1,8 @@
-package de.semesterprojekt.quiz.model;
+package de.semesterprojekt.quiz.game.message;
 
-import de.semesterprojekt.quiz.entity.Question;
-import de.semesterprojekt.quiz.entity.User;
+import de.semesterprojekt.quiz.database.entity.Question;
+import de.semesterprojekt.quiz.database.entity.User;
+import lombok.Data;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -9,10 +10,10 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * This class represents a round of a game. It will be send to the user
+ * This class represents a round of a game. It will be sent to the user before each round
  */
 @Getter
-public class GameMessage {
+public class GameMessage extends ScoreMessage {
 
     //Stores the category
     private String category;
@@ -29,23 +30,15 @@ public class GameMessage {
     //the index of the correct answer '1' -> answer1, '2' -> answer2,...
     private int correctAnswer;
 
-    //Stores the score of the user
-    private int userScore;
-
-    //Stores the score of the opponent
-    private int opponentScore;
-
-    //Store the user and opponent
-    private SimpleUser user;
-    private SimpleUser opponent;
-
-
     public GameMessage(User user, User opponent, int userScore, int opponentScore, Question question) {
 
-        this.user = user.getSimpleUser();
-        this.opponent = opponent.getSimpleUser();
-        this.userScore = userScore;
-        this.opponentScore = opponentScore;
+        //Set the users and scores
+        super(user.getSimpleUser(), opponent.getSimpleUser(), userScore, opponentScore);
+
+        //Set the message type
+        super.setType(MessageType.GAME_MESSAGE);
+
+        //Set the question and category
         this.question = question.getQuestionText();
         this.category = question.getCategory().getCategoryName();
 

@@ -1,14 +1,12 @@
 package de.semesterprojekt.quiz.websocket;
 
 import com.sun.security.auth.UserPrincipal;
-import de.semesterprojekt.quiz.entity.User;
-import de.semesterprojekt.quiz.repository.UserRepository;
+import de.semesterprojekt.quiz.database.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
 import java.security.Principal;
-import java.util.List;
 import java.util.Map;
 
 public class UserHandshakeHandler extends DefaultHandshakeHandler {

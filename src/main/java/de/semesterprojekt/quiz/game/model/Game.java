@@ -1,9 +1,11 @@
-package de.semesterprojekt.quiz.model;
+package de.semesterprojekt.quiz.game.model;
 
 import de.semesterprojekt.quiz.config.GameConfig;
-import de.semesterprojekt.quiz.entity.Question;
-import de.semesterprojekt.quiz.entity.User;
+import de.semesterprojekt.quiz.database.entity.Question;
+import de.semesterprojekt.quiz.database.entity.User;
 import de.semesterprojekt.quiz.utility.QuestionRandomizer;
+import de.semesterprojekt.quiz.game.message.GameMessage;
+import de.semesterprojekt.quiz.websocket.message.IncomingWebSocketMessage;
 
 import java.util.*;
 
@@ -123,7 +125,7 @@ public class Game extends Observable {
      * @return question
      */
     public Question getQuestion(int index) {
-        if(index < 0 || index >= GameConfig.QUESTION_COUNT) {
+        if(index < 0 || index >= GameConfig.COUNT_QUESTION) {
             index = 0;
         }
         return question.get(index);
@@ -138,7 +140,7 @@ public class Game extends Observable {
     public GameMessage getGameMessage(User user, int round) {
 
         //Return null if the requested index is out of bound
-        if(round >= GameConfig.QUESTION_COUNT) {
+        if(round >= GameConfig.COUNT_QUESTION) {
             return null;
         }
 

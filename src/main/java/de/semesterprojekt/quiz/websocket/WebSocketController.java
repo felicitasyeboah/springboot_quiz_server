@@ -1,13 +1,13 @@
 package de.semesterprojekt.quiz.websocket;
 
 import com.google.gson.Gson;
-import de.semesterprojekt.quiz.gamelogic.GameThread;
-import de.semesterprojekt.quiz.gamelogic.WebsocketMessageSender;
-import de.semesterprojekt.quiz.model.Game;
-import de.semesterprojekt.quiz.model.GameMessage;
-import de.semesterprojekt.quiz.entity.User;
-import de.semesterprojekt.quiz.model.IncomingWebSocketMessage;
-import de.semesterprojekt.quiz.repository.UserRepository;
+import de.semesterprojekt.quiz.game.controller.GameThread;
+import de.semesterprojekt.quiz.websocket.message.WebsocketMessageSender;
+import de.semesterprojekt.quiz.game.model.Game;
+import de.semesterprojekt.quiz.game.message.GameMessage;
+import de.semesterprojekt.quiz.database.entity.User;
+import de.semesterprojekt.quiz.websocket.message.IncomingWebSocketMessage;
+import de.semesterprojekt.quiz.database.repository.UserRepository;
 import de.semesterprojekt.quiz.security.JwtTokenProvider;
 import de.semesterprojekt.quiz.utility.QuestionRandomizer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,6 +150,8 @@ public class WebSocketController {
      */
     @EventListener
     public void handleWebSocketConnectListener(SessionSubscribeEvent event) {
+
+        //TODO: Block a double login
 
         //Get the token
         String token = event.getUser().toString();

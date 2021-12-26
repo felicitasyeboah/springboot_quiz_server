@@ -1,11 +1,11 @@
-package de.semesterprojekt.quiz.gamelogic;
+package de.semesterprojekt.quiz.game.controller;
 
 import com.google.gson.Gson;
 import de.semesterprojekt.quiz.config.GameConfig;
-import de.semesterprojekt.quiz.model.Game;
-import de.semesterprojekt.quiz.model.IncomingWebSocketMessage;
+import de.semesterprojekt.quiz.game.model.Game;
+import de.semesterprojekt.quiz.websocket.message.IncomingWebSocketMessage;
+import de.semesterprojekt.quiz.websocket.message.WebsocketMessageSender;
 
-import java.sql.Timestamp;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -36,8 +36,8 @@ public class GameThread extends Thread implements Observer {
 
         //BREAK_DURATION
         try {
-            System.out.println("Wait " + GameConfig.BREAK_DURATION + "millis");
-            Thread.sleep(GameConfig.BREAK_DURATION);
+            System.out.println("Wait " + GameConfig.DURATION_BREAK + "millis");
+            Thread.sleep(GameConfig.DURATION_BREAK);
         } catch (Exception e) {
 
         }
@@ -58,7 +58,7 @@ public class GameThread extends Thread implements Observer {
 
         //Start a timer
         long startTimeMillis = System.currentTimeMillis();
-        long remainingTimeMillis = GameConfig.QUESTION_DURATION;
+        long remainingTimeMillis = GameConfig.DURATION_QUESTION;
 
         //Has a user answered the question?
         boolean user1Answered = false;
@@ -106,7 +106,7 @@ public class GameThread extends Thread implements Observer {
                 }
 
                 //Calculate the new remaining time
-                remainingTimeMillis = GameConfig.QUESTION_DURATION - (System.currentTimeMillis() - startTimeMillis);
+                remainingTimeMillis = GameConfig.DURATION_QUESTION - (System.currentTimeMillis() - startTimeMillis);
 
                 //When both players answered, the remaining time will be set to 0
                 if(user1Answered && user2Answered)
@@ -123,8 +123,8 @@ public class GameThread extends Thread implements Observer {
         System.out.println("The correct answer is: " + game.getQuestion(currentRound).getAnswerCorrect());
 
         //Analysis of the result
-        System.out.println(game.getUser1().getUserName() + " answered: " + user1Answer + " in " + user1Time + " millis");
-        System.out.println(game.getUser2().getUserName() + " answered: " + user2Answer + " in " + user2Time + " millis");
+        System.out.println(game.getUser1().getUserName() + " answered: " + user1Answer + " in " + user1Time + " millis. Points: " + calculatePoints(user1Time));
+        System.out.println(game.getUser2().getUserName() + " answered: " + user2Answer + " in " + user2Time + " millis. Points: " + calculatePoints(user2Time));
 
         //Print message
         System.out.println("Please restart the server for further testing");
@@ -143,5 +143,34 @@ public class GameThread extends Thread implements Observer {
 
         //Interrupt the sleep() for handling the incoming messages
         this.interrupt();
+    }
+
+    /**
+     * Calculate the points for the user
+     * timeMillis = 0 - GameConfig.MAXPOINTS_DURATION -> GameConfig.POINTS_MAX
+     * timeMillis = GameConfig.MAXPOINTS_DURATION - GameConfig.QUESTION_DURATION -> GameConfig.POINTS_MIN - GameConfig.POINTS_MAX
+     * timeMillis > GameConfig.MAXPOINTS_DURATION -> 0 points
+     *
+     * @param timeMillis needed time to answer
+     * @return
+     */
+    private int calculatePoints (long timeMillis) {
+        if (timeMillis < GameConfig.DURATION_MAX_POINTS) {
+
+            //Return max points
+            return GameConfig.POINTS_MAX;
+
+        } else if (timeMillis >= GameConfig.DURATION_MAX_POINTS && timeMillis < GameConfig.DURATION_QUESTION) {
+
+            long deltaTimeNeededMillis = timeMillis - GameConfig.DURATION_MAX_POINTS;
+            int deltaPoints = GameConfig.POINTS_MAX - GameConfig.POINTS_MIN;
+            long deltaTimeMillis = GameConfig.DURATION_QUESTION - GameConfig.DURATION_MAX_POINTS;
+
+            return GameConfig.POINTS_MIN;
+            //return (int) GameConfig.POINTS_MIN + GameConfig.POINTS_MAX - ((deltaTimeNeededMillis / deltaTimeMillis) * deltaPoints));
+        }
+
+        //Return 0 points
+        return 0;
     }
 }

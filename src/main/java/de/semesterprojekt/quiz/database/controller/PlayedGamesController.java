@@ -1,10 +1,10 @@
-package de.semesterprojekt.quiz.controller;
+package de.semesterprojekt.quiz.database.controller;
 
-import de.semesterprojekt.quiz.entity.PlayedGames;
-import de.semesterprojekt.quiz.entity.User;
+import de.semesterprojekt.quiz.database.entity.PlayedGames;
+import de.semesterprojekt.quiz.database.entity.User;
 import de.semesterprojekt.quiz.model.UserScore;
-import de.semesterprojekt.quiz.repository.PlayedGamesRepository;
-import de.semesterprojekt.quiz.repository.UserRepository;
+import de.semesterprojekt.quiz.database.repository.PlayedGamesRepository;
+import de.semesterprojekt.quiz.database.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
