@@ -1,9 +1,8 @@
 package de.semesterprojekt.quiz.game.controller;
 
-import com.google.gson.Gson;
 import de.semesterprojekt.quiz.config.GameConfig;
 import de.semesterprojekt.quiz.game.model.Game;
-import de.semesterprojekt.quiz.websocket.message.WebsocketMessageSender;
+import de.semesterprojekt.quiz.websocket.WebsocketMessageSender;
 
 public class GameTimer extends Thread {
 
