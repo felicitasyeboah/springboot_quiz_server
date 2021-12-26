@@ -5,13 +5,12 @@ import de.semesterprojekt.quiz.entity.Question;
 import de.semesterprojekt.quiz.entity.User;
 import de.semesterprojekt.quiz.utility.QuestionRandomizer;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * The class represents a game session
  */
-public class Game {
+public class Game extends Observable {
 
     private static int gameIdGenerator = 0;
     private int gameId;
@@ -22,6 +21,7 @@ public class Game {
     private int scoreUser1;
     private int scoreUser2;
     private List<Question> question;
+    private Queue<IncomingWebSocketMessage> messageInputQueue;
 
     /**
      * The contructor generates a new game session
@@ -39,6 +39,7 @@ public class Game {
         this.scoreUser1 = 0;
         this.scoreUser2 = 0;
         this.question = questionRandomizer.getQuestions();
+        this.messageInputQueue = new LinkedList<>();
     }
 
     /**
@@ -154,5 +155,48 @@ public class Game {
 
         //Return null if the user is wrong
         return null;
+    }
+
+    /**
+     * The method adds a queue for incoming messages during a game
+     * It notifies the observer (GameThread instance)
+     */
+    public synchronized void addMessage(IncomingWebSocketMessage newMessage) {
+
+        //Add the message if its from one of the users
+        if(newMessage.getUser().equals(this.user1) || newMessage.getUser().equals(this.user2)) {
+            this.messageInputQueue.add(newMessage);
+            setChanged();
+            notifyObservers();
+        }
+    }
+
+    /**
+     * Return the first message from the queue
+     * @return
+     */
+    public IncomingWebSocketMessage getNextMessage() {
+
+        //Get the first entry of the queue
+        return messageInputQueue.poll();
+    }
+
+    /**
+     * Check for a new message
+     * @return
+     */
+    public boolean isNextMessage() {
+
+        //Is the queue not empty?
+        return !messageInputQueue.isEmpty();
+    }
+
+    /**
+     * Delete the messageInputQueue
+     */
+    public void clearMessages() {
+
+        //Clear the queue
+        this.messageInputQueue.clear();
     }
 }
