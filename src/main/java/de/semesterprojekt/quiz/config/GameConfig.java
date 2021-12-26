@@ -5,11 +5,11 @@ public class GameConfig {
     //The count of the questions
     public final static int COUNT_QUESTION = 3;
 
-    //The question duration in milliseconds
-    public final static long DURATION_QUESTION = 10000;
+    //The question duration in seconds
+    public final static int DURATION_QUESTION = 10;
 
-    //The time before each question
-    public final static long DURATION_BREAK = 2000;
+    //The time before each question in seconds
+    public final static int DURATION_BREAK = 2;
 
     //The question duration in milliseconds (Must be smaller than QUESTION_DURATION)
     public final static long DURATION_MAX_POINTS = 1000;
