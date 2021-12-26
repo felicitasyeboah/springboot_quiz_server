@@ -1,8 +1,8 @@
-INSERT INTO PaF_GruppeB.user (user_name, password, is_ready)
+INSERT INTO PaF_GruppeB.user (user_name, password)
 	VALUES
-		('user1', 'password1', false),
-        ('user2', 'password2', false),
-        ('user3', 'password3', false);
+		('user1', 'password1'),
+        ('user2', 'password2'),
+        ('user3', 'password3');
 
 INSERT INTO PaF_GruppeB.category (category_name) 
 	VALUES
