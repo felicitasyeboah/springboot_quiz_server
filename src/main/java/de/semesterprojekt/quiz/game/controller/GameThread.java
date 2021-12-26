@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import de.semesterprojekt.quiz.config.GameConfig;
 import de.semesterprojekt.quiz.game.model.Game;
 import de.semesterprojekt.quiz.websocket.message.IncomingWebSocketMessage;
-import de.semesterprojekt.quiz.websocket.message.WebsocketMessageSender;
+import de.semesterprojekt.quiz.websocket.WebsocketMessageSender;
 
 import java.util.Observable;
 import java.util.Observer;
