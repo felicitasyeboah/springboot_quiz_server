@@ -22,8 +22,7 @@ public class IncomingWebSocketMessage {
         this.user = user;
 
         //Get the Data with key "answer" -> if the key is no present, the field will be an empty string
-        AnswerMessage answer = new Gson().fromJson(message, AnswerMessage.class);
-        this.message = answer.getAnswer();
+        this.message = new Gson().fromJson(message, AnswerMessage.class).getAnswer();
     }
 
 }
