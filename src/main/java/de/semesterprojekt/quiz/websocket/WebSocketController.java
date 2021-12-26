@@ -6,6 +6,7 @@ import de.semesterprojekt.quiz.gamelogic.WebsocketMessageSender;
 import de.semesterprojekt.quiz.model.Game;
 import de.semesterprojekt.quiz.model.GameMessage;
 import de.semesterprojekt.quiz.entity.User;
+import de.semesterprojekt.quiz.model.IncomingWebSocketMessage;
 import de.semesterprojekt.quiz.repository.UserRepository;
 import de.semesterprojekt.quiz.security.JwtTokenProvider;
 import de.semesterprojekt.quiz.utility.QuestionRandomizer;
@@ -38,8 +39,9 @@ public class WebSocketController {
     QuestionRandomizer questionRandomizer;
 
     //Map to store username and token
-    private Map<String,String> userTokenMap = new HashMap<>();
+    private Map<String, String> userTokenMap = new HashMap<>();
     private List<User> userList = new ArrayList<>();
+    private List<Game> gameList = new ArrayList<>();
 
     /**
      * The Methods sends a message to the calling user
@@ -47,11 +49,27 @@ public class WebSocketController {
      * @param principal
      */
     @MessageMapping("/game")
-    public void getGameMessage(String message, Principal principal){
+    public void handleIncomingMessage(String message, Principal principal){
 
-        //Get sessionId from the request
-        //String token = principal.getName().toString();
-        //String username = tokenProvider.getUserNameFromToken(token);
+        //Get the user from the message
+        String token = principal.getName().toString();
+        String userName = tokenProvider.getUserNameFromToken(token);
+        Optional<User> userOptional = userRepository.findByUserName(userName);
+        User user = (User) userOptional.get();
+
+        //Create a new IncomingMessage object
+        IncomingWebSocketMessage newMessage = new IncomingWebSocketMessage(user, message);
+
+        //Find the current game of the calling user
+        for(Game game : gameList) {
+
+            if(game.getUser1().getUserName().equals(userName) || game.getUser2().getUserName().equals(userName)) {
+
+                //Add the message to the queue
+                game.addMessage(newMessage);
+                break;
+            }
+        }
 
         //System.out.println("Message from: " + username);
         //System.out.println("Message: " + message);
@@ -90,6 +108,9 @@ public class WebSocketController {
                 System.out.println("");
             }
         }
+        if(userListSize == 0) {
+            System.out.println("");
+        }
     }
 
     /**
@@ -101,16 +122,21 @@ public class WebSocketController {
         int userListSize = userList.size();
 
         //Try to match players, when there are sets of two ready to play
-        if(userListSize % 2 == 0) {
+        if(userListSize % 2 == 0 && userListSize > 0) {
 
             //Get the users
             User user1 = userList.get(userListSize - 2);
             User user2 = userList.get(userListSize - 1);
 
-            //Create the game and start it
+            //Create the game
             Game newGame = new Game(user1, userTokenMap.get(user1.getUserName()), user2, userTokenMap.get(user2.getUserName()), questionRandomizer);
+
+            //Add the Game to the gameList
+            gameList.add(newGame);
+
+            //Start the game
             GameThread newGameThread = new GameThread(newGame, messageSender);
-            newGameThread.run();
+            newGameThread.start();
         }
     }
 
@@ -139,9 +165,6 @@ public class WebSocketController {
 
         //Store user in userList
         userList.add(user);
-
-        //Print text
-        System.out.println("User \"" + username + "\" is ready to play.");
 
         //Print the connected users
         printConnectedUsers();
@@ -178,9 +201,6 @@ public class WebSocketController {
         if(userList.contains(user)) {
             userList.remove(user);
         }
-
-        //Print text
-        System.out.println("User \"" + username + "\" disconnected.");
 
         //Print the connected users
         printConnectedUsers();
