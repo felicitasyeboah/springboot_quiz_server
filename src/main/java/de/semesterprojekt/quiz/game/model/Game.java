@@ -201,4 +201,45 @@ public class Game extends Observable {
         //Clear the queue
         this.messageInputQueue.clear();
     }
+
+    /**
+     * Checks the answer and add the calculated points
+     */
+    public void submitAnswer(User user, int round, String answer, long answerTime) {
+
+        //Check the answer
+        if(answer.equals(this.question.get(round).getAnswerCorrect())) {
+
+            //Check which user answered and calculate the points
+            if(user.equals(this.getUser1())) {
+                this.addScoreUser1(calculatePoints(answerTime));
+            } else if (user.equals(this.getUser2())) {
+                this.addScoreUser2(calculatePoints(answerTime));
+            }
+        }
+    }
+
+    /**
+     * Calculate the points of a round
+     *
+     * @param answerTime needed time to answer
+     * @return
+     */
+    private int calculatePoints (long answerTime) {
+        if (answerTime < GameConfig.DURATION_MAX_POINTS) {
+
+            //Return max points
+            return GameConfig.POINTS_MAX;
+
+        } else if (answerTime >= GameConfig.DURATION_MAX_POINTS && answerTime <= GameConfig.DURATION_QUESTION * 1000) {
+
+            //Calculate the points
+            return (int) (GameConfig.POINTS_MIN + ((GameConfig.POINTS_MAX - GameConfig.POINTS_MIN) * (1 - ((float) (answerTime - GameConfig.DURATION_MAX_POINTS) / (GameConfig.DURATION_QUESTION * 1000 - GameConfig.DURATION_MAX_POINTS)))));
+        }
+
+        //Return 0 points
+        return 0;
+    }
+
+
 }
