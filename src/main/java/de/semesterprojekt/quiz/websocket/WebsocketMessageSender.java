@@ -1,8 +1,10 @@
-package de.semesterprojekt.quiz.websocket.message;
+package de.semesterprojekt.quiz.websocket;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.MessageHeaders;
+import org.springframework.messaging.core.MessagePostProcessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Controller;
 
 import java.util.HashMap;
@@ -20,6 +22,7 @@ public class WebsocketMessageSender {
      * @param message message
      */
     public void sendMessage(String token, String message) {
+
         Map<String,String> newMap = new HashMap<>();
         newMap.put("type","gameMessage");
 
