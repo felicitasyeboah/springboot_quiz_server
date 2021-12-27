@@ -1,8 +1,10 @@
 package de.semesterprojekt.quiz.database.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Comparator;
 import java.util.Date;
 
 /**
@@ -10,10 +12,11 @@ import java.util.Date;
  */
 @Data
 @Entity
-public class PlayedGames {
+public class PlayedGame {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private int gameId;
 
     private Date timeStamp;
@@ -29,4 +32,17 @@ public class PlayedGames {
     User user2;
 
     private int userScore2;
+
+    /**
+     * The method returns the biggest userscore of the game
+     * @return
+     */
+    @JsonIgnore
+    public int getMaxScore() {
+        if (this.getUserScore1() > this.getUserScore2()) {
+            return this.getUserScore1();
+        } else {
+            return this.getUserScore2();
+        }
+    }
 }
