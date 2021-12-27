@@ -1,9 +1,9 @@
 package de.semesterprojekt.quiz.database.controller;
 
-import de.semesterprojekt.quiz.database.entity.PlayedGames;
+import de.semesterprojekt.quiz.database.entity.PlayedGame;
 import de.semesterprojekt.quiz.database.entity.User;
 import de.semesterprojekt.quiz.model.UserScore;
-import de.semesterprojekt.quiz.database.repository.PlayedGamesRepository;
+import de.semesterprojekt.quiz.database.repository.PlayedGameRepository;
 import de.semesterprojekt.quiz.database.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,22 +22,22 @@ import java.util.List;
  */
 @CrossOrigin
 @RestController
-@RequestMapping("/playedGames")
-public class PlayedGamesController {
+@RequestMapping("")
+public class PlayedGameController {
 
-    private PlayedGamesRepository playedGamesRepository;
+    private PlayedGameRepository playedGameRepository;
 
     @Autowired
     private UserRepository userRepository;
 
-    public PlayedGamesController(PlayedGamesRepository playedGamesRepository) {
-        this.playedGamesRepository = playedGamesRepository;
+    public PlayedGameController(PlayedGameRepository playedGameRepository) {
+        this.playedGameRepository = playedGameRepository;
     }
 
     /**
      * Returns a list of all played games of the calling user
      */
-    @GetMapping( path = "")
+    @GetMapping( path = "/playedGames")
     public ResponseEntity<List<UserScore>> getAllPlayedGames(){
 
         String username;
@@ -69,7 +69,7 @@ public class PlayedGamesController {
                 List<UserScore> userGameList = new ArrayList<>();
 
                 //Check all played games and create UserScore objects
-                for(PlayedGames playedGame : playedGamesRepository.findAll()) {
+                for(PlayedGame playedGame : playedGameRepository.findAll()) {
 
                     if(playedGame.getUser1().getUserId() == userId) {
 
