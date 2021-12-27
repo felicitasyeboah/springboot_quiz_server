@@ -9,11 +9,18 @@ import lombok.Getter;
 @Getter
 public class ResultMessage extends ScoreMessage {
 
+    //Add a value that represents, that a user achieved a new highscore
     private boolean isHighScore;
 
     public ResultMessage(User user, User opponent, int userScore, int opponentScore, boolean isHighScore) {
-        super(user.getSimpleUser(), opponent.getSimpleUser(), userScore, opponentScore);
-        this.isHighScore = isHighScore;
+
+        //construct the extended class
+        super(user, opponent, userScore, opponentScore);
+
+        //Set the type
         super.setType(MessageType.RESULT_MESSAGE);
+
+        //Set the value
+        this.isHighScore = isHighScore;
     }
 }
