@@ -46,7 +46,7 @@ VALUES (1, ''Welches Metall leitet Wärme am besten?'', ''Silber'', ''Kupfer'', 
        (5, ''Was macht der Platzwart von Berufs wegen?'', ''ein paar Linien ziehen'', ''an der Tube schnüffeln'',
         ''sich einen zwitschern'', ''ne Tüte drehen'');
 
-INSERT INTO PaF_GruppeB.played_games (user_id1, user_id2, user_score1, user_score2)
+INSERT INTO PaF_GruppeB.played_game (user_id1, user_id2, user_score1, user_score2)
 VALUES (1, 2, 1800, 1500),
        (1, 3, 2700, 800),
        (2, 3, 650, 700);
