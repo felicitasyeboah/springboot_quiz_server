@@ -24,5 +24,5 @@ public class GameConfig {
     public final static int POINTS_MAX = 1000;
 
     //The length of the highscore-list
-    public final static int LENGTH_HIGHSCORE_LIST = 3;
+    public final static int LENGTH_HIGHSCORE_LIST = 5;
 }
