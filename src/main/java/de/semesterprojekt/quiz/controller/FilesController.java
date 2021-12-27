@@ -1,7 +1,7 @@
 package de.semesterprojekt.quiz.controller;
 
 import de.semesterprojekt.quiz.model.FileInfo;
-import de.semesterprojekt.quiz.model.ResponseMessage;
+import de.semesterprojekt.quiz.security.model.ResponseMessage;
 import de.semesterprojekt.quiz.service.FilesStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;

@@ -1,10 +1,10 @@
 package de.semesterprojekt.quiz.game.controller;
 
 import de.semesterprojekt.quiz.config.GameConfig;
-import de.semesterprojekt.quiz.game.message.MessageType;
-import de.semesterprojekt.quiz.game.message.TimerMessage;
+import de.semesterprojekt.quiz.game.model.message.MessageType;
+import de.semesterprojekt.quiz.game.model.message.TimerMessage;
 import de.semesterprojekt.quiz.game.model.Game;
-import de.semesterprojekt.quiz.websocket.WebsocketMessageSender;
+import de.semesterprojekt.quiz.websocket.controller.WebsocketMessageSender;
 
 public class GameTimer extends Thread {
 

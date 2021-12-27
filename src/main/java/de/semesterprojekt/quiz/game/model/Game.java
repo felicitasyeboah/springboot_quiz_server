@@ -1,11 +1,11 @@
 package de.semesterprojekt.quiz.game.model;
 
 import de.semesterprojekt.quiz.config.GameConfig;
-import de.semesterprojekt.quiz.database.entity.Question;
-import de.semesterprojekt.quiz.database.entity.User;
-import de.semesterprojekt.quiz.utility.QuestionRandomizer;
-import de.semesterprojekt.quiz.game.message.GameMessage;
-import de.semesterprojekt.quiz.websocket.message.IncomingWebSocketMessage;
+import de.semesterprojekt.quiz.data.entity.Question;
+import de.semesterprojekt.quiz.data.entity.User;
+import de.semesterprojekt.quiz.data.utility.QuestionRandomizer;
+import de.semesterprojekt.quiz.game.model.message.GameMessage;
+import de.semesterprojekt.quiz.websocket.model.IncomingWebSocketMessage;
 
 import java.util.*;
 

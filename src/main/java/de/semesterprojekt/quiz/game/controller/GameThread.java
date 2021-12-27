@@ -2,10 +2,10 @@ package de.semesterprojekt.quiz.game.controller;
 
 import com.google.gson.Gson;
 import de.semesterprojekt.quiz.config.GameConfig;
-import de.semesterprojekt.quiz.game.message.*;
+import de.semesterprojekt.quiz.game.model.message.*;
 import de.semesterprojekt.quiz.game.model.Game;
-import de.semesterprojekt.quiz.websocket.message.IncomingWebSocketMessage;
-import de.semesterprojekt.quiz.websocket.WebsocketMessageSender;
+import de.semesterprojekt.quiz.websocket.model.IncomingWebSocketMessage;
+import de.semesterprojekt.quiz.websocket.controller.WebsocketMessageSender;
 
 import java.util.Observable;
 import java.util.Observer;

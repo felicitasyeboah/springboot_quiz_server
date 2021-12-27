@@ -1,7 +1,7 @@
 package de.semesterprojekt.quiz.config;
 
-import de.semesterprojekt.quiz.security.JwtAuthenticationEntryPoint;
-import de.semesterprojekt.quiz.security.JwtAuthenticationFilter;
+import de.semesterprojekt.quiz.security.jwt.JwtAuthenticationEntryPoint;
+import de.semesterprojekt.quiz.security.jwt.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
