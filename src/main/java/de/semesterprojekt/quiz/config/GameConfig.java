@@ -8,8 +8,14 @@ public class GameConfig {
     //The question duration in seconds
     public final static int DURATION_QUESTION = 10;
 
-    //The time before each question in seconds
-    public final static int DURATION_BREAK = 2;
+    //The time before each game will start in seconds
+    public final static int DURATION_START = 2;
+
+    //The time after each question to show score for this question in seconds
+    public final static int DURATION_SCORE = 2;
+
+    //The time after game finished to show result in seconds
+    public final static int DURATION_RESULT = 5;
 
     //The question duration in milliseconds (Must be smaller than QUESTION_DURATION)
     public final static long DURATION_MAX_POINTS = 1000;
