@@ -1,5 +1,6 @@
 package de.semesterprojekt.quiz.game.controller;
 
+import de.semesterprojekt.quiz.database.repository.PlayedGameRepository;
 import de.semesterprojekt.quiz.game.model.Game;
 import de.semesterprojekt.quiz.database.entity.User;
 import de.semesterprojekt.quiz.websocket.controller.WebsocketMessageSender;
@@ -24,6 +25,9 @@ public class LobbyController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    PlayedGameRepository playedGameRepository;
 
     @Autowired
     WebsocketMessageSender messageSender;
@@ -112,7 +116,7 @@ public class LobbyController {
             gameList.add(newGame);
 
             //Start the game
-            GameThread newGameThread = new GameThread(newGame, messageSender);
+            GameThread newGameThread = new GameThread(newGame, messageSender, playedGameRepository);
             newGameThread.start();
         }
     }

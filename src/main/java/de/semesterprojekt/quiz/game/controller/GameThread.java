@@ -2,6 +2,7 @@ package de.semesterprojekt.quiz.game.controller;
 
 import com.google.gson.Gson;
 import de.semesterprojekt.quiz.config.GameConfig;
+import de.semesterprojekt.quiz.database.repository.PlayedGameRepository;
 import de.semesterprojekt.quiz.game.model.message.*;
 import de.semesterprojekt.quiz.game.model.Game;
 import de.semesterprojekt.quiz.websocket.model.IncomingWebSocketMessage;
@@ -17,11 +18,13 @@ public class GameThread extends Thread implements Observer {
 
     private Game game;
     private WebsocketMessageSender messageSender;
+    private PlayedGameRepository playedGameRepository;
     private Gson gson = new Gson();
 
-    public GameThread(Game game, WebsocketMessageSender messageSender){
+    public GameThread(Game game, WebsocketMessageSender messageSender, PlayedGameRepository playedGameRepository){
         this.game = game;
         this.messageSender = messageSender;
+        this.playedGameRepository = playedGameRepository;
     }
 
     /**
