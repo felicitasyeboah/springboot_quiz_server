@@ -5,12 +5,13 @@ package de.semesterprojekt.quiz.game.message;
  */
 public enum MessageType {
 
-    //Add values to the ENUM
+    //Message types
     GENERIC_MESSAGE("GENERIC_MESSAGE"),
     GAME_MESSAGE("GAME_MESSAGE"),
     SCORE_MESSAGE("SCORE_MESSAGE"),
     RESULT_MESSAGE("RESULT_MESSAGE"),
-    TIMER_MESSAGE("TIMER_MESSAGE"),
+
+    //Timer Types
     START_TIMER_MESSAGE("START_TIMER_MESSAGE"),
     QUESTION_TIMER_MESSAGE("QUESTION_TIMER_MESSAGE"),
     SCORE_TIMER_MESSAGE("SCORE_TIMER_MESSAGE"),
