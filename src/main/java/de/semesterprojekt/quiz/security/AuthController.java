@@ -113,7 +113,7 @@ public class AuthController {
             );
 
             //returns JW-Token when user is authenticated
-            System.out.println("User \"" + authRequest.getUserName().trim() + "\" successfully logged in.");
+            System.out.println("User \"" + authRequest.getUserName().trim() + "\" successfully received a JWT.");
             Map<String, String> token = new HashMap<>();
             token.put("token", jwtTokenProvider.generateToken(authentication));
             return ResponseEntity.ok(token);
