@@ -3,6 +3,9 @@ package de.semesterprojekt.quiz.game.controller;
 import com.google.gson.Gson;
 import de.semesterprojekt.quiz.config.GameConfig;
 import de.semesterprojekt.quiz.game.message.MessageType;
+import de.semesterprojekt.quiz.game.message.ResultMessage;
+import de.semesterprojekt.quiz.game.message.ScoreMessage;
+import de.semesterprojekt.quiz.game.message.TimerMessage;
 import de.semesterprojekt.quiz.game.model.Game;
 import de.semesterprojekt.quiz.websocket.message.IncomingWebSocketMessage;
 import de.semesterprojekt.quiz.websocket.WebsocketMessageSender;
@@ -37,10 +40,12 @@ public class GameThread extends Thread implements Observer {
 
             //Break timer
             try {
-                for (int i = GameConfig.DURATION_BREAK; i > 0; i--) {
-                    System.out.println("Break timer: " + i + " seconds left.");
+                for (int timeLeft = GameConfig.DURATION_BREAK; timeLeft > 0; timeLeft--) {
 
-                    //TODO: SEND TIMER MESSAGE
+                    //Create a timer-message and send it to the user
+                    TimerMessage newTimerMessage = new TimerMessage(timeLeft);
+                    messageSender.sendMessage(game.getTokenUser1(), newTimerMessage);
+                    messageSender.sendMessage(game.getTokenUser2(), newTimerMessage);
 
                     Thread.sleep(1000);
                 }
@@ -48,12 +53,9 @@ public class GameThread extends Thread implements Observer {
 
             }
 
-            //Print the question of the current round
-            System.out.println("Question " + (currentRound + 1) + ": " + game.getQuestion(currentRound).getQuestionText());
-
-            //Send the question to both users
-            messageSender.sendMessage(game.getTokenUser1(), gson.toJson(game.getGameMessage(game.getUser1(), currentRound)), MessageType.GAME_MESSAGE);
-            messageSender.sendMessage(game.getTokenUser2(), gson.toJson(game.getGameMessage(game.getUser2(), currentRound)), MessageType.GAME_MESSAGE);
+            //Send the game-message to both users
+            messageSender.sendMessage(game.getTokenUser1(), game.getGameMessage(game.getUser1(), currentRound));
+            messageSender.sendMessage(game.getTokenUser2(), game.getGameMessage(game.getUser2(), currentRound));
 
             //Delete messages from the queue
             game.clearMessages();
@@ -122,15 +124,17 @@ public class GameThread extends Thread implements Observer {
             //Remove messageQueue-observer
             game.deleteObserver(this);
 
-            //TODO: Send a scoreMessage to the users
+            //Send the score-message to each user
+            messageSender.sendMessage(game.getTokenUser1(),new ScoreMessage(game.getUser1(), game.getUser2(), game.getScoreUser1(), game.getScoreUser2()));
+            messageSender.sendMessage(game.getTokenUser2(),new ScoreMessage(game.getUser2(), game.getUser1(), game.getScoreUser2(), game.getScoreUser1()));
 
-            //Print timer-is-over message
-            System.out.println("First round is over.");
-
-            //Print the points of the users
-            System.out.println(game.getUser1().getUserName() + " got " + game.getScoreUser1() + " points.");
-            System.out.println(game.getUser2().getUserName() + " got " + game.getScoreUser2() + " points.");
         }
+
+        //TODO: CHECK HIGHSCORES
+
+        //Send a result-message to each user
+        messageSender.sendMessage(game.getTokenUser1(),new ResultMessage(game.getUser2(), game.getUser1(), game.getScoreUser2(), game.getScoreUser1(),false));
+        messageSender.sendMessage(game.getTokenUser1(),new ResultMessage(game.getUser2(), game.getUser1(), game.getScoreUser2(), game.getScoreUser1(),false));
 
         //Print message
         System.out.println("Please restart the server for further testing");
