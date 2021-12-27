@@ -1,7 +1,7 @@
 package de.semesterprojekt.quiz.game.model.message;
 
-import de.semesterprojekt.quiz.data.entity.User;
-import de.semesterprojekt.quiz.data.model.SimpleUser;
+import de.semesterprojekt.quiz.database.entity.User;
+import de.semesterprojekt.quiz.database.model.SimpleUser;
 import lombok.Getter;
 
 /**

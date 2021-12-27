@@ -1,8 +1,8 @@
-package de.semesterprojekt.quiz.controller;
+package de.semesterprojekt.quiz.fileservice.controller;
 
-import de.semesterprojekt.quiz.model.FileInfo;
+import de.semesterprojekt.quiz.fileservice.model.FileInfo;
 import de.semesterprojekt.quiz.security.model.ResponseMessage;
-import de.semesterprojekt.quiz.service.FilesStorageService;
+import de.semesterprojekt.quiz.fileservice.FilesStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;

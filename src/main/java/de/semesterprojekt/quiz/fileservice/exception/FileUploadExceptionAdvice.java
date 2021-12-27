@@ -1,4 +1,4 @@
-package de.semesterprojekt.quiz.service.exception;
+package de.semesterprojekt.quiz.fileservice.exception;
 
 import de.semesterprojekt.quiz.security.model.ResponseMessage;
 import org.springframework.http.HttpStatus;

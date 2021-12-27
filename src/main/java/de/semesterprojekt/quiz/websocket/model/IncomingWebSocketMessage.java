@@ -1,7 +1,7 @@
 package de.semesterprojekt.quiz.websocket.model;
 
 import com.google.gson.Gson;
-import de.semesterprojekt.quiz.data.entity.User;
+import de.semesterprojekt.quiz.database.entity.User;
 import lombok.Data;
 
 /**

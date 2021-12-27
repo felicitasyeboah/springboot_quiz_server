@@ -1,7 +1,7 @@
-package de.semesterprojekt.quiz.data.entity;
+package de.semesterprojekt.quiz.database.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import de.semesterprojekt.quiz.data.model.SimpleUser;
+import de.semesterprojekt.quiz.database.model.SimpleUser;
 import lombok.Data;
 
 import javax.persistence.*;

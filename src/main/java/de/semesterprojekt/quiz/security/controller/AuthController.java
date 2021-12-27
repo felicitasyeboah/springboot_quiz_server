@@ -1,7 +1,7 @@
 package de.semesterprojekt.quiz.security.controller;
 
-import de.semesterprojekt.quiz.data.entity.User;
-import de.semesterprojekt.quiz.data.repository.UserRepository;
+import de.semesterprojekt.quiz.database.entity.User;
+import de.semesterprojekt.quiz.database.repository.UserRepository;
 import de.semesterprojekt.quiz.security.jwt.JwtTokenProvider;
 import de.semesterprojekt.quiz.security.model.AuthRequest;
 import org.springframework.http.HttpStatus;

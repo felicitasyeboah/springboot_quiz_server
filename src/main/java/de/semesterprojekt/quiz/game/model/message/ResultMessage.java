@@ -1,6 +1,6 @@
 package de.semesterprojekt.quiz.game.model.message;
 
-import de.semesterprojekt.quiz.data.entity.User;
+import de.semesterprojekt.quiz.database.entity.User;
 import lombok.Getter;
 
 /**

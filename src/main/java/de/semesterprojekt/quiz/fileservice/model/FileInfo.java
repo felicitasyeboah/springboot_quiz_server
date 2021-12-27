@@ -1,4 +1,4 @@
-package de.semesterprojekt.quiz.model;
+package de.semesterprojekt.quiz.fileservice.model;
 
 public class FileInfo {
     private String name;

@@ -1,7 +1,7 @@
 package de.semesterprojekt.quiz.security.service;
 
-import de.semesterprojekt.quiz.data.entity.User;
-import de.semesterprojekt.quiz.data.repository.UserRepository;
+import de.semesterprojekt.quiz.database.entity.User;
+import de.semesterprojekt.quiz.database.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

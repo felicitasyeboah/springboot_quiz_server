@@ -1,7 +1,7 @@
-package de.semesterprojekt.quiz.data.controller;
+package de.semesterprojekt.quiz.database.controller;
 
-import de.semesterprojekt.quiz.data.entity.User;
-import de.semesterprojekt.quiz.data.repository.UserRepository;
+import de.semesterprojekt.quiz.database.entity.User;
+import de.semesterprojekt.quiz.database.repository.UserRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

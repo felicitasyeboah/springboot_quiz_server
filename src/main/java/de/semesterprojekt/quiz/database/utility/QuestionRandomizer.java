@@ -1,8 +1,8 @@
-package de.semesterprojekt.quiz.data.utility;
+package de.semesterprojekt.quiz.database.utility;
 
 import de.semesterprojekt.quiz.config.GameConfig;
-import de.semesterprojekt.quiz.data.entity.Question;
-import de.semesterprojekt.quiz.data.repository.QuestionRepository;
+import de.semesterprojekt.quiz.database.entity.Question;
+import de.semesterprojekt.quiz.database.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

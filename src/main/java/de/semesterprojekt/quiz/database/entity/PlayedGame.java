@@ -1,4 +1,4 @@
-package de.semesterprojekt.quiz.data.entity;
+package de.semesterprojekt.quiz.database.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;

@@ -1,8 +1,6 @@
 package de.semesterprojekt.quiz;
 
-import de.semesterprojekt.quiz.config.GameConfig;
-import de.semesterprojekt.quiz.service.FilesStorageService;
-import org.springframework.boot.CommandLineRunner;
+import de.semesterprojekt.quiz.fileservice.FilesStorageService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

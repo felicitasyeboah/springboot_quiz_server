@@ -1,6 +1,6 @@
-package de.semesterprojekt.quiz.data.utility;
+package de.semesterprojekt.quiz.database.utility;
 
-import de.semesterprojekt.quiz.data.entity.PlayedGame;
+import de.semesterprojekt.quiz.database.entity.PlayedGame;
 
 import java.util.Comparator;
 
