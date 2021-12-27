@@ -35,9 +35,9 @@ public class GameThread extends Thread implements Observer {
             for (int timeLeft = GameConfig.DURATION_START; timeLeft > 0; timeLeft--) {
 
                 //Create a timer-message and send it to the user
-                StartTimerMessage newStartTimerMessage = new StartTimerMessage(timeLeft);
-                messageSender.sendMessage(game.getTokenUser1(), newStartTimerMessage);
-                messageSender.sendMessage(game.getTokenUser2(), newStartTimerMessage);
+                TimerMessage newTimerMessage = new TimerMessage(MessageType.START_TIMER_MESSAGE, timeLeft);
+                messageSender.sendMessage(game.getTokenUser1(), newTimerMessage);
+                messageSender.sendMessage(game.getTokenUser2(), newTimerMessage);
 
                 Thread.sleep(1000);
             }
@@ -131,9 +131,9 @@ public class GameThread extends Thread implements Observer {
                 for (int timeLeft = GameConfig.DURATION_SCORE; timeLeft > 0; timeLeft--) {
 
                     //Create a timer-message and send it to the user
-                    ScoreTimerMessage newScoreTimerMessage = new ScoreTimerMessage(timeLeft);
-                    messageSender.sendMessage(game.getTokenUser1(), newScoreTimerMessage);
-                    messageSender.sendMessage(game.getTokenUser2(), newScoreTimerMessage);
+                    TimerMessage newTimerMessage = new TimerMessage(MessageType.SCORE_TIMER_MESSAGE, timeLeft);
+                    messageSender.sendMessage(game.getTokenUser1(), newTimerMessage);
+                    messageSender.sendMessage(game.getTokenUser2(), newTimerMessage);
 
                     Thread.sleep(1000);
                 }
@@ -154,9 +154,9 @@ public class GameThread extends Thread implements Observer {
             for (int timeLeft = GameConfig.DURATION_RESULT; timeLeft > 0; timeLeft--) {
 
                 //Create a timer-message and send it to the user
-                ResultTimerMessage newResultTimerMessage = new ResultTimerMessage(timeLeft);
-                messageSender.sendMessage(game.getTokenUser1(), newResultTimerMessage);
-                messageSender.sendMessage(game.getTokenUser2(), newResultTimerMessage);
+                TimerMessage newTimerMessage = new TimerMessage(MessageType.RESULT_TIMER_MESSAGE, timeLeft);
+                messageSender.sendMessage(game.getTokenUser1(), newTimerMessage);
+                messageSender.sendMessage(game.getTokenUser2(), newTimerMessage);
 
                 Thread.sleep(1000);
             }

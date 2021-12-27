@@ -34,6 +34,12 @@ public class PlayedGameController {
     }
 
     /**
+     * TODO: CREATE PRIVATE INDEX FUNCTION
+     * TODO: CREATE HIGHSCORE LIST
+     * CHECK FOR HIGHSCORE
+     */
+
+    /**
      * Returns a list of all played games of the calling user
      */
     @GetMapping( path = "/playedGames")
