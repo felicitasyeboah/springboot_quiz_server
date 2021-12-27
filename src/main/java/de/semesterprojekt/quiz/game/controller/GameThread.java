@@ -33,26 +33,15 @@ public class GameThread extends Thread implements Observer {
     @Override
     public void run() {
 
-        //Start timer
-        try {
-            for (int timeLeft = GameConfig.DURATION_START; timeLeft > 0; timeLeft--) {
+        //Print the usernames
+        System.out.println("Start game: " + game.getUser1().getUserName() + " vs. " + game.getUser2().getUserName());
 
-                //Create a timer-message and send it to the user
-                TimerMessage newTimerMessage = new TimerMessage(MessageType.START_TIMER_MESSAGE, timeLeft);
-                messageSender.sendMessage(game.getTokenUser1(), newTimerMessage);
-                messageSender.sendMessage(game.getTokenUser2(), newTimerMessage);
+        //Start the blocking start timer
+        GameTimer startTimer = new GameTimer(this.game, this.messageSender, MessageType.START_TIMER_MESSAGE, GameConfig.DURATION_START);
+        startTimer.startBlocking();
 
-                Thread.sleep(1000);
-            }
-        } catch (Exception e) {
-
-        }
         for(int currentRound = 0; currentRound < GameConfig.COUNT_QUESTION; currentRound++)
         {
-            //Print the usernames
-            System.out.println("Start game: " + game.getUser1().getUserName() + " vs. " + game.getUser2().getUserName());
-
-
 
             //Send the game-message to both users
             messageSender.sendMessage(game.getTokenUser1(), game.getGameMessage(game.getUser1(), currentRound));
@@ -72,9 +61,9 @@ public class GameThread extends Thread implements Observer {
             boolean hasAnsweredUser1 = false;
             boolean hasAnsweredUser2 = false;
 
-            //Start the client timer
-            GameTimer clientTimer = new GameTimer(this.game, this.messageSender);
-            clientTimer.start();
+            //Start the non-blocking question timer
+            GameTimer questionTimer = new GameTimer(this.game, this.messageSender, MessageType.QUESTION_TIMER_MESSAGE, GameConfig.DURATION_QUESTION);
+            questionTimer.start();
 
             //Start the timer loop
             do {
@@ -119,8 +108,8 @@ public class GameThread extends Thread implements Observer {
                 }
             } while (remainingTimeMillis > 0);
 
-            //Interrupt the Client Timer
-            clientTimer.interrupt();
+            //Interrupt the question timer
+            questionTimer.interrupt();
 
             //Remove messageQueue-observer
             game.deleteObserver(this);
@@ -129,21 +118,9 @@ public class GameThread extends Thread implements Observer {
             messageSender.sendMessage(game.getTokenUser1(),new ScoreMessage(game.getUser1(), game.getUser2(), game.getScoreUser1(), game.getScoreUser2()));
             messageSender.sendMessage(game.getTokenUser2(),new ScoreMessage(game.getUser2(), game.getUser1(), game.getScoreUser2(), game.getScoreUser1()));
 
-            //Score timer
-            try {
-                for (int timeLeft = GameConfig.DURATION_SCORE; timeLeft > 0; timeLeft--) {
-
-                    //Create a timer-message and send it to the user
-                    TimerMessage newTimerMessage = new TimerMessage(MessageType.SCORE_TIMER_MESSAGE, timeLeft);
-                    messageSender.sendMessage(game.getTokenUser1(), newTimerMessage);
-                    messageSender.sendMessage(game.getTokenUser2(), newTimerMessage);
-
-                    Thread.sleep(1000);
-                }
-            } catch (Exception e) {
-
-            }
-
+            //Start the blocking score timer
+            GameTimer scoreTimer = new GameTimer(this.game, this.messageSender, MessageType.SCORE_TIMER_MESSAGE, GameConfig.DURATION_SCORE);
+            scoreTimer.startBlocking();
         }
 
         //TODO: STORE IN PLAYED GAME AND CHECK HIGHSCORES
