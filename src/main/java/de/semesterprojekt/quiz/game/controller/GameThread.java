@@ -2,6 +2,7 @@ package de.semesterprojekt.quiz.game.controller;
 
 import com.google.gson.Gson;
 import de.semesterprojekt.quiz.config.GameConfig;
+import de.semesterprojekt.quiz.game.message.MessageType;
 import de.semesterprojekt.quiz.game.model.Game;
 import de.semesterprojekt.quiz.websocket.message.IncomingWebSocketMessage;
 import de.semesterprojekt.quiz.websocket.WebsocketMessageSender;
@@ -51,8 +52,8 @@ public class GameThread extends Thread implements Observer {
             System.out.println("Question " + (currentRound + 1) + ": " + game.getQuestion(currentRound).getQuestionText());
 
             //Send the question to both users
-            messageSender.sendMessage(game.getTokenUser1(), gson.toJson(game.getGameMessage(game.getUser1(), currentRound)));
-            messageSender.sendMessage(game.getTokenUser2(), gson.toJson(game.getGameMessage(game.getUser2(), currentRound)));
+            messageSender.sendMessage(game.getTokenUser1(), gson.toJson(game.getGameMessage(game.getUser1(), currentRound)), MessageType.GAME_MESSAGE);
+            messageSender.sendMessage(game.getTokenUser2(), gson.toJson(game.getGameMessage(game.getUser2(), currentRound)), MessageType.GAME_MESSAGE);
 
             //Delete messages from the queue
             game.clearMessages();
