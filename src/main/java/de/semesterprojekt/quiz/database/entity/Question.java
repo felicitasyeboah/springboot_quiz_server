@@ -1,5 +1,6 @@
 package de.semesterprojekt.quiz.database.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
@@ -14,6 +15,7 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private int questionId;
 
     private String questionText;
