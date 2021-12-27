@@ -1,5 +1,6 @@
 package de.semesterprojekt.quiz.game.message;
 
+import de.semesterprojekt.quiz.database.entity.User;
 import de.semesterprojekt.quiz.model.SimpleUser;
 import lombok.Getter;
 
@@ -17,11 +18,19 @@ public class ScoreMessage extends GenericMessage {
     private int userScore;
     private int opponentScore;
 
-    public ScoreMessage(SimpleUser user, SimpleUser opponent, int userScore, int opponentScore) {
+    public ScoreMessage(User user, User opponent, int userScore, int opponentScore) {
 
+        //construct the extended class
+        super();
+
+        //Set the type
         super.setType(MessageType.SCORE_MESSAGE);
-        this.user = user;
-        this.opponent = opponent;
+
+        //Set the users
+        this.user = user.getSimpleUser();
+        this.opponent = opponent.getSimpleUser();
+
+        //Set the scores
         this.userScore = userScore;
         this.opponentScore = opponentScore;
     }
