@@ -16,7 +16,9 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private int userId;
+
     @Column (unique = true)
     private String userName;
 
@@ -25,6 +27,7 @@ public class User {
 
     private String profileImage;
 
+    @JsonIgnore
     public SimpleUser getSimpleUser () {
 
         return new SimpleUser(this);
