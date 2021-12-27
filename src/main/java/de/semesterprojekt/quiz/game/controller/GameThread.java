@@ -143,26 +143,11 @@ public class GameThread extends Thread implements Observer {
 
         }
 
-        //TODO: CHECK HIGHSCORES
+        //TODO: STORE IN PLAYED GAME AND CHECK HIGHSCORES
 
         //Send a result-message to each user
         messageSender.sendMessage(game.getTokenUser1(),new ResultMessage(game.getUser2(), game.getUser1(), game.getScoreUser2(), game.getScoreUser1(),false));
         messageSender.sendMessage(game.getTokenUser1(),new ResultMessage(game.getUser2(), game.getUser1(), game.getScoreUser2(), game.getScoreUser1(),false));
-
-        //Result timer
-        try {
-            for (int timeLeft = GameConfig.DURATION_RESULT; timeLeft > 0; timeLeft--) {
-
-                //Create a timer-message and send it to the user
-                TimerMessage newTimerMessage = new TimerMessage(MessageType.RESULT_TIMER_MESSAGE, timeLeft);
-                messageSender.sendMessage(game.getTokenUser1(), newTimerMessage);
-                messageSender.sendMessage(game.getTokenUser2(), newTimerMessage);
-
-                Thread.sleep(1000);
-            }
-        } catch (Exception e) {
-
-        }
 
         //Print message
         System.out.println("Please restart the server for further testing");
