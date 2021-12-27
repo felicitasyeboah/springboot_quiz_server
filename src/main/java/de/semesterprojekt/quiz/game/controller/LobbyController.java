@@ -1,8 +1,6 @@
 package de.semesterprojekt.quiz.game.controller;
 
-import com.google.gson.Gson;
 import de.semesterprojekt.quiz.game.model.Game;
-import de.semesterprojekt.quiz.game.model.message.GameMessage;
 import de.semesterprojekt.quiz.database.entity.User;
 import de.semesterprojekt.quiz.websocket.controller.WebsocketMessageSender;
 import de.semesterprojekt.quiz.websocket.model.IncomingWebSocketMessage;
@@ -12,7 +10,6 @@ import de.semesterprojekt.quiz.database.utility.QuestionRandomizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import org.springframework.web.socket.messaging.SessionSubscribeEvent;
@@ -21,9 +18,6 @@ import java.util.*;
 
 @Controller
 public class LobbyController {
-
-    @Autowired
-    SimpMessagingTemplate template;
 
     @Autowired
     JwtTokenProvider tokenProvider;
@@ -69,22 +63,6 @@ public class LobbyController {
                 break;
             }
         }
-
-        //System.out.println("Message from: " + username);
-        //System.out.println("Message: " + message);
-
-        //System.out.println("Send the following data to \"" + username + "\"");
-
-        //Get the User and create the test GameMessage
-        //Optional<User> userOptional = userRepository.findByUserName(username);
-        //User user = (User) userOptional.get();
-        //String testGameMessage = getTestGameMessage(user, token);
-
-        //Print the data
-        //System.out.println(testGameMessage);
-
-        //Send Data to user
-        //template.convertAndSendToUser(token , "/topic/game", testGameMessage);
     }
 
     /**
@@ -205,29 +183,5 @@ public class LobbyController {
 
         //Print the connected users
         printConnectedUsers();
-    }
-
-    /**
-     * The method returns a stringified test object of the type GameMessage
-     * @return test object
-     */
-    private String getTestGameMessage(User user1, String tokenUser1) {
-
-        //TEST DATA
-        User user2 = new User();
-        user2.setUserName("Beate");
-        String tokenUser2 = "testToken";
-
-        //Create test data with user1 (real user) and user2 (test user)
-        Game newGame = new Game(user1, tokenUser1, user2, tokenUser2, questionRandomizer);
-
-        //Get the gameMessage for user 1 for the first round
-        GameMessage newGameMessage = newGame.getGameMessage(user1, 0);
-
-        //Create a new Gson object
-        Gson gson = new Gson();
-
-        //format the object and return it
-        return gson.toJson(newGameMessage);
     }
 }
