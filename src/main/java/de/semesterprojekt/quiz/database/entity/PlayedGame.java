@@ -37,7 +37,6 @@ public class PlayedGame {
     /**
      * All args Constructor
      */
-    //@JsonIgnore
     public PlayedGame (User user1, User user2, int userScore1, int userScore2) {
 
         //Set the date and time
@@ -50,18 +49,5 @@ public class PlayedGame {
         //Set the scores
         this.userScore1 = userScore1;
         this.userScore2 = userScore2;
-    }
-
-    /**
-     * The method returns the biggest userscore of the game
-     * @return
-     */
-    //@JsonIgnore
-    public int getMaxScore() {
-        if (this.getUserScore1() > this.getUserScore2()) {
-            return this.getUserScore1();
-        } else {
-            return this.getUserScore2();
-        }
     }
 }
