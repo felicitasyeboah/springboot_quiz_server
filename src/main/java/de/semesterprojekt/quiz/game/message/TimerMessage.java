@@ -8,12 +8,18 @@ import lombok.Getter;
 @Getter
 public class TimerMessage extends GenericMessage {
 
+    //Add a value that represents a timer value
     private int timeLeft;
 
     public TimerMessage(int timeLeft) {
 
+        //construct the extended class
+        super();
+
+        //Set the type
         super.setType(MessageType.TIMER_MESSAGE);
 
+        //Set the value
         this.timeLeft = timeLeft;
     }
 
