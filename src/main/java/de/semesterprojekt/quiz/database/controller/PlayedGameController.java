@@ -22,7 +22,6 @@ import java.util.List;
  */
 @CrossOrigin
 @RestController
-@RequestMapping("")
 public class PlayedGameController {
 
     private PlayedGameRepository playedGameRepository;
