@@ -32,8 +32,8 @@ public class GameMessage extends ScoreMessage {
 
     public GameMessage(User user, User opponent, int userScore, int opponentScore, Question question) {
 
-        //Set the users and scores
-        super(user.getSimpleUser(), opponent.getSimpleUser(), userScore, opponentScore);
+        //construct the extended class
+        super(user, opponent, userScore, opponentScore);
 
         //Set the message type
         super.setType(MessageType.GAME_MESSAGE);
