@@ -2,10 +2,7 @@ package de.semesterprojekt.quiz.game.controller;
 
 import com.google.gson.Gson;
 import de.semesterprojekt.quiz.config.GameConfig;
-import de.semesterprojekt.quiz.game.message.MessageType;
-import de.semesterprojekt.quiz.game.message.ResultMessage;
-import de.semesterprojekt.quiz.game.message.ScoreMessage;
-import de.semesterprojekt.quiz.game.message.TimerMessage;
+import de.semesterprojekt.quiz.game.message.*;
 import de.semesterprojekt.quiz.game.model.Game;
 import de.semesterprojekt.quiz.websocket.message.IncomingWebSocketMessage;
 import de.semesterprojekt.quiz.websocket.WebsocketMessageSender;
@@ -33,25 +30,26 @@ public class GameThread extends Thread implements Observer {
     @Override
     public void run() {
 
+        //Start timer
+        try {
+            for (int timeLeft = GameConfig.DURATION_START; timeLeft > 0; timeLeft--) {
+
+                //Create a timer-message and send it to the user
+                StartTimerMessage newStartTimerMessage = new StartTimerMessage(timeLeft);
+                messageSender.sendMessage(game.getTokenUser1(), newStartTimerMessage);
+                messageSender.sendMessage(game.getTokenUser2(), newStartTimerMessage);
+
+                Thread.sleep(1000);
+            }
+        } catch (Exception e) {
+
+        }
         for(int currentRound = 0; currentRound < GameConfig.COUNT_QUESTION; currentRound++)
         {
             //Print the usernames
             System.out.println("Start game: " + game.getUser1().getUserName() + " vs. " + game.getUser2().getUserName());
 
-            //Break timer
-            try {
-                for (int timeLeft = GameConfig.DURATION_BREAK; timeLeft > 0; timeLeft--) {
 
-                    //Create a timer-message and send it to the user
-                    TimerMessage newTimerMessage = new TimerMessage(timeLeft);
-                    messageSender.sendMessage(game.getTokenUser1(), newTimerMessage);
-                    messageSender.sendMessage(game.getTokenUser2(), newTimerMessage);
-
-                    Thread.sleep(1000);
-                }
-            } catch (Exception e) {
-
-            }
 
             //Send the game-message to both users
             messageSender.sendMessage(game.getTokenUser1(), game.getGameMessage(game.getUser1(), currentRound));
@@ -128,6 +126,21 @@ public class GameThread extends Thread implements Observer {
             messageSender.sendMessage(game.getTokenUser1(),new ScoreMessage(game.getUser1(), game.getUser2(), game.getScoreUser1(), game.getScoreUser2()));
             messageSender.sendMessage(game.getTokenUser2(),new ScoreMessage(game.getUser2(), game.getUser1(), game.getScoreUser2(), game.getScoreUser1()));
 
+            //Score timer
+            try {
+                for (int timeLeft = GameConfig.DURATION_SCORE; timeLeft > 0; timeLeft--) {
+
+                    //Create a timer-message and send it to the user
+                    ScoreTimerMessage newScoreTimerMessage = new ScoreTimerMessage(timeLeft);
+                    messageSender.sendMessage(game.getTokenUser1(), newScoreTimerMessage);
+                    messageSender.sendMessage(game.getTokenUser2(), newScoreTimerMessage);
+
+                    Thread.sleep(1000);
+                }
+            } catch (Exception e) {
+
+            }
+
         }
 
         //TODO: CHECK HIGHSCORES
@@ -135,6 +148,21 @@ public class GameThread extends Thread implements Observer {
         //Send a result-message to each user
         messageSender.sendMessage(game.getTokenUser1(),new ResultMessage(game.getUser2(), game.getUser1(), game.getScoreUser2(), game.getScoreUser1(),false));
         messageSender.sendMessage(game.getTokenUser1(),new ResultMessage(game.getUser2(), game.getUser1(), game.getScoreUser2(), game.getScoreUser1(),false));
+
+        //Result timer
+        try {
+            for (int timeLeft = GameConfig.DURATION_RESULT; timeLeft > 0; timeLeft--) {
+
+                //Create a timer-message and send it to the user
+                ResultTimerMessage newResultTimerMessage = new ResultTimerMessage(timeLeft);
+                messageSender.sendMessage(game.getTokenUser1(), newResultTimerMessage);
+                messageSender.sendMessage(game.getTokenUser2(), newResultTimerMessage);
+
+                Thread.sleep(1000);
+            }
+        } catch (Exception e) {
+
+        }
 
         //Print message
         System.out.println("Please restart the server for further testing");
