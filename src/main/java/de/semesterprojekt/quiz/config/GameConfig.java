@@ -25,4 +25,7 @@ public class GameConfig {
 
     //The length of the highscore-list
     public final static int LENGTH_HIGHSCORE_LIST = 5;
+
+    //The length of the user-game-history-list
+    public final static int LENGTH_USER_PLAYED_GAMES_LIST = 100;
 }
