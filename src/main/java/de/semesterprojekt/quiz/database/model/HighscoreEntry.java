@@ -2,24 +2,23 @@ package de.semesterprojekt.quiz.database.model;
 
 import de.semesterprojekt.quiz.database.entity.User;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
 /**
- * The class represents a highscore entry
+ * The class represents a highscore entry, it adds a simple user to a score entry
  */
-@Data
-public class HighscoreEntry {
+@Getter
+@Setter
+public class HighscoreEntry extends ScoreEntry {
+
+    private SimpleUser user;
 
     public HighscoreEntry(Date timeStamp, User user, int userScore) {
-        this.timeStamp = timeStamp;
+
+        super(timeStamp,userScore);
         this.user = user.getSimpleUser();
-        this.userScore = userScore;
-
     }
-
-    private Date timeStamp;
-    private SimpleUser user;
-    private int userScore;
-
 }
