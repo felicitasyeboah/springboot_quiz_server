@@ -13,20 +13,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * The class controls the REST-mapping for the PlayedGames-entity
  */
 @CrossOrigin
 @RestController
+@Controller
 public class PlayedGameController {
 
     private PlayedGameRepository playedGameRepository;
@@ -149,5 +148,57 @@ public class PlayedGameController {
 
         //No User or played games found, return a bad request
         return ResponseEntity.badRequest().build();
+    }
+
+    /**
+     * The method stores a playedGame to the datebase and returns wheather one or both of the players achieved a new highscore
+     * @param playedGame
+     * @return
+     */
+    public Map<User, Boolean> submitPlayedGame(PlayedGame playedGame) {
+
+        //Store the played game in the database
+        playedGameRepository.save(playedGame);
+
+        //Create the return map with default values
+        Map<User, Boolean> isHighscore = new HashMap<>();
+        isHighscore.put(playedGame.getUser1(), false);
+        isHighscore.put(playedGame.getUser2(), false);
+
+        //Get the new highscore list
+        ResponseEntity<List<HighscoreEntry>> highscoreResponse = getHighScore();
+        if(highscoreResponse.hasBody()) {
+            List<HighscoreEntry> highscoreList = highscoreResponse.getBody();
+
+            //Create HighscoreEntry object of both users
+            HighscoreEntry highscoreEntryUser1 = new HighscoreEntry(playedGame.getTimeStamp(), playedGame.getUser1(), playedGame.getUserScore1());
+            HighscoreEntry highscoreEntryUser2 = new HighscoreEntry(playedGame.getTimeStamp(), playedGame.getUser2(), playedGame.getUserScore2());
+
+            //Check for highscores
+            for(HighscoreEntry entry : highscoreList) {
+
+                //Check user1 for highscore
+                if(entry.equals(highscoreEntryUser1)) {
+                    isHighscore.replace(playedGame.getUser1(), true);
+                }
+
+                //Check user2 for highscore
+                if(entry.equals(highscoreEntryUser2)) {
+                    isHighscore.replace(playedGame.getUser2(), true);
+                }
+
+                //Break when both users achieved a highscore
+                if(isHighscore.get(playedGame.getUser1()) && isHighscore.get(playedGame.getUser2())) {
+                    break;
+                }
+            }
+
+            //Return the highscore map
+            return isHighscore;
+        } else {
+
+            //Return false/false when there's no highscore available
+            return isHighscore;
+        }
     }
 }
