@@ -2,12 +2,15 @@ package de.semesterprojekt.quiz.game.controller;
 
 import com.google.gson.Gson;
 import de.semesterprojekt.quiz.config.GameConfig;
-import de.semesterprojekt.quiz.database.repository.PlayedGameRepository;
+import de.semesterprojekt.quiz.database.controller.PlayedGameController;
+import de.semesterprojekt.quiz.database.entity.PlayedGame;
+import de.semesterprojekt.quiz.database.entity.User;
 import de.semesterprojekt.quiz.game.model.message.*;
 import de.semesterprojekt.quiz.game.model.Game;
 import de.semesterprojekt.quiz.websocket.model.IncomingWebSocketMessage;
 import de.semesterprojekt.quiz.websocket.controller.WebsocketMessageSender;
 
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -18,13 +21,13 @@ public class GameThread extends Thread implements Observer {
 
     private Game game;
     private WebsocketMessageSender messageSender;
-    private PlayedGameRepository playedGameRepository;
+    private PlayedGameController playedGameController;
     private Gson gson = new Gson();
 
-    public GameThread(Game game, WebsocketMessageSender messageSender, PlayedGameRepository playedGameRepository){
+    public GameThread(Game game, WebsocketMessageSender messageSender, PlayedGameController playedGameController){
         this.game = game;
         this.messageSender = messageSender;
-        this.playedGameRepository = playedGameRepository;
+        this.playedGameController = playedGameController;
     }
 
     /**
@@ -123,16 +126,16 @@ public class GameThread extends Thread implements Observer {
             scoreTimer.startBlocking();
         }
 
-        //TODO: STORE IN PLAYED GAME AND CHECK HIGHSCORES
+        //Store the played game and store the isHighscore values
+        Map<User,Boolean> isHighscore = playedGameController.submitPlayedGame(new PlayedGame(game.getUser1(),game.getUser2(),game.getScoreUser1(),game.getScoreUser2()));
 
         //Send a result-message to each user
-        messageSender.sendMessage(game.getTokenUser1(),new ResultMessage(game.getUser1(), game.getUser2(), game.getScoreUser1(), game.getScoreUser2(),false));
-        messageSender.sendMessage(game.getTokenUser1(),new ResultMessage(game.getUser2(), game.getUser1(), game.getScoreUser2(), game.getScoreUser1(),false));
+        messageSender.sendMessage(game.getTokenUser1(),new ResultMessage(game.getUser1(), game.getUser2(), game.getScoreUser1(), game.getScoreUser2(),isHighscore.get(game.getUser1())));
+        messageSender.sendMessage(game.getTokenUser1(),new ResultMessage(game.getUser2(), game.getUser1(), game.getScoreUser2(), game.getScoreUser1(),isHighscore.get(game.getUser2())));
 
         //Print message
         System.out.println("Please restart the server for further testing");
 
-        //TODO: repeat the round, set scores, set the highscore at the end
         //TODO: delete game from gamelist, and users from userlist
     }
 
