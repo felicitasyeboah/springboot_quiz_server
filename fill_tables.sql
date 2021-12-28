@@ -35,8 +35,14 @@ VALUES
     (5, 'Wie oft findet eine Fußball-Weltmeisterschaft statt?', 'alle vier Jahre', 'alle zwei Jahre', 'jedes Jahr', 'alle fünf Jahre'),
     (5, 'Was macht der Platzwart von Berufs wegen?','ein paar Linien ziehen','an der Tube schnüffeln','sich einen zwitschern','ne Tüte drehen');
 
-INSERT INTO PaF_GruppeB.played_game (user_id1, user_id2, user_score1, user_score2)
+INSERT INTO PaF_GruppeB.played_game (time_stamp, user_id1, user_id2, user_score1, user_score2)
 VALUES
-    (1, 2, 1800, 1500),
-    (1, 3, 2700, 800),
-    (2, 3, 650, 700);
+    ('2021-12-28 11:10:00', 12, 3, 4000, 1450),
+    ('2021-12-28 11:11:00', 1, 2, 3500, 740),
+    ('2021-12-28 11:12:00', 1, 12, 840, 4000),
+    ('2021-12-28 11:13:00', 12, 2, 4000, 1350),
+    ('2021-12-28 11:14:00', 1, 3, 3400, 750),
+    ('2021-12-28 11:15:00', 3, 12, 610, 3100),
+    ('2021-12-28 11:16:00', 12, 2, 3100, 1650),
+    ('2021-12-28 11:17:00', 3, 2, 3450, 770),
+    ('2021-12-28 11:18:00', 2, 1, 680, 3400);
