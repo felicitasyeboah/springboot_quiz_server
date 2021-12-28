@@ -4,10 +4,11 @@ import de.semesterprojekt.quiz.config.GameConfig;
 import de.semesterprojekt.quiz.database.entity.PlayedGame;
 import de.semesterprojekt.quiz.database.entity.User;
 import de.semesterprojekt.quiz.database.model.HighscoreEntry;
-import de.semesterprojekt.quiz.database.model.UserScore;
+import de.semesterprojekt.quiz.database.model.ScoreEntryDateComparator;
+import de.semesterprojekt.quiz.database.model.ScoreEntryScoreAndDateComparator;
+import de.semesterprojekt.quiz.database.model.UserScoreEntry;
 import de.semesterprojekt.quiz.database.repository.PlayedGameRepository;
 import de.semesterprojekt.quiz.database.repository.UserRepository;
-import de.semesterprojekt.quiz.database.utility.HighscoreEntryComparator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The class controls the REST-mapping for the PlayedGames-entity
@@ -37,9 +39,7 @@ public class PlayedGameController {
     }
 
     /**
-     * TODO: CREATE PRIVATE INDEX FUNCTION
-     * TODO: CREATE HIGHSCORE LIST
-     * CHECK FOR HIGHSCORE
+     * TODO: CHECK FOR HIGHSCORE
      */
 
     /**
@@ -68,8 +68,8 @@ public class PlayedGameController {
                 highscoreList.add(new HighscoreEntry(playedGame.getTimeStamp(), playedGame.getUser2(), playedGame.getUserScore2()));
             }
 
-            //Sort the highscoreList
-            Collections.sort(highscoreList, new HighscoreEntryComparator());
+            //Sort the highscoreList by score and then by date
+            Collections.sort(highscoreList, new ScoreEntryScoreAndDateComparator());
 
             //Shrink the list to the maximum size of LENGTH_HIGHSCORE_LIST
             if(highscoreList.size() > GameConfig.LENGTH_HIGHSCORE_LIST) {
@@ -88,7 +88,7 @@ public class PlayedGameController {
      * Returns a list of all played games of the calling user
      */
     @GetMapping( path = "/playedGames")
-    public ResponseEntity<List<UserScore>> getAllPlayedGames(){
+    public ResponseEntity<List<UserScoreEntry>> getAllPlayedGames(){
 
         String username;
 
@@ -107,43 +107,47 @@ public class PlayedGameController {
                     .toString();
         }
 
-        //Find the user and get its id
-        for(User user : userRepository.findAll()) {
+        //Get the userId
+        Optional<User> userOptional = userRepository.findByUserName(username);
+        if(userOptional.isPresent()) {
+            User user = userOptional.get();
+            int userId = user.getUserId();
 
-            if (user.getUserName().equals(username)) {
+            //List for all played games of the user
+            List<UserScoreEntry> userGameList = new ArrayList<>();
 
-                //Set the user id
-                int userId = user.getUserId();
+            //Check all played games and create UserScoreEntry objects
+            for(PlayedGame playedGameList : playedGameRepository.findAll()) {
 
-                //List for all played games of the user
-                List<UserScore> userGameList = new ArrayList<>();
+                if(playedGameList.getUser1().getUserId() == userId) {
 
-                //Check all played games and create UserScore objects
-                for(PlayedGame playedGame : playedGameRepository.findAll()) {
+                    //Check the first player in the playedGame
+                    userGameList.add(new UserScoreEntry(playedGameList.getTimeStamp(), playedGameList.getUserScore1(), playedGameList.getUserScore2(), playedGameList.getUser2()));
 
-                    if(playedGame.getUser1().getUserId() == userId) {
+                } else if (playedGameList.getUser2().getUserId() == userId) {
 
-                        //Check the first player in the playedGame
-                        userGameList.add(new UserScore(playedGame.getTimeStamp(), playedGame.getUserScore1(), playedGame.getUserScore2(), playedGame.getUser2()));
+                    //Check the second player in the playedGame
+                    userGameList.add(new UserScoreEntry(playedGameList.getTimeStamp(), playedGameList.getUserScore2(), playedGameList.getUserScore1(), playedGameList.getUser1()));
+                }
+            }
 
-                    } else if (playedGame.getUser2().getUserId() == userId) {
+            //Check if there are entries in the list
+            if(userGameList.size() > 0) {
 
-                        //Check the second player in the playedGame
-                        userGameList.add(new UserScore(playedGame.getTimeStamp(), playedGame.getUserScore2(), playedGame.getUserScore1(), playedGame.getUser1()));
+                //Sort the list by date
+                Collections.sort(userGameList, new ScoreEntryDateComparator());
 
-                    }
+                //Shrink the list to the maximum size of LENGTH_HIGHSCORE_LIST
+                if(userGameList.size() > GameConfig.LENGTH_USER_PLAYED_GAMES_LIST) {
+                    userGameList = userGameList.subList(0, GameConfig.LENGTH_USER_PLAYED_GAMES_LIST);
                 }
 
-
-
-                //TODO: SORT LIST
-
-                //Return the list of games
+                //Return the list
                 return ResponseEntity.ok(userGameList);
             }
         }
 
-        //User/No played games found, return a bad request
+        //No User or played games found, return a bad request
         return ResponseEntity.badRequest().build();
     }
 }
