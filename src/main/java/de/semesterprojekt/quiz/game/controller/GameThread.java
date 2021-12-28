@@ -133,10 +133,8 @@ public class GameThread extends Thread implements Observer {
         messageSender.sendMessage(game.getTokenUser1(),new ResultMessage(game.getUser1(), game.getUser2(), game.getScoreUser1(), game.getScoreUser2(),isHighscore.get(game.getUser1())));
         messageSender.sendMessage(game.getTokenUser1(),new ResultMessage(game.getUser2(), game.getUser1(), game.getScoreUser2(), game.getScoreUser1(),isHighscore.get(game.getUser2())));
 
-        //Print message
-        System.out.println("Please restart the server for further testing");
-
-        //TODO: delete game from gamelist, and users from userlist
+        //Set Game over to notify the lobby
+        game.setGameOver();
     }
 
     /**
@@ -147,9 +145,14 @@ public class GameThread extends Thread implements Observer {
     @Override
     public void update(Observable o, Object arg) {
 
-        //Interrupt the sleep() for handling the incoming messages
-        this.interrupt();
+        if(arg instanceof String) {
+
+            //If the message is NEW_MESSAGE
+            if(((String) arg).equals("NEW_MESSAGE")) {
+
+                //Interrupt the sleep() for handling the incoming messages)
+                this.interrupt();
+            }
+        }
     }
-
-
 }
