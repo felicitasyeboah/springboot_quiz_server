@@ -19,7 +19,7 @@ import java.security.Principal;
 import java.util.*;
 
 @Controller
-public class LobbyController {
+public class LobbyController implements Observer{
 
     @Autowired
     JwtTokenProvider tokenProvider;
@@ -113,6 +113,9 @@ public class LobbyController {
             //Create the game
             Game newGame = new Game(user1, userTokenMap.get(user1.getUserName()), user2, userTokenMap.get(user2.getUserName()), questionRandomizer);
 
+            //Add game over observer
+            newGame.addObserver(this);
+
             //Add the Game to the gameList
             gameList.add(newGame);
 
@@ -181,17 +184,64 @@ public class LobbyController {
         //Get the user
         User user = (User) userRepository.findByUserName(username).get();
 
+        removeUser(user);
+
+        //Print the connected users
+        printConnectedUsers();
+    }
+
+    /**
+     * Method removes a user from the userlist and deletes a key-value-pair in the userTokenMap
+     */
+    public void removeUser(User user) {
         //Delete username and token from userTokenMap
-        if(userTokenMap.containsKey(username)) {
-            userTokenMap.remove(username);
+        if(userTokenMap.containsKey(user.getUserName())) {
+            userTokenMap.remove(user.getUserName());
         }
 
         //Delete User from userList
         if(userList.contains(user)) {
             userList.remove(user);
         }
+    }
 
-        //Print the connected users
-        printConnectedUsers();
+    /**
+     * Method removes a game from the game list
+     * @param game
+     */
+    public void removeGame(Game game) {
+
+        //Remove the user from the lists
+        removeUser(game.getUser1());
+        removeUser(game.getUser2());
+
+        //Remove the game
+        if(gameList.contains(game)) {
+            gameList.remove(game);
+        }
+    }
+
+
+    @Override
+    public void update(Observable o, Object arg) {
+
+        if(arg instanceof String) {
+
+            //If the message is NEW_MESSAGE
+            if(((String) arg).equals("GAME_OVER")) {
+
+                //Get the game instance
+                Game game = (Game) o;
+
+                //Delete all observers
+                game.deleteObservers();
+
+                //Remove the game from the list
+                removeGame((Game) o);
+
+                //Set game = null
+                game = null;
+            }
+        }
     }
 }

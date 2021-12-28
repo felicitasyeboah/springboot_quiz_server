@@ -169,7 +169,7 @@ public class Game extends Observable {
         if(newMessage.getUser().equals(this.user1) || newMessage.getUser().equals(this.user2)) {
             this.messageInputQueue.add(newMessage);
             setChanged();
-            notifyObservers();
+            notifyObservers("NEW_MESSAGE");
         }
     }
 
@@ -241,5 +241,11 @@ public class Game extends Observable {
         return 0;
     }
 
-
+    /**
+     * Method calls the observer to delete the game from the lobby
+     */
+    public void setGameOver() {
+        setChanged();
+        notifyObservers("GAME_OVER");
+    }
 }
