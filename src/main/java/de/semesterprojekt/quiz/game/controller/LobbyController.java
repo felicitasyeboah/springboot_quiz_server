@@ -1,5 +1,6 @@
 package de.semesterprojekt.quiz.game.controller;
 
+import de.semesterprojekt.quiz.database.controller.PlayedGameController;
 import de.semesterprojekt.quiz.database.repository.PlayedGameRepository;
 import de.semesterprojekt.quiz.game.model.Game;
 import de.semesterprojekt.quiz.database.entity.User;
@@ -27,13 +28,13 @@ public class LobbyController {
     UserRepository userRepository;
 
     @Autowired
-    PlayedGameRepository playedGameRepository;
-
-    @Autowired
     WebsocketMessageSender messageSender;
 
     @Autowired
     QuestionRandomizer questionRandomizer;
+
+    @Autowired
+    PlayedGameController playedGameController;
 
     //Map to store username and token
     private Map<String, String> userTokenMap = new HashMap<>();
@@ -116,7 +117,7 @@ public class LobbyController {
             gameList.add(newGame);
 
             //Start the game
-            GameThread newGameThread = new GameThread(newGame, messageSender, playedGameRepository);
+            GameThread newGameThread = new GameThread(newGame, messageSender, playedGameController);
             newGameThread.start();
         }
     }
@@ -143,17 +144,22 @@ public class LobbyController {
         //Get the user
         User user = (User) userRepository.findByUserName(username).get();
 
-        //Store username and token in userTokenMap
-        userTokenMap.put(username, token);
+        if(!userList.contains(user)) {
 
-        //Store user in userList
-        userList.add(user);
+            //Store username and token in userTokenMap
+            userTokenMap.put(username, token);
 
-        //Print the connected users
-        printConnectedUsers();
+            //Store user in userList
+            userList.add(user);
 
-        //Check for player match
-        checkMatch();
+            //Print the connected users
+            printConnectedUsers();
+
+            //Check for player match
+            checkMatch();
+
+        }
+        //TODO: SEND ERROR MESSAGE USER IS ALREADY LOGGED IN
     }
 
     /**
