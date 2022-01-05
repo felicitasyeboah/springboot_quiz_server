@@ -36,8 +36,8 @@ public class GameTimer extends Thread {
 
                 //Create a timer-message and send it to the user
                 TimerMessage newTimerMessage = new TimerMessage(timerType, timeLeft);
-                messageSender.sendMessage(game.getTokenUser1(), newTimerMessage);
-                messageSender.sendMessage(game.getTokenUser2(), newTimerMessage);
+                messageSender.sendMessage(game.getUuidUser1(), newTimerMessage);
+                messageSender.sendMessage(game.getUuidUser2(), newTimerMessage);
 
                 //Wait one second
                 Thread.sleep(1000);

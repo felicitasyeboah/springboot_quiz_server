@@ -1,14 +1,16 @@
 package de.semesterprojekt.quiz.game.controller;
 
+import com.google.gson.Gson;
 import de.semesterprojekt.quiz.database.controller.PlayedGameController;
-import de.semesterprojekt.quiz.database.repository.PlayedGameRepository;
 import de.semesterprojekt.quiz.game.model.Game;
 import de.semesterprojekt.quiz.database.entity.User;
 import de.semesterprojekt.quiz.websocket.controller.WebsocketMessageSender;
-import de.semesterprojekt.quiz.websocket.model.IncomingWebSocketMessage;
 import de.semesterprojekt.quiz.database.repository.UserRepository;
 import de.semesterprojekt.quiz.security.jwt.JwtTokenProvider;
 import de.semesterprojekt.quiz.database.utility.QuestionRandomizer;
+import de.semesterprojekt.quiz.websocket.model.AnswerMessage;
+import de.semesterprojekt.quiz.websocket.model.TokenMessage;
+import de.semesterprojekt.quiz.websocket.model.UserAnswerMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -36,8 +38,10 @@ public class LobbyController implements Observer{
     @Autowired
     PlayedGameController playedGameController;
 
+    Gson gson = new Gson();
+
     //Map to store username and token
-    private Map<String, String> userTokenMap = new HashMap<>();
+    private Map<String, String> userUuidMap = new HashMap<>();
     private List<User> userList = new ArrayList<>();
     private List<Game> gameList = new ArrayList<>();
 
@@ -49,25 +53,132 @@ public class LobbyController implements Observer{
     @MessageMapping("/game")
     public void handleIncomingMessage(String message, Principal principal){
 
-        //Get the user from the message
-        String token = principal.getName().toString();
-        String userName = tokenProvider.getUserNameFromToken(token);
-        Optional<User> userOptional = userRepository.findByUserName(userName);
-        User user = (User) userOptional.get();
+        //Try to get the token
+        String token = gson.fromJson(message,TokenMessage.class).getToken();
+        String uuid = principal.getName();
+        String userName = null;
+        User user = null;
 
-        //Create a new IncomingMessage object
-        IncomingWebSocketMessage newMessage = new IncomingWebSocketMessage(user, message);
+        //Check the token
+        if(token != null) {
 
-        //Find the current game of the calling user
-        for(Game game : gameList) {
+            if(tokenProvider.validateToken(token)) {
 
-            if(game.getUser1().getUserName().equals(userName) || game.getUser2().getUserName().equals(userName)) {
+                //Get the username
+                userName = tokenProvider.getUserNameFromToken(token);
 
-                //Add the message to the queue
-                game.addMessage(newMessage);
-                break;
+                //Get the user
+                Optional<User> userOptional = userRepository.findByUserName(userName);
+                user = (User) userOptional.get();
+
+                //is the user already in the list?
+                if(!userList.contains(user)) {
+
+                    //Store username and token in userTokenMap
+                    userUuidMap.put(userName, uuid);
+
+                    //Store user in userList
+                    userList.add(user);
+
+                    //Print the connected users
+                    printConnectedUsers();
+
+                    //Check for player match
+                    checkMatch();
+                }
+
+
+            } else {
+
+                System.out.println("The token is not valid.");
             }
         }
+        else {
+
+            //Try to get an answer message
+            String answer = gson.fromJson(message, AnswerMessage.class).getAnswer();
+
+            if(answer != null) {
+
+                //is the user available in the list
+                if(userUuidMap.containsValue(uuid)) {
+
+                    System.out.println("The user is authenticated.");
+
+                    //user is authenticated
+                    System.out.println("Answer: " + answer);
+
+                    //Get the user from uuid
+                    user = getUserFromUuid(uuid);
+
+                    if(user != null) {
+
+                        //Create a new IncomingMessage object
+                        UserAnswerMessage newMessage = new UserAnswerMessage(user, answer);
+
+                        //Find the current game of the calling user
+                        for(Game game : gameList) {
+
+                            if(game.getUser1().equals(user) || game.getUser2().equals(user)) {
+
+                                //Add the message to the queue
+                                game.addMessage(newMessage);
+                                break;
+                            }
+                        }
+                    }
+                } else {
+
+                    System.out.println("User is not authenticated.");
+                }
+
+            } else {
+
+                System.out.println("The websocket message is not valid.");
+            }
+        }
+    }
+
+    /**
+     * The Eventlistener is called when a client connects
+     * - puts the username and token on the userTokenMap
+     * - adds the User to the userList
+     * - print a connect message
+     * - call checkMatch()
+     * @param event connect event
+     */
+    @EventListener
+    public void handleWebSocketSubscribeListener(SessionSubscribeEvent event) {
+
+
+        //System.out.println(event.getUser().toString());
+        /*
+
+        //Get the token
+        String token = event.getUser().toString();
+
+        //Get the username
+        String username = tokenProvider.getUserNameFromToken(token);
+
+        //Get the user
+        User user = (User) userRepository.findByUserName(username).get();
+
+        if(!userList.contains(user)) {
+
+            //Store username and token in userTokenMap
+            userTokenMap.put(username, token);
+
+            //Store user in userList
+            userList.add(user);
+
+            //Print the connected users
+            printConnectedUsers();
+
+            //Check for player match
+            checkMatch();
+
+        }
+         */
     }
 
     /**
@@ -111,7 +222,7 @@ public class LobbyController implements Observer{
             User user2 = userList.get(userListSize - 1);
 
             //Create the game
-            Game newGame = new Game(user1, userTokenMap.get(user1.getUserName()), user2, userTokenMap.get(user2.getUserName()), questionRandomizer);
+            Game newGame = new Game(user1, userUuidMap.get(user1.getUserName()), user2, userUuidMap.get(user2.getUserName()), questionRandomizer);
 
             //Add game over observer
             newGame.addObserver(this);
@@ -126,46 +237,6 @@ public class LobbyController implements Observer{
     }
 
     /**
-     * The Eventlistener is called when a client connects
-     * - puts the username and token on the userTokenMap
-     * - adds the User to the userList
-     * - print a connect message
-     * - call checkMatch()
-     * @param event connect event
-     */
-    @EventListener
-    public void handleWebSocketConnectListener(SessionSubscribeEvent event) {
-
-        //TODO: Block a double login
-
-        //Get the token
-        String token = event.getUser().toString();
-
-        //Get the username
-        String username = tokenProvider.getUserNameFromToken(token);
-
-        //Get the user
-        User user = (User) userRepository.findByUserName(username).get();
-
-        if(!userList.contains(user)) {
-
-            //Store username and token in userTokenMap
-            userTokenMap.put(username, token);
-
-            //Store user in userList
-            userList.add(user);
-
-            //Print the connected users
-            printConnectedUsers();
-
-            //Check for player match
-            checkMatch();
-
-        }
-        //TODO: SEND ERROR MESSAGE USER IS ALREADY LOGGED IN
-    }
-
-    /**
      * The Eventlistener is called when a client disconnects
      * - removes the username and token from the userTokenMap
      * - removes the User from the userList
@@ -175,28 +246,21 @@ public class LobbyController implements Observer{
     @EventListener
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
 
-        //Get the token
-        String token = event.getUser().toString();
-
-        //Get the username
-        String username = tokenProvider.getUserNameFromToken(token);
-
-        //Get the user
-        User user = (User) userRepository.findByUserName(username).get();
-
-        removeUser(user);
+        //Remove the user from the lists
+        removeUser(getUserFromUuid(event.getUser().getName()));
 
         //Print the connected users
         printConnectedUsers();
     }
 
     /**
-     * Method removes a user from the userlist and deletes a key-value-pair in the userTokenMap
+     * Method removes a user from the userlist and deletes a key-value-pair from the userUuidMap
      */
     public void removeUser(User user) {
-        //Delete username and token from userTokenMap
-        if(userTokenMap.containsKey(user.getUserName())) {
-            userTokenMap.remove(user.getUserName());
+
+        //Delete username and token from userUuidMap
+        if(userUuidMap.containsKey(user.getUserName())) {
+            userUuidMap.remove(user.getUserName());
         }
 
         //Delete User from userList
@@ -221,7 +285,11 @@ public class LobbyController implements Observer{
         }
     }
 
-
+    /**
+     * Implementation of the Observer method "update"
+     * @param o
+     * @param arg
+     */
     @Override
     public void update(Observable o, Object arg) {
 
@@ -243,5 +311,27 @@ public class LobbyController implements Observer{
                 game = null;
             }
         }
+    }
+
+    /**
+     * returns a User based on the uuid and the userUuidList
+     * @param uuid
+     * @return
+     */
+    private User getUserFromUuid(String uuid) {
+        //Get the username and user
+        for(Map.Entry<String,String> entry : userUuidMap.entrySet()) {
+
+            if(entry.getValue().equals(uuid)) {
+
+
+                //Get the user
+                Optional<User> userOptional = userRepository.findByUserName(entry.getKey());
+                return (User) userOptional.get();
+            }
+        }
+
+        //No user found
+        return null;
     }
 }

@@ -3,7 +3,7 @@ package de.semesterprojekt.quiz.game.model;
 import de.semesterprojekt.quiz.database.entity.User;
 import de.semesterprojekt.quiz.database.utility.QuestionRandomizer;
 import de.semesterprojekt.quiz.websocket.controller.WebsocketMessageSender;
-import de.semesterprojekt.quiz.websocket.model.IncomingWebSocketMessage;
+import de.semesterprojekt.quiz.websocket.model.UserAnswerMessage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,7 +40,7 @@ public class Lobby {
     /**
      * Method takes a IncomingWebsocketMessage and forwards it to the correct game
      */
-    public void forwardMessage(IncomingWebSocketMessage message) {
+    public void forwardMessage(UserAnswerMessage message) {
 
     }
 

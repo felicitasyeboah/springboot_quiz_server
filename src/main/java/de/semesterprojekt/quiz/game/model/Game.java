@@ -5,7 +5,7 @@ import de.semesterprojekt.quiz.database.entity.Question;
 import de.semesterprojekt.quiz.database.entity.User;
 import de.semesterprojekt.quiz.database.utility.QuestionRandomizer;
 import de.semesterprojekt.quiz.game.model.message.GameMessage;
-import de.semesterprojekt.quiz.websocket.model.IncomingWebSocketMessage;
+import de.semesterprojekt.quiz.websocket.model.UserAnswerMessage;
 
 import java.util.*;
 
@@ -18,12 +18,12 @@ public class Game extends Observable {
     private int gameId;
     private User user1;
     private User user2;
-    private String tokenUser1;
-    private String tokenUser2;
+    private String uuidUser1;
+    private String uuidUser2;
     private int scoreUser1;
     private int scoreUser2;
     private List<Question> question;
-    private Queue<IncomingWebSocketMessage> messageInputQueue;
+    private Queue<UserAnswerMessage> messageInputQueue;
 
     /**
      * The contructor generates a new game session
@@ -31,13 +31,13 @@ public class Game extends Observable {
      * @param user2 User 2
      * @param questionRandomizer Instance of the QuestionRandomizer
      */
-    public Game(User user1, String tokenUser1, User user2, String tokenUser2, QuestionRandomizer questionRandomizer) {
+    public Game(User user1, String uuidUser1, User user2, String uuidUser2, QuestionRandomizer questionRandomizer) {
         //generates a new gameId
         this.gameId = gameIdGenerator++;
         this.user1 = user1;
         this.user2 = user2;
-        this.tokenUser1 = tokenUser1;
-        this.tokenUser2 = tokenUser2;
+        this.uuidUser1 = uuidUser1;
+        this.uuidUser2 = uuidUser2;
         this.scoreUser1 = 0;
         this.scoreUser2 = 0;
         this.question = questionRandomizer.getQuestions();
@@ -69,19 +69,19 @@ public class Game extends Observable {
     }
 
     /**
-     * Returns token of user1
-     * @return token of user1
+     * Returns uuid of user1
+     * @return uuid of user1
      */
-    public String getTokenUser1(){
-        return this.tokenUser1;
+    public String getUuidUser1(){
+        return this.uuidUser1;
     }
 
     /**
-     * Returns token of user2
-     * @return token of user2
+     * Returns uuid of user2
+     * @return uuid of user2
      */
-    public String getTokenUser2(){
-        return this.tokenUser2;
+    public String getUuidUser2(){
+        return this.uuidUser2;
     }
 
     /**
@@ -163,7 +163,7 @@ public class Game extends Observable {
      * The method adds a queue for incoming messages during a game
      * It notifies the observer (GameThread instance)
      */
-    public synchronized void addMessage(IncomingWebSocketMessage newMessage) {
+    public synchronized void addMessage(UserAnswerMessage newMessage) {
 
         //Add the message if its from one of the users
         if(newMessage.getUser().equals(this.user1) || newMessage.getUser().equals(this.user2)) {
@@ -177,7 +177,7 @@ public class Game extends Observable {
      * Return the first message from the queue
      * @return
      */
-    public IncomingWebSocketMessage getNextMessage() {
+    public UserAnswerMessage getNextMessage() {
 
         //Get the first entry of the queue
         return messageInputQueue.poll();

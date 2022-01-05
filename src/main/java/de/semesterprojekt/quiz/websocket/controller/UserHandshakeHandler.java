@@ -8,6 +8,7 @@ import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
 import java.security.Principal;
 import java.util.Map;
+import java.util.UUID;
 
 public class UserHandshakeHandler extends DefaultHandshakeHandler {
 
@@ -24,6 +25,11 @@ public class UserHandshakeHandler extends DefaultHandshakeHandler {
     @Override
     protected Principal determineUser(ServerHttpRequest request, WebSocketHandler wsHandler, Map<String, Object> attributes) {
 
+        String uuid = UUID.randomUUID().toString();
+        System.out.println("UUID: " + uuid);
+        return new UserPrincipal(uuid);
+
+           /*
         //Check if the Principal is already set
         if(request.getPrincipal() == null) {
 
@@ -43,5 +49,7 @@ public class UserHandshakeHandler extends DefaultHandshakeHandler {
             //Return already set value
             return new UserPrincipal(request.getPrincipal().getName());
         }
+        */
+
     }
 }

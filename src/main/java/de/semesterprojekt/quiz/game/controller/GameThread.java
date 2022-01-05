@@ -7,7 +7,7 @@ import de.semesterprojekt.quiz.database.entity.PlayedGame;
 import de.semesterprojekt.quiz.database.entity.User;
 import de.semesterprojekt.quiz.game.model.message.*;
 import de.semesterprojekt.quiz.game.model.Game;
-import de.semesterprojekt.quiz.websocket.model.IncomingWebSocketMessage;
+import de.semesterprojekt.quiz.websocket.model.UserAnswerMessage;
 import de.semesterprojekt.quiz.websocket.controller.WebsocketMessageSender;
 
 import java.util.Map;
@@ -47,8 +47,8 @@ public class GameThread extends Thread implements Observer {
         {
 
             //Send the game-message to both users
-            messageSender.sendMessage(game.getTokenUser1(), game.getGameMessage(game.getUser1(), currentRound));
-            messageSender.sendMessage(game.getTokenUser2(), game.getGameMessage(game.getUser2(), currentRound));
+            messageSender.sendMessage(game.getUuidUser1(), game.getGameMessage(game.getUser1(), currentRound));
+            messageSender.sendMessage(game.getUuidUser2(), game.getGameMessage(game.getUser2(), currentRound));
 
             //Delete messages from the queue
             game.clearMessages();
@@ -82,12 +82,12 @@ public class GameThread extends Thread implements Observer {
 
                     //Check if there's a message
                     if (game.isNextMessage()) {
-                        IncomingWebSocketMessage message = game.getNextMessage();
+                        UserAnswerMessage message = game.getNextMessage();
 
                         //Submit the answer of user 1
                         if (game.getUser1().equals(message.getUser()) && !hasAnsweredUser1) {
 
-                            game.submitAnswer(game.getUser1(), currentRound, message.getMessage(), System.currentTimeMillis() - startTimeMillis);
+                            game.submitAnswer(game.getUser1(), currentRound, message.getAnswer(), System.currentTimeMillis() - startTimeMillis);
                             hasAnsweredUser1 = true;
                             System.out.println(game.getUser1().getUserName() + " has chosen an answer.");
                         }
@@ -95,7 +95,7 @@ public class GameThread extends Thread implements Observer {
                         //Submit the answer of user 2
                         if (game.getUser2().equals(message.getUser()) && !hasAnsweredUser2) {
 
-                            game.submitAnswer(game.getUser2(), currentRound, message.getMessage(), System.currentTimeMillis() - startTimeMillis);
+                            game.submitAnswer(game.getUser2(), currentRound, message.getAnswer(), System.currentTimeMillis() - startTimeMillis);
                             hasAnsweredUser2 = true;
                             System.out.println(game.getUser2().getUserName() + " has chosen an answer.");
                         }
@@ -118,8 +118,8 @@ public class GameThread extends Thread implements Observer {
             game.deleteObserver(this);
 
             //Send the score-message to each user
-            messageSender.sendMessage(game.getTokenUser1(),new ScoreMessage(game.getUser1(), game.getUser2(), game.getScoreUser1(), game.getScoreUser2()));
-            messageSender.sendMessage(game.getTokenUser2(),new ScoreMessage(game.getUser2(), game.getUser1(), game.getScoreUser2(), game.getScoreUser1()));
+            messageSender.sendMessage(game.getUuidUser1(),new ScoreMessage(game.getUser1(), game.getUser2(), game.getScoreUser1(), game.getScoreUser2()));
+            messageSender.sendMessage(game.getUuidUser2(),new ScoreMessage(game.getUser2(), game.getUser1(), game.getScoreUser2(), game.getScoreUser1()));
 
             //Start the blocking score timer
             GameTimer scoreTimer = new GameTimer(this.game, this.messageSender, MessageType.SCORE_TIMER_MESSAGE, GameConfig.DURATION_SCORE);
@@ -130,8 +130,8 @@ public class GameThread extends Thread implements Observer {
         Map<User,Boolean> isHighscore = playedGameController.submitPlayedGame(new PlayedGame(game.getUser1(),game.getUser2(),game.getScoreUser1(),game.getScoreUser2()));
 
         //Send a result-message to each user
-        messageSender.sendMessage(game.getTokenUser1(),new ResultMessage(game.getUser1(), game.getUser2(), game.getScoreUser1(), game.getScoreUser2(),isHighscore.get(game.getUser1())));
-        messageSender.sendMessage(game.getTokenUser1(),new ResultMessage(game.getUser2(), game.getUser1(), game.getScoreUser2(), game.getScoreUser1(),isHighscore.get(game.getUser2())));
+        messageSender.sendMessage(game.getUuidUser1(),new ResultMessage(game.getUser1(), game.getUser2(), game.getScoreUser1(), game.getScoreUser2(),isHighscore.get(game.getUser1())));
+        messageSender.sendMessage(game.getUuidUser1(),new ResultMessage(game.getUser2(), game.getUser1(), game.getScoreUser2(), game.getScoreUser1(),isHighscore.get(game.getUser2())));
 
         //Set Game over to notify the lobby
         game.setGameOver();
