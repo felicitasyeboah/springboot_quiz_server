@@ -249,6 +249,8 @@ public class LobbyController implements Observer{
         //Remove the user from the lists
         removeUser(getUserFromUuid(event.getUser().getName()));
 
+        //TODO: DELETE GAME AND SEND ERRROR MESSAGE TO THE OTHER USER
+
         //Print the connected users
         printConnectedUsers();
     }
