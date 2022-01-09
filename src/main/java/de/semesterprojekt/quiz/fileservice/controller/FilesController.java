@@ -1,5 +1,7 @@
 package de.semesterprojekt.quiz.fileservice.controller;
 
+import de.semesterprojekt.quiz.database.entity.User;
+import de.semesterprojekt.quiz.database.repository.UserRepository;
 import de.semesterprojekt.quiz.fileservice.model.FileInfo;
 import de.semesterprojekt.quiz.security.model.ResponseMessage;
 import de.semesterprojekt.quiz.fileservice.FilesStorageService;
@@ -8,6 +10,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,17 +28,52 @@ public class FilesController {
     @Autowired
     FilesStorageService storageService;
 
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    FileRenamer fileRenamer;
+
+    /**
+     * The method gets the file and sets it as profile image
+     * @param file
+     * @return
+     */
     @PostMapping("/upload")
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
-        String message = "";
+
         try {
+
+            String username = "";
+
+            //Get username from context
+            Object principal = SecurityContextHolder
+                    .getContext()
+                    .getAuthentication()
+                    .getPrincipal();
+
+            //Set the username
+            if (principal instanceof UserDetails) {
+                username = ((UserDetails)principal)
+                        .getUsername();
+            } else {
+                username = principal
+                        .toString();
+            }
+
+            //Get the User
+            User user = (User) userRepository.findByUserName(username).get();
+
+            //Save the file
             storageService.save(file);
 
-            message = "Uploaded the file successfully: " + file.getOriginalFilename();
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
+            //Rename the file uniquely and set it as profile image
+            fileRenamer.rename(user, file.getOriginalFilename());
+
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("Uploaded the file successfully: " + file.getOriginalFilename()));
         } catch (Exception e) {
-            message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
+
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage("Could not upload the file: " + file.getOriginalFilename() + "!"));
         }
     }
 
