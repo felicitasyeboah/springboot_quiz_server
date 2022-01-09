@@ -35,7 +35,6 @@ public class FileRenamer {
 
             //delete the old image if it's no default picture
             if(!user.getProfileImage().substring(0,7).equals("default")) {
-                System.out.println("bild kann gelöscht werden");
                 File oldFile = new File(root + user.getProfileImage());
                 oldFile.delete();
             }
