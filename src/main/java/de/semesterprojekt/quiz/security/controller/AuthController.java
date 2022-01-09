@@ -76,9 +76,8 @@ public class AuthController {
 
         //set a random picture
         Random rand = new Random();
-        int int1 = rand.nextInt(12);
-        String image = "default"+int1+".png";
-        newUser.setProfileImage(image);
+        String defaultImage = "default" + rand.nextInt(14) + ".png";
+        newUser.setProfileImage(defaultImage);
 
         //save new user to database
         User createdUser = userRepository.save(newUser);
