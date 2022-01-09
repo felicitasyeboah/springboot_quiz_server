@@ -131,7 +131,7 @@ public class GameThread extends Thread implements Observer {
 
         //Send a result-message to each user
         messageSender.sendMessage(game.getUuidUser1(),new ResultMessage(game.getUser1(), game.getUser2(), game.getScoreUser1(), game.getScoreUser2(),isHighscore.get(game.getUser1())));
-        messageSender.sendMessage(game.getUuidUser1(),new ResultMessage(game.getUser2(), game.getUser1(), game.getScoreUser2(), game.getScoreUser1(),isHighscore.get(game.getUser2())));
+        messageSender.sendMessage(game.getUuidUser2(),new ResultMessage(game.getUser2(), game.getUser1(), game.getScoreUser2(), game.getScoreUser1(),isHighscore.get(game.getUser2())));
 
         //Set Game over to notify the lobby
         game.setGameOver();
