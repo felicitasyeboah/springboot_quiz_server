@@ -244,8 +244,18 @@ public class Game extends Observable {
     /**
      * Method calls the observer to delete the game from the lobby
      */
-    public void setGameOver() {
+    public synchronized void setGameOver() {
+
         setChanged();
         notifyObservers("GAME_OVER");
+    }
+
+    /**
+     * Method calls the observer to sends a message to the still connected user and deletes the game from the lobby
+     */
+    public synchronized void setDisconnected() {
+
+        setChanged();
+        notifyObservers("USER_DISCONNECTED");
     }
 }
