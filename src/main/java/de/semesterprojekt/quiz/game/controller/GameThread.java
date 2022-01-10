@@ -23,11 +23,20 @@ public class GameThread extends Thread implements Observer {
     private WebsocketMessageSender messageSender;
     private PlayedGameController playedGameController;
     private Gson gson = new Gson();
+    private boolean receiveMessages = false;
+
+    //Create GameTimers that can be stopped from update()
+    private GameTimer questionTimer;
+    private GameTimer startTimer;
+    private GameTimer scoreTimer;
 
     public GameThread(Game game, WebsocketMessageSender messageSender, PlayedGameController playedGameController){
         this.game = game;
         this.messageSender = messageSender;
         this.playedGameController = playedGameController;
+
+        //Add an observer for new messages and disconnects
+        this.game.addObserver(this);
     }
 
     /**
@@ -40,8 +49,8 @@ public class GameThread extends Thread implements Observer {
         System.out.println("Start game: " + game.getUser1().getUserName() + " vs. " + game.getUser2().getUserName());
 
         //Start the blocking start timer
-        GameTimer startTimer = new GameTimer(this.game, this.messageSender, MessageType.START_TIMER_MESSAGE, GameConfig.DURATION_START);
-        startTimer.startBlocking();
+        this.startTimer = new GameTimer(this.game, this.messageSender, MessageType.START_TIMER_MESSAGE, GameConfig.DURATION_START);
+        this.startTimer.startBlocking();
 
         for(int currentRound = 0; currentRound < GameConfig.COUNT_QUESTION; currentRound++)
         {
@@ -53,8 +62,8 @@ public class GameThread extends Thread implements Observer {
             //Delete messages from the queue
             game.clearMessages();
 
-            //Add messageQueue-observer
-            game.addObserver(this);
+            //Let new messages interrupt the game
+            this.receiveMessages = true;
 
             //Start a timer
             long startTimeMillis = System.currentTimeMillis();
@@ -65,8 +74,8 @@ public class GameThread extends Thread implements Observer {
             boolean hasAnsweredUser2 = false;
 
             //Start the non-blocking question timer
-            GameTimer questionTimer = new GameTimer(this.game, this.messageSender, MessageType.QUESTION_TIMER_MESSAGE, GameConfig.DURATION_QUESTION);
-            questionTimer.start();
+            this.questionTimer = new GameTimer(this.game, this.messageSender, MessageType.QUESTION_TIMER_MESSAGE, GameConfig.DURATION_QUESTION);
+            this.questionTimer.start();
 
             //Start the timer loop
             do {
@@ -112,18 +121,18 @@ public class GameThread extends Thread implements Observer {
             } while (remainingTimeMillis > 0);
 
             //Interrupt the question timer
-            questionTimer.interrupt();
+            this.questionTimer.interrupt();
 
-            //Remove messageQueue-observer
-            game.deleteObserver(this);
+            //Don't let new messages interrupt the game
+            this.receiveMessages = false;
 
             //Send the score-message to each user
             messageSender.sendMessage(game.getUuidUser1(),new ScoreMessage(game.getUser1(), game.getUser2(), game.getScoreUser1(), game.getScoreUser2()));
             messageSender.sendMessage(game.getUuidUser2(),new ScoreMessage(game.getUser2(), game.getUser1(), game.getScoreUser2(), game.getScoreUser1()));
 
             //Start the blocking score timer
-            GameTimer scoreTimer = new GameTimer(this.game, this.messageSender, MessageType.SCORE_TIMER_MESSAGE, GameConfig.DURATION_SCORE);
-            scoreTimer.startBlocking();
+            this.scoreTimer = new GameTimer(this.game, this.messageSender, MessageType.SCORE_TIMER_MESSAGE, GameConfig.DURATION_SCORE);
+            this.scoreTimer.startBlocking();
         }
 
         //Store the played game and store the isHighscore values
@@ -138,6 +147,30 @@ public class GameThread extends Thread implements Observer {
     }
 
     /**
+     * The method stops the current thread and all timers
+     */
+    private void stopAll(){
+
+        //Stop the current startTimer
+        if(this.startTimer != null) {
+            this.startTimer.stop();
+        }
+
+        //Stop the current questionTimer
+        if(this.questionTimer != null) {
+            this.questionTimer.stop();
+        }
+
+        //Stop the current scoreTimer
+        if(this.scoreTimer != null) {
+            this.scoreTimer.stop();
+        }
+
+        //Stop the current GameThread
+        this.stop();
+    }
+
+    /**
      * The method implements the update method of Observer
      * @param o
      * @param arg
@@ -147,11 +180,29 @@ public class GameThread extends Thread implements Observer {
 
         if(arg instanceof String) {
 
+            String message = (String) arg;
+
             //If the message is NEW_MESSAGE
-            if(((String) arg).equals("NEW_MESSAGE")) {
+            if(message.equals("NEW_MESSAGE") && this.receiveMessages == true) {
 
                 //Interrupt the sleep() for handling the incoming messages)
                 this.interrupt();
+            }
+
+            //If the message is USER_DISCONNECTED
+            if(message.equals("USER_DISCONNECTED")) {
+
+                System.out.println("User disconnected during game.");
+
+                //Send a disconnect message to both users (only one is required)
+                messageSender.sendMessage(game.getUuidUser1(),new DisconnectMessage());
+                messageSender.sendMessage(game.getUuidUser2(),new DisconnectMessage());
+
+                //Set Game over to notify the lobby
+                game.setGameOver();
+
+                //Stop the current game thread and all timers
+                stopAll();
             }
         }
     }
