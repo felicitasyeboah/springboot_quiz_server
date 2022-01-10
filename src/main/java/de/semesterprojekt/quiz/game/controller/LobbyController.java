@@ -16,7 +16,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
-import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 import java.security.Principal;
 import java.util.*;
 
@@ -40,7 +39,7 @@ public class LobbyController implements Observer{
 
     Gson gson = new Gson();
 
-    //Map to store username and token
+    //Map to store username and websocket uuid
     private Map<String, String> userUuidMap = new HashMap<>();
     private List<User> userList = new ArrayList<>();
     private List<Game> gameList = new ArrayList<>();
@@ -56,7 +55,6 @@ public class LobbyController implements Observer{
         //Try to get the token
         String token = gson.fromJson(message,TokenMessage.class).getToken();
         String uuid = principal.getName();
-        String userName = null;
         User user = null;
 
         //Check the token
@@ -64,29 +62,12 @@ public class LobbyController implements Observer{
 
             if(tokenProvider.validateToken(token)) {
 
-                //Get the username
-                userName = tokenProvider.getUserNameFromToken(token);
-
                 //Get the user
-                Optional<User> userOptional = userRepository.findByUserName(userName);
+                Optional<User> userOptional = userRepository.findByUserName(tokenProvider.getUserNameFromToken(token));
                 user = (User) userOptional.get();
 
-                //is the user already in the list?
-                if(!userList.contains(user)) {
-
-                    //Store username and token in userTokenMap
-                    userUuidMap.put(userName, uuid);
-
-                    //Store user in userList
-                    userList.add(user);
-
-                    //Print the connected users
-                    printConnectedUsers();
-
-                    //Check for player match
-                    checkMatch();
-                }
-
+                //Adds a user to the lobby and checks for a match
+                addUserToLobby(user, uuid);
 
             } else {
 
@@ -103,11 +84,6 @@ public class LobbyController implements Observer{
                 //is the user available in the list
                 if(userUuidMap.containsValue(uuid)) {
 
-                    System.out.println("The user is authenticated.");
-
-                    //user is authenticated
-                    System.out.println("Answer: " + answer);
-
                     //Get the user from uuid
                     user = getUserFromUuid(uuid);
 
@@ -116,16 +92,8 @@ public class LobbyController implements Observer{
                         //Create a new IncomingMessage object
                         UserAnswerMessage newMessage = new UserAnswerMessage(user, answer);
 
-                        //Find the current game of the calling user
-                        for(Game game : gameList) {
-
-                            if(game.getUser1().equals(user) || game.getUser2().equals(user)) {
-
-                                //Add the message to the queue
-                                game.addMessage(newMessage);
-                                break;
-                            }
-                        }
+                        //Find the current game of the calling user and add the message
+                        getGame(user).addMessage(newMessage);
                     }
                 } else {
 
@@ -140,45 +108,79 @@ public class LobbyController implements Observer{
     }
 
     /**
-     * The Eventlistener is called when a client connects
-     * - puts the username and token on the userTokenMap
-     * - adds the User to the userList
-     * - print a connect message
-     * - call checkMatch()
-     * @param event connect event
+     * The method adds an user to the lobby
+     * @param user
+     */
+    private void addUserToLobby(User user, String uuid) {
+        if(user != null) {
+
+            //is the user already in the list?
+            if(!userList.contains(user)) {
+
+                //Store username and token in userTokenMap
+                userUuidMap.put(user.getUserName(), uuid);
+
+                //Store user in userList
+                userList.add(user);
+
+                //Print the connected users
+                printConnectedUsers();
+
+                //Check for player match
+                checkMatch();
+            }
+        }
+    }
+
+    /**
+     * The Eventlistener is called when a client disconnects
+     * - removes the username and token from the userTokenMap
+     * - removes the User from the userList
+     * - print a disconnect message
+     * @param event disconnect event
      */
     @EventListener
-    public void handleWebSocketSubscribeListener(SessionSubscribeEvent event) {
+    public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
 
+        //Get the calling user
+        User user = getUserFromUuid(event.getUser().getName());
 
-        //System.out.println(event.getUser().toString());
-        /*
+        //Get the game of the calling user (or null)
+        Game game = getGame(user);
 
-        //Get the token
-        String token = event.getUser().toString();
+        //Check if the user is in a game
+        if(game == null && user != null) {
 
-        //Get the username
-        String username = tokenProvider.getUserNameFromToken(token);
-
-        //Get the user
-        User user = (User) userRepository.findByUserName(username).get();
-
-        if(!userList.contains(user)) {
-
-            //Store username and token in userTokenMap
-            userTokenMap.put(username, token);
-
-            //Store user in userList
-            userList.add(user);
+            //Remove the user from the lists
+            removeUser(getUserFromUuid(event.getUser().getName()));
 
             //Print the connected users
             printConnectedUsers();
 
-            //Check for player match
-            checkMatch();
+        } else if (user != null) {
 
+            //Tell the game that a user disconnected
+            getGame(user).setDisconnected();
         }
-         */
+    }
+
+    /**
+     * returns the current running game of the user
+     */
+    private Game getGame(User user) {
+
+        //Find the current game of a user
+        for(Game game : gameList) {
+
+            if(game.getUser1().equals(user) || game.getUser2().equals(user)) {
+
+                //return the game
+                return game;
+            }
+        }
+
+        //No game found
+        return null;
     }
 
     /**
@@ -237,37 +239,21 @@ public class LobbyController implements Observer{
     }
 
     /**
-     * The Eventlistener is called when a client disconnects
-     * - removes the username and token from the userTokenMap
-     * - removes the User from the userList
-     * - print a disconnect message
-     * @param event disconnect event
-     */
-    @EventListener
-    public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
-
-        //Remove the user from the lists
-        removeUser(getUserFromUuid(event.getUser().getName()));
-
-        //TODO: DELETE GAME AND SEND ERRROR MESSAGE TO THE OTHER USER
-
-        //Print the connected users
-        printConnectedUsers();
-    }
-
-    /**
      * Method removes a user from the userlist and deletes a key-value-pair from the userUuidMap
      */
     public void removeUser(User user) {
 
-        //Delete username and token from userUuidMap
-        if(userUuidMap.containsKey(user.getUserName())) {
-            userUuidMap.remove(user.getUserName());
-        }
+        if(user != null) {
 
-        //Delete User from userList
-        if(userList.contains(user)) {
-            userList.remove(user);
+            //Delete username and token from userUuidMap
+            if(userUuidMap.containsKey(user.getUserName())) {
+                userUuidMap.remove(user.getUserName());
+            }
+
+            //Delete User from userList
+            if(userList.contains(user)) {
+                userList.remove(user);
+            }
         }
     }
 
@@ -277,13 +263,19 @@ public class LobbyController implements Observer{
      */
     public void removeGame(Game game) {
 
-        //Remove the user from the lists
-        removeUser(game.getUser1());
-        removeUser(game.getUser2());
+        if(game != null) {
 
-        //Remove the game
-        if(gameList.contains(game)) {
-            gameList.remove(game);
+            //Remove the user from the lists
+            removeUser(game.getUser1());
+            removeUser(game.getUser2());
+
+            //Print the connected users
+            printConnectedUsers();
+
+            //Remove the game
+            if(gameList.contains(game)) {
+                gameList.remove(game);
+            }
         }
     }
 
@@ -299,6 +291,8 @@ public class LobbyController implements Observer{
 
             //If the message is NEW_MESSAGE
             if(((String) arg).equals("GAME_OVER")) {
+
+                System.out.println("The current game is over.");
 
                 //Get the game instance
                 Game game = (Game) o;
@@ -321,11 +315,11 @@ public class LobbyController implements Observer{
      * @return
      */
     private User getUserFromUuid(String uuid) {
+
         //Get the username and user
         for(Map.Entry<String,String> entry : userUuidMap.entrySet()) {
 
             if(entry.getValue().equals(uuid)) {
-
 
                 //Get the user
                 Optional<User> userOptional = userRepository.findByUserName(entry.getKey());
