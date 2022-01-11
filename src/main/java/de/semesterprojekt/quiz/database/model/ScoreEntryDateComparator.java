@@ -12,9 +12,9 @@ public class ScoreEntryDateComparator implements Comparator<ScoreEntry> {
 
         //Compare the dates -> lower date equals a lower position after sorting
         if (o1.getTimeStamp().before(o2.getTimeStamp())) {
-            return -1;
-        } else if (o2.getTimeStamp().before(o1.getTimeStamp())) {
             return 1;
+        } else if (o2.getTimeStamp().before(o1.getTimeStamp())) {
+            return -1;
         }
 
         //The dates are the same
