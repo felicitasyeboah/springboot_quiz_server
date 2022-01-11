@@ -46,7 +46,7 @@ public class GameThread extends Thread implements Observer {
     public void run() {
 
         //Print the usernames
-        System.out.println("Start game: " + game.getUser1().getUserName() + " vs. " + game.getUser2().getUserName());
+        System.out.println("Start game: '" + game.getUser1().getUserName() + "' vs. '" + game.getUser2().getUserName() + "'");
 
         //Start the blocking start timer
         this.startTimer = new GameTimer(this.game, this.messageSender, MessageType.START_TIMER_MESSAGE, GameConfig.DURATION_START);
@@ -98,7 +98,7 @@ public class GameThread extends Thread implements Observer {
 
                             game.submitAnswer(game.getUser1(), currentRound, message.getAnswer(), System.currentTimeMillis() - startTimeMillis);
                             hasAnsweredUser1 = true;
-                            System.out.println(game.getUser1().getUserName() + " has chosen an answer.");
+                            System.out.println("'" + game.getUser1().getUserName() + "' has chosen an answer.");
                         }
 
                         //Submit the answer of user 2
@@ -106,7 +106,7 @@ public class GameThread extends Thread implements Observer {
 
                             game.submitAnswer(game.getUser2(), currentRound, message.getAnswer(), System.currentTimeMillis() - startTimeMillis);
                             hasAnsweredUser2 = true;
-                            System.out.println(game.getUser2().getUserName() + " has chosen an answer.");
+                            System.out.println("'" + game.getUser2().getUserName() + "' has chosen an answer.");
                         }
                     }
 
@@ -172,25 +172,23 @@ public class GameThread extends Thread implements Observer {
 
     /**
      * The method implements the update method of Observer
-     * @param o
-     * @param arg
+     * @param o Observable
+     * @param arg Arguments
      */
     @Override
     public void update(Observable o, Object arg) {
 
         if(arg instanceof String) {
 
-            String message = (String) arg;
-
             //If the message is NEW_MESSAGE
-            if(message.equals("NEW_MESSAGE") && this.receiveMessages == true) {
+            if(arg.equals("NEW_MESSAGE") && this.receiveMessages) {
 
                 //Interrupt the sleep() for handling the incoming messages)
                 this.interrupt();
             }
 
             //If the message is USER_DISCONNECTED
-            if(message.equals("USER_DISCONNECTED")) {
+            if(arg.equals("USER_DISCONNECTED")) {
 
                 System.out.println("User disconnected during game.");
 

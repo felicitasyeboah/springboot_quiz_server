@@ -15,6 +15,6 @@ public class QuizApplication  {
 
 		SpringApplication.run(QuizApplication.class, args);
 
-		System.out.println("Superquiz");
+		System.out.println("Server started successfully.");
 	}
 }

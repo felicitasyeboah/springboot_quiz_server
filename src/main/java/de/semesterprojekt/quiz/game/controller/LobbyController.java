@@ -46,8 +46,8 @@ public class LobbyController implements Observer{
 
     /**
      * The Methods sends a message to the calling user
-     * @param message
-     * @param principal
+     * @param message Message
+     * @param principal Principal
      */
     @MessageMapping("/game")
     public void handleIncomingMessage(String message, Principal principal){
@@ -55,7 +55,7 @@ public class LobbyController implements Observer{
         //Try to get the token
         String token = gson.fromJson(message,TokenMessage.class).getToken();
         String uuid = principal.getName();
-        User user = null;
+        User user;
 
         //Check the token
         if(token != null) {
@@ -64,10 +64,16 @@ public class LobbyController implements Observer{
 
                 //Get the user
                 Optional<User> userOptional = userRepository.findByUserName(tokenProvider.getUserNameFromToken(token));
-                user = (User) userOptional.get();
 
-                //Adds a user to the lobby and checks for a match
-                addUserToLobby(user, uuid);
+                if(userOptional.isPresent()) {
+                    user = userOptional.get();
+
+                    //Adds a user to the lobby and checks for a match
+                    addUserToLobby(user, uuid);
+                } else {
+
+                    System.out.println("No user available.");
+                }
 
             } else {
 
@@ -93,7 +99,10 @@ public class LobbyController implements Observer{
                         UserAnswerMessage newMessage = new UserAnswerMessage(user, answer);
 
                         //Find the current game of the calling user and add the message
-                        getGame(user).addMessage(newMessage);
+                        Game game = getGame(user);
+                        if(game != null) {
+                            game.addMessage(newMessage);
+                        }
                     }
                 } else {
 
@@ -109,7 +118,7 @@ public class LobbyController implements Observer{
 
     /**
      * The method adds an user to the lobby
-     * @param user
+     * @param user User to be added
      */
     private void addUserToLobby(User user, String uuid) {
         if(user != null) {
@@ -142,8 +151,14 @@ public class LobbyController implements Observer{
     @EventListener
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
 
+        User user = null;
+        //Get the principal
+        Principal principal = event.getUser();
+
         //Get the calling user
-        User user = getUserFromUuid(event.getUser().getName());
+        if(principal != null) {
+            user = getUserFromUuid(principal.getName());
+        }
 
         //Get the game of the calling user (or null)
         Game game = getGame(user);
@@ -160,7 +175,7 @@ public class LobbyController implements Observer{
         } else if (user != null) {
 
             //Tell the game that a user disconnected
-            getGame(user).setDisconnected();
+            game.setDisconnected();
         }
     }
 
@@ -188,23 +203,27 @@ public class LobbyController implements Observer{
      */
     private void printConnectedUsers() {
 
-        //Set the userListSize
+        //Get the userListSize
         int userListSize = userList.size();
 
-        //Print the connected usernames
-        System.out.print("Connected Users (" + userListSize + "): ");
+        //Create a String for the usernames
+        String userListText = "";
+
+        //Add the connected user to the print text
         for(int i = userListSize; i > 0; i--) {
 
-            //Print a username
-            System.out.print("\"" + userList.get(userListSize - i).getUserName() + "\"");
+            //Append a username
+            userListText = userListText + "'" + userList.get(userListSize - i).getUserName() + "'";
             if(i > 1) {
-                System.out.print(", ");
-            } else {
-                System.out.println("");
+                userListText = userListText + ", ";
             }
         }
-        if(userListSize == 0) {
-            System.out.println("");
+
+        //Print the text
+        if(userListSize > 0) {
+            System.out.println("Connected Users (" + userListSize + "): " + userListText);
+        } else {
+            System.out.println("No connected users.");
         }
     }
 
@@ -246,20 +265,16 @@ public class LobbyController implements Observer{
         if(user != null) {
 
             //Delete username and token from userUuidMap
-            if(userUuidMap.containsKey(user.getUserName())) {
-                userUuidMap.remove(user.getUserName());
-            }
+            userUuidMap.remove(user.getUserName());
 
             //Delete User from userList
-            if(userList.contains(user)) {
-                userList.remove(user);
-            }
+            userList.remove(user);
         }
     }
 
     /**
      * Method removes a game from the game list
-     * @param game
+     * @param game Game to be deleted
      */
     public void removeGame(Game game) {
 
@@ -273,16 +288,14 @@ public class LobbyController implements Observer{
             printConnectedUsers();
 
             //Remove the game
-            if(gameList.contains(game)) {
-                gameList.remove(game);
-            }
+            gameList.remove(game);
         }
     }
 
     /**
      * Implementation of the Observer method "update"
-     * @param o
-     * @param arg
+     * @param o Observable
+     * @param arg Argument
      */
     @Override
     public void update(Observable o, Object arg) {
@@ -290,7 +303,7 @@ public class LobbyController implements Observer{
         if(arg instanceof String) {
 
             //If the message is NEW_MESSAGE
-            if(((String) arg).equals("GAME_OVER")) {
+            if(arg.equals("GAME_OVER")) {
 
                 System.out.println("The current game is over.");
 
@@ -302,17 +315,14 @@ public class LobbyController implements Observer{
 
                 //Remove the game from the list
                 removeGame((Game) o);
-
-                //Set game = null
-                game = null;
             }
         }
     }
 
     /**
      * returns a User based on the uuid and the userUuidList
-     * @param uuid
-     * @return
+     * @param uuid UUID of the user
+     * @return User with the UUID
      */
     private User getUserFromUuid(String uuid) {
 
@@ -323,7 +333,9 @@ public class LobbyController implements Observer{
 
                 //Get the user
                 Optional<User> userOptional = userRepository.findByUserName(entry.getKey());
-                return (User) userOptional.get();
+                if(userOptional.isPresent()) {
+                    return userOptional.get();
+                }
             }
         }
 

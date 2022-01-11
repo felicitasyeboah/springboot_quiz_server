@@ -1,5 +1,6 @@
 package de.semesterprojekt.quiz.fileservice.controller;
 
+import de.semesterprojekt.quiz.database.controller.UserController;
 import de.semesterprojekt.quiz.database.entity.User;
 import de.semesterprojekt.quiz.database.repository.UserRepository;
 import de.semesterprojekt.quiz.fileservice.model.FileInfo;
@@ -29,40 +30,23 @@ public class FilesController {
     FilesStorageService storageService;
 
     @Autowired
-    UserRepository userRepository;
+    UserController userController;
 
     @Autowired
     FileRenamer fileRenamer;
 
     /**
      * The method gets the file and sets it as profile image
-     * @param file
-     * @return
+     * @param file new profile image
+     * @return Success or Fail message
      */
     @PostMapping("/upload")
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
 
         try {
 
-            String username = "";
-
-            //Get username from context
-            Object principal = SecurityContextHolder
-                    .getContext()
-                    .getAuthentication()
-                    .getPrincipal();
-
-            //Set the username
-            if (principal instanceof UserDetails) {
-                username = ((UserDetails)principal)
-                        .getUsername();
-            } else {
-                username = principal
-                        .toString();
-            }
-
-            //Get the User
-            User user = (User) userRepository.findByUserName(username).get();
+            //Get the user from the securityContext
+            User user = userController.getUserFromSecurityContext(SecurityContextHolder.getContext());
 
             //Save the file
             storageService.save(file);

@@ -37,10 +37,10 @@ public class AuthController {
     /**
      * AuthContructor
      *
-     * @param userRepository
-     * @param passwordEncoder
-     * @param authenticationManager
-     * @param jwtTokenProvider
+     * @param userRepository UserRepository Instance
+     * @param passwordEncoder PasswordEncoder Instance
+     * @param authenticationManager AuthenticationManager Instance
+     * @param jwtTokenProvider JwtTokenProvider Instance
      */
     public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
         this.userRepository = userRepository;
@@ -52,8 +52,8 @@ public class AuthController {
     /**
      * Registers a new user to the system
      *
-     * @param authRequest request
-     * @return
+     * @param authRequest Request
+     * @return new User
      */
     //register route
     @CrossOrigin
@@ -64,7 +64,7 @@ public class AuthController {
 
         //return bad request when username is not available
         if (userOptional.isPresent()) {
-            System.out.println("Username \"" + authRequest.getUserName() + "\" is occupied.");
+            System.out.println("Username '" + authRequest.getUserName() + "' is occupied.");
             return ResponseEntity.badRequest().build();
         }
 
@@ -83,7 +83,7 @@ public class AuthController {
         User createdUser = userRepository.save(newUser);
 
         //return created user object
-        System.out.println("Username \"" + authRequest.getUserName() + "\" has been created.");
+        System.out.println("User '" + authRequest.getUserName() + "' has been created.");
         return ResponseEntity.ok(createdUser);
     }
 
@@ -100,7 +100,7 @@ public class AuthController {
     public ResponseEntity<Map<String, String>> login(@RequestBody AuthRequest authRequest) {
 
         //creates an authentication
-        Authentication authentication = null;
+        Authentication authentication;
 
         try {
             authentication = authenticationManager.authenticate(
@@ -112,7 +112,7 @@ public class AuthController {
             );
 
             //returns JW-Token when user is authenticated
-            System.out.println("User \"" + authRequest.getUserName().trim() + "\" successfully received a JWT.");
+            System.out.println("User '" + authRequest.getUserName().trim() + "' successfully received a JWT.");
             Map<String, String> token = new HashMap<>();
             token.put("token", jwtTokenProvider.generateToken(authentication));
             return ResponseEntity.ok(token);
@@ -120,7 +120,7 @@ public class AuthController {
         } catch (Exception exception) {
 
             //returns bad request otherwise
-            System.out.println("User \"" + authRequest.getUserName() + "\" failed to log in.");
+            System.out.println("User '" + authRequest.getUserName() + "' failed to log in.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();//badRequest().build();
         }
     }
