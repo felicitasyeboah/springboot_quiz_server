@@ -25,11 +25,10 @@ public class CategoryController {
     }
 
     /**
-     * TODO: DELETE
      * Returns a list of all categories
      * @return List of categories
      */
-    @GetMapping("")
+    @GetMapping("/all")
     public List<Category> index(){
 
         return categoryRepository.findAll();

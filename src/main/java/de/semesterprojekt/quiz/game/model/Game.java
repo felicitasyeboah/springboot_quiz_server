@@ -1,9 +1,9 @@
 package de.semesterprojekt.quiz.game.model;
 
 import de.semesterprojekt.quiz.config.GameConfig;
+import de.semesterprojekt.quiz.database.controller.QuestionController;
 import de.semesterprojekt.quiz.database.entity.Question;
 import de.semesterprojekt.quiz.database.entity.User;
-import de.semesterprojekt.quiz.database.utility.QuestionRandomizer;
 import de.semesterprojekt.quiz.game.model.message.GameMessage;
 import de.semesterprojekt.quiz.websocket.model.UserAnswerMessage;
 
@@ -29,9 +29,10 @@ public class Game extends Observable {
      * The contructor generates a new game session
      * @param user1 User 1
      * @param user2 User 2
-     * @param questionRandomizer Instance of the QuestionRandomizer
+     * @param questionController Instance of the QuestionController
      */
-    public Game(User user1, String uuidUser1, User user2, String uuidUser2, QuestionRandomizer questionRandomizer) {
+    public Game(User user1, String uuidUser1, User user2, String uuidUser2, QuestionController questionController) {
+
         //generates a new gameId
         this.gameId = gameIdGenerator++;
         this.user1 = user1;
@@ -40,7 +41,7 @@ public class Game extends Observable {
         this.uuidUser2 = uuidUser2;
         this.scoreUser1 = 0;
         this.scoreUser2 = 0;
-        this.question = questionRandomizer.getQuestions();
+        this.question = questionController.getQuestions();
         this.messageInputQueue = new LinkedList<>();
     }
 

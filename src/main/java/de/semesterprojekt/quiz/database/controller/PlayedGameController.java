@@ -8,12 +8,9 @@ import de.semesterprojekt.quiz.database.model.ScoreEntryDateComparator;
 import de.semesterprojekt.quiz.database.model.ScoreEntryScoreAndDateComparator;
 import de.semesterprojekt.quiz.database.model.UserScoreEntry;
 import de.semesterprojekt.quiz.database.repository.PlayedGameRepository;
-import de.semesterprojekt.quiz.database.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,26 +22,23 @@ import java.util.*;
  */
 @CrossOrigin
 @RestController
-@Controller
 public class PlayedGameController {
 
+    @Autowired
     private PlayedGameRepository playedGameRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserController userController;
 
     public PlayedGameController(PlayedGameRepository playedGameRepository) {
         this.playedGameRepository = playedGameRepository;
     }
 
     /**
-     * TODO: CHECK FOR HIGHSCORE
-     */
-
-    /**
      * index method that returns all played games
      * @return
      */
+    @GetMapping(path = "/all")
     private List<PlayedGame> index() {
         return playedGameRepository.findAll();
     }
@@ -89,27 +83,13 @@ public class PlayedGameController {
     @GetMapping( path = "/playedGames")
     public ResponseEntity<List<UserScoreEntry>> getAllPlayedGames(){
 
-        String username;
+        //Get the user from the context
+        User user = userController.getUserFromSecurityContext(SecurityContextHolder.getContext());
 
-        //Get username from context
-        Object principal = SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getPrincipal();
+        //Is the user present
+        if(user != null) {
 
-        //Set the username
-        if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal)
-                    .getUsername();
-        } else {
-            username = principal
-                    .toString();
-        }
-
-        //Get the userId
-        Optional<User> userOptional = userRepository.findByUserName(username);
-        if(userOptional.isPresent()) {
-            User user = userOptional.get();
+            //Get the userId
             int userId = user.getUserId();
 
             //List for all played games of the user

@@ -10,14 +10,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * The class...
- * TODO: Refer to login screen later
+ * The class is the entry point for JWT authentication
  */
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
+
         //return HTTP Status 401
         httpServletResponse.sendError((HttpServletResponse.SC_UNAUTHORIZED));
     }

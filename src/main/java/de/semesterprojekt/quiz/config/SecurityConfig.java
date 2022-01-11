@@ -53,13 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //makes every session unique
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-                //TODO: allows a user to view the api documentation without login
-                .and()
-                .authorizeRequests()
-                .antMatchers("/swagger-ui/**") // /swagger-ui
-                .permitAll()
-
-                //TODO: allows a user to view the uploaded files without token
+                //allows a user to view the uploaded files without token
                 .and()
                 .authorizeRequests()
                 .antMatchers("/files/**") // /upload

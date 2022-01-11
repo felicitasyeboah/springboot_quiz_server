@@ -2,12 +2,12 @@ package de.semesterprojekt.quiz.game.controller;
 
 import com.google.gson.Gson;
 import de.semesterprojekt.quiz.database.controller.PlayedGameController;
+import de.semesterprojekt.quiz.database.controller.QuestionController;
 import de.semesterprojekt.quiz.game.model.Game;
 import de.semesterprojekt.quiz.database.entity.User;
 import de.semesterprojekt.quiz.websocket.controller.WebsocketMessageSender;
 import de.semesterprojekt.quiz.database.repository.UserRepository;
 import de.semesterprojekt.quiz.security.jwt.JwtTokenProvider;
-import de.semesterprojekt.quiz.database.utility.QuestionRandomizer;
 import de.semesterprojekt.quiz.websocket.model.AnswerMessage;
 import de.semesterprojekt.quiz.websocket.model.TokenMessage;
 import de.semesterprojekt.quiz.websocket.model.UserAnswerMessage;
@@ -32,7 +32,7 @@ public class LobbyController implements Observer{
     WebsocketMessageSender messageSender;
 
     @Autowired
-    QuestionRandomizer questionRandomizer;
+    QuestionController questionController;
 
     @Autowired
     PlayedGameController playedGameController;
@@ -224,7 +224,7 @@ public class LobbyController implements Observer{
             User user2 = userList.get(userListSize - 1);
 
             //Create the game
-            Game newGame = new Game(user1, userUuidMap.get(user1.getUserName()), user2, userUuidMap.get(user2.getUserName()), questionRandomizer);
+            Game newGame = new Game(user1, userUuidMap.get(user1.getUserName()), user2, userUuidMap.get(user2.getUserName()), questionController);
 
             //Add game over observer
             newGame.addObserver(this);
