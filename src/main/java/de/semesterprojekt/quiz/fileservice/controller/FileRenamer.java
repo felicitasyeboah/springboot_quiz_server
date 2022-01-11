@@ -50,7 +50,7 @@ public class FileRenamer {
             }
 
             //Create an unique file name
-            String uniqueFileName = UUID.randomUUID().toString() + "." + extension;
+            String uniqueFileName = UUID.randomUUID().toString() + "." + extension.toLowerCase();
 
             //Rename file
             file.renameTo(new File(root + uniqueFileName));
