@@ -1,6 +1,7 @@
 package de.semesterprojekt.quiz.game.model.message;
 
 import de.semesterprojekt.quiz.database.entity.User;
+import de.semesterprojekt.quiz.database.model.SimpleUser;
 import lombok.Getter;
 
 /**
@@ -12,7 +13,10 @@ public class ResultMessage extends ScoreMessage {
     //Add a value that represents, that a user achieved a new highscore
     private boolean isHighScore;
 
-    public ResultMessage(User user, User opponent, int userScore, int opponentScore, boolean isHighScore) {
+    //The winner of the game
+    private SimpleUser winner;
+
+    public ResultMessage(User user, User opponent, User winner, int userScore, int opponentScore, boolean isHighScore) {
 
         //construct the extended class
         super(user, opponent, userScore, opponentScore);
@@ -20,7 +24,14 @@ public class ResultMessage extends ScoreMessage {
         //Set the type
         super.setType(MessageType.RESULT_MESSAGE);
 
-        //Set the value
+        //Set the isHighscore value
         this.isHighScore = isHighScore;
+
+        //Set the winner
+        if(winner != null) {
+            this.winner = winner.getSimpleUser();
+        } else {
+            this.winner = null;
+        }
     }
 }

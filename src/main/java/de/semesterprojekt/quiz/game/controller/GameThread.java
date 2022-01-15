@@ -138,9 +138,17 @@ public class GameThread extends Thread implements Observer {
         //Store the played game and store the isHighscore values
         Map<User,Boolean> isHighscore = playedGameController.submitPlayedGame(new PlayedGame(game.getUser1(),game.getUser2(),game.getScoreUser1(),game.getScoreUser2()));
 
+        //Get the winner (same scores -> null-object)
+        User winner = null;
+        if(game.getScoreUser1() > game.getScoreUser2()) {
+            winner = game.getUser1();
+        } else if(game.getScoreUser2() > game.getScoreUser1()) {
+            winner = game.getUser2();
+        }
+
         //Send a result-message to each user
-        messageSender.sendMessage(game.getUuidUser1(),new ResultMessage(game.getUser1(), game.getUser2(), game.getScoreUser1(), game.getScoreUser2(),isHighscore.get(game.getUser1())));
-        messageSender.sendMessage(game.getUuidUser2(),new ResultMessage(game.getUser2(), game.getUser1(), game.getScoreUser2(), game.getScoreUser1(),isHighscore.get(game.getUser2())));
+        messageSender.sendMessage(game.getUuidUser1(),new ResultMessage(game.getUser1(), game.getUser2(), winner, game.getScoreUser1(), game.getScoreUser2(),isHighscore.get(game.getUser1())));
+        messageSender.sendMessage(game.getUuidUser2(),new ResultMessage(game.getUser2(), game.getUser1(), winner, game.getScoreUser2(), game.getScoreUser1(),isHighscore.get(game.getUser2())));
 
         //Set Game over to notify the lobby
         game.setGameOver();
