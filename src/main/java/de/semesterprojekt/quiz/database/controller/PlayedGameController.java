@@ -121,7 +121,7 @@ public class PlayedGameController {
                 }
 
                 //Create the PlayedGameResult
-                PlayedGameResult result = new PlayedGameResult(user, userGameList);
+                PlayedGameResult result = new PlayedGameResult(userGameList);
 
                 //Create a PlayedGameResult object and return it
                 return ResponseEntity.ok(result);

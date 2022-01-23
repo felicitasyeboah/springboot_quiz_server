@@ -8,16 +8,14 @@ import java.util.List;
 @Getter
 public class PlayedGameResult {
 
-    User user;
     List<UserScoreEntry> playedGames;
     int wonGames = 0;
     int lostGames = 0;
     int averageScore = 0;
 
-    public PlayedGameResult(User user, List<UserScoreEntry> playedGames) {
+    public PlayedGameResult(List<UserScoreEntry> playedGames) {
 
         //Set the attributes
-        this.user = user;
         this.playedGames = playedGames;
 
         //Calculate the values
@@ -28,7 +26,7 @@ public class PlayedGameResult {
      * The method calculates the won/lost games and the average scores
      */
     private void calculateValues() {
-        if(user != null && playedGames != null) {
+        if(playedGames != null) {
             for(UserScoreEntry entry : playedGames) {
 
                 //Add won/lost games
