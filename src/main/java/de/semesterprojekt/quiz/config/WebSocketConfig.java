@@ -16,9 +16,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/websocket")
                 .setHandshakeHandler(new UserHandshakeHandler());
-        registry.addEndpoint("/websocket")
+        registry.addEndpoint("/websocket").setAllowedOrigins("http://localhost:4001")
                 .setHandshakeHandler(new UserHandshakeHandler()).withSockJS();
+        registry.addEndpoint("/websocket").setAllowedOrigins("http://192.168.178.47:4001")
+                .setHandshakeHandler(new UserHandshakeHandler());
+        registry.addEndpoint("/websocket").setAllowedOrigins("http://localhost:4001")
+                .setHandshakeHandler(new UserHandshakeHandler());
     }
+
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
