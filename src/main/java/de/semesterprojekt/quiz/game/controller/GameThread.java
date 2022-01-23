@@ -49,8 +49,8 @@ public class GameThread extends Thread implements Observer {
         System.out.println("Start game: '" + game.getUser1().getUserName() + "' vs. '" + game.getUser2().getUserName() + "'");
 
         //Send the opponent to both users
-        messageSender.sendMessage(game.getUuidUser1(), new StartMessage(game.getUser2()));
-        messageSender.sendMessage(game.getUuidUser2(), new StartMessage(game.getUser1()));
+        //messageSender.sendMessage(game.getUuidUser1(), new StartMessage(game.getUser2()));
+        //messageSender.sendMessage(game.getUuidUser2(), new StartMessage(game.getUser1()));
 
         //Start the blocking start timer
         this.startTimer = new GameTimer(this.game, this.messageSender, MessageType.START_TIMER_MESSAGE, GameConfig.DURATION_START);

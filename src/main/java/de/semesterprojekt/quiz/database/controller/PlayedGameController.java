@@ -3,10 +3,7 @@ package de.semesterprojekt.quiz.database.controller;
 import de.semesterprojekt.quiz.config.GameConfig;
 import de.semesterprojekt.quiz.database.entity.PlayedGame;
 import de.semesterprojekt.quiz.database.entity.User;
-import de.semesterprojekt.quiz.database.model.HighscoreEntry;
-import de.semesterprojekt.quiz.database.model.ScoreEntryDateComparator;
-import de.semesterprojekt.quiz.database.model.ScoreEntryScoreAndDateComparator;
-import de.semesterprojekt.quiz.database.model.UserScoreEntry;
+import de.semesterprojekt.quiz.database.model.*;
 import de.semesterprojekt.quiz.database.repository.PlayedGameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -81,7 +78,7 @@ public class PlayedGameController {
      * Returns a list of all played games of the calling user
      */
     @GetMapping( path = "/playedGames")
-    public ResponseEntity<List<UserScoreEntry>> getAllPlayedGames(){
+    public ResponseEntity<PlayedGameResult> getAllPlayedGames(){
 
         //Get the user from the context
         User user = userController.getUserFromSecurityContext(SecurityContextHolder.getContext());
@@ -95,17 +92,19 @@ public class PlayedGameController {
             //List for all played games of the user
             List<UserScoreEntry> userGameList = new ArrayList<>();
 
+            boolean wonGame;
+
             //Check all played games and create UserScoreEntry objects
             for(PlayedGame playedGameList : playedGameRepository.findAll()) {
 
                 if(playedGameList.getUser1().getUserId() == userId) {
 
-                    //Check the first player in the playedGame
+                    //The first player is the calling user
                     userGameList.add(new UserScoreEntry(playedGameList.getTimeStamp(), playedGameList.getUserScore1(), playedGameList.getUserScore2(), playedGameList.getUser2()));
 
                 } else if (playedGameList.getUser2().getUserId() == userId) {
 
-                    //Check the second player in the playedGame
+                    //The second player is the calling user
                     userGameList.add(new UserScoreEntry(playedGameList.getTimeStamp(), playedGameList.getUserScore2(), playedGameList.getUserScore1(), playedGameList.getUser1()));
                 }
             }
@@ -121,8 +120,11 @@ public class PlayedGameController {
                     userGameList = userGameList.subList(0, GameConfig.LENGTH_USER_PLAYED_GAMES_LIST);
                 }
 
-                //Return the list
-                return ResponseEntity.ok(userGameList);
+                //Create the PlayedGameResult
+                PlayedGameResult result = new PlayedGameResult(user, userGameList);
+
+                //Create a PlayedGameResult object and return it
+                return ResponseEntity.ok(result);
             }
         }
 
