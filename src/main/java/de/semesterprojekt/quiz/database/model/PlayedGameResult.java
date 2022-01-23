@@ -11,6 +11,7 @@ public class PlayedGameResult {
     List<UserScoreEntry> playedGames;
     int wonGames = 0;
     int lostGames = 0;
+    int drawGames = 0;
     int averageScore = 0;
 
     public PlayedGameResult(List<UserScoreEntry> playedGames) {
@@ -32,8 +33,10 @@ public class PlayedGameResult {
                 //Add won/lost games
                 if(entry.getUserScore() > entry.getOpponentScore()) {
                     wonGames++;
-                } else {
+                } else if (entry.getUserScore() < entry.getOpponentScore()) {
                     lostGames++;
+                } else {
+                    drawGames++;
                 }
 
                 //Add score
