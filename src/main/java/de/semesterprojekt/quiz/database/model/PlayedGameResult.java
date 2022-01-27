@@ -13,11 +13,13 @@ public class PlayedGameResult {
     int lostGames = 0;
     int drawGames = 0;
     int averageScore = 0;
+    int gameCount;
 
     public PlayedGameResult(List<UserScoreEntry> playedGames) {
 
         //Set the attributes
         this.playedGames = playedGames;
+        this.gameCount = playedGames.size();
 
         //Calculate the values
         calculateValues();
