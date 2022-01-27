@@ -74,7 +74,7 @@ public class FilesController {
 
         return ResponseEntity.status(HttpStatus.OK).body(fileInfos);
     }
-
+*/
     @GetMapping("/files/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> getFile(@PathVariable String filename) {
@@ -82,5 +82,4 @@ public class FilesController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
- */
 }
