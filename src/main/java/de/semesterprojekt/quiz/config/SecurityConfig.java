@@ -59,6 +59,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/files/**") // /upload
                 .permitAll()
 
+                //allows a user to view the uploaded files without token
+                .and()
+                .authorizeRequests()
+                .antMatchers("/profileImage/**") // /get profile image by username
+                .permitAll()
+
                 //TODO: Allow use of websockets without authentication
                 .and()
                 .authorizeRequests()
