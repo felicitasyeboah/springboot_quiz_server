@@ -5,6 +5,7 @@ import de.semesterprojekt.quiz.database.controller.PlayedGameController;
 import de.semesterprojekt.quiz.database.controller.QuestionController;
 import de.semesterprojekt.quiz.game.model.Game;
 import de.semesterprojekt.quiz.database.entity.User;
+import de.semesterprojekt.quiz.game.model.message.DisconnectMessage;
 import de.semesterprojekt.quiz.websocket.controller.WebsocketMessageSender;
 import de.semesterprojekt.quiz.database.repository.UserRepository;
 import de.semesterprojekt.quiz.security.jwt.JwtTokenProvider;
@@ -69,6 +70,7 @@ public class LobbyController implements Observer{
                     user = userOptional.get();
 
                     //Adds a user to the lobby and checks for a match
+                    //Is the user is already logged in, the first connection will be disconnected
                     addUserToLobby(user, uuid);
                 } else {
 
@@ -137,6 +139,30 @@ public class LobbyController implements Observer{
 
                 //Check for player match
                 checkMatch();
+            } else {
+
+                //Disconnect the already logged in user
+
+                //Get the uuid of the already logged in user
+                String oldLoginUuid = userUuidMap.get(user.getUserName());
+
+                //Is the user in a game?
+                if(getGame(user) != null) {
+
+                    //Tell the game that a user disconnected
+                    getGame(user).setDisconnected();
+
+                } else {
+
+                    //Remove the already logged in user
+                    removeUser(user);
+
+                    //Send a Disconnect Message
+                    messageSender.sendMessage(oldLoginUuid,new DisconnectMessage());
+
+                    //Add the new user
+                    addUserToLobby(user, uuid);
+                }
             }
         }
     }
