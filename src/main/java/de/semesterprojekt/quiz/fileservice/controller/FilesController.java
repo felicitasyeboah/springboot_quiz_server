@@ -60,7 +60,8 @@ public class FilesController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage("Could not upload the file: " + file.getOriginalFilename() + "!"));
         }
     }
-
+/*
+    //TODO: DELETE
     @GetMapping("/files")
     public ResponseEntity<List<FileInfo>> getListFiles() {
         List<FileInfo> fileInfos = storageService.loadAll().map(path -> {
@@ -81,4 +82,5 @@ public class FilesController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
+ */
 }
