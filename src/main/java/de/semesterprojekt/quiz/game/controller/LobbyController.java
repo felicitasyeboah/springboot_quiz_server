@@ -194,6 +194,9 @@ public class LobbyController implements Observer{
             user = getUserFromUuid(principal.getName());
         }
 
+        //Print the disconnected user
+        System.out.println("User '" + user.getUserName() + "' disconnected.");
+
         //Get the game of the calling user (or null)
         Game game = getGame(user);
 
