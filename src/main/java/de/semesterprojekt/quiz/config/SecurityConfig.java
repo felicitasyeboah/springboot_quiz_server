@@ -65,7 +65,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/websocket/**","/topic/user") // /Websockets
                 .permitAll()
 
-
                 //allows a user to register and login
                 .and()
                 .authorizeRequests()
