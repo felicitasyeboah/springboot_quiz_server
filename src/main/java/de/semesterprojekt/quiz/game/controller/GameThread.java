@@ -205,8 +205,8 @@ public class GameThread extends Thread implements Observer {
                 System.out.println("User disconnected during game.");
 
                 //Send a disconnect message to both users (only one is required)
-                messageSender.sendMessage(game.getUuidUser1(),new DisconnectMessage());
-                messageSender.sendMessage(game.getUuidUser2(),new DisconnectMessage());
+                messageSender.sendMessage(game.getUuidUser1(),new GenericMessage(MessageType.DISCONNECT_MESSAGE));
+                messageSender.sendMessage(game.getUuidUser2(),new GenericMessage(MessageType.DISCONNECT_MESSAGE));
 
                 //Set Game over to notify the lobby
                 game.setGameOver();
