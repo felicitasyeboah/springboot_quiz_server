@@ -185,20 +185,19 @@ public class LobbyController implements Observer{
     @EventListener
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
 
+        //Create a game and a user
         User user = null;
+        Game game = null;
         //Get the principal
         Principal principal = event.getUser();
 
         //Get the calling user
         if(principal != null) {
             user = getUserFromUuid(principal.getName());
+
+            //Get the game of the calling user (or null)
+            game = getGame(user);
         }
-
-        //Print the disconnected user
-        System.out.println("User '" + user.getUserName() + "' disconnected.");
-
-        //Get the game of the calling user (or null)
-        Game game = getGame(user);
 
         //Check if the user is in a game
         if(game == null && user != null) {
@@ -300,6 +299,9 @@ public class LobbyController implements Observer{
     public void removeUser(User user) {
 
         if(user != null) {
+
+            //Print the disconnect message
+            System.out.println("User '" + user.getUserName() + "' disconnected.");
 
             //Delete username and token from userUuidMap
             userUuidMap.remove(user.getUserName());
