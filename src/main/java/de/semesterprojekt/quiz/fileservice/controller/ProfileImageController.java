@@ -27,39 +27,6 @@ public class ProfileImageController {
     @Autowired
     ProfileImageRenamer profileImageRenamer;
 
-/*
-    //TODO: DELETE
-    @GetMapping("/files")
-    public ResponseEntity<List<FileInfo>> getListFiles() {
-        List<FileInfo> fileInfos = storageService.loadAll().map(path -> {
-            String filename = path.getFileName().toString();
-            String url = MvcUriComponentsBuilder
-                    .fromMethodName(ProfileImageController.class, "getFile", path.getFileName().toString()).build().toString();
-
-            return new FileInfo(filename, url);
-        }).collect(Collectors.toList());
-
-        return ResponseEntity.status(HttpStatus.OK).body(fileInfos);
-    }
-*/
-    /*
-    /**
-     * TODO: DELETE
-     * Load the profile image by the fileName
-     * @param filename filename
-     * @return profile image
-     */
-    /*
-    @GetMapping("/files/{filename:.+}")
-    @ResponseBody
-    public ResponseEntity<Resource> getFile(@PathVariable String filename) {
-
-        System.out.println("/files/filename wird noch genutzt!");
-        Resource file = storageService.load(filename);
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
-    }
-    */
     /**
      * The method gets the file and sets it as profile image
      * @param file new profile image
