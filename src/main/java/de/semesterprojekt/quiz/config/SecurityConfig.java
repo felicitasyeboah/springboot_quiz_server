@@ -53,13 +53,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //makes every session unique
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-                //allows a user to view the uploaded files without token
+                //allows users to upload images
+                /*
                 .and()
                 .authorizeRequests()
                 .antMatchers("/files/**") // /upload
                 .permitAll()
+                */
 
-                //allows a user to view the uploaded files without token
+                //allows users to view the profile images without token
+                //TODO: KANN WEG
                 .and()
                 .authorizeRequests()
                 .antMatchers("/profileImage/**") // /get profile image by username
@@ -68,8 +71,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //TODO: Allow use of websockets without authentication
                 .and()
                 .authorizeRequests()
+                .antMatchers("/app", "/topic","/websocket","/topic/user","/app/user","/websocket/**","/topic/**","/app/**") // /Websockets
+                .permitAll()
+
+                //TODO: KANN WEG
+                /*
+                .and()
+                .authorizeRequests()
                 .antMatchers("/app","/ws","/hello","/topic","/websocket","/resources/**","/topic/user","/app/user","/websocket/**","/topic/**","/app/**","/webjars/**","/app.js") // /Websockets
                 .permitAll()
+                */
+
+
+                //TODO: KANN WEG
+                /*
                 .and()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
@@ -77,6 +92,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .toStaticResources()
                         .atCommonLocations())
                 .permitAll()
+                */
+
 
 
                 //allows a user to register and login

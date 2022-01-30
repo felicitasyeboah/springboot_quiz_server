@@ -29,7 +29,13 @@ public class GameMessage extends ScoreMessage {
     //the index of the correct answer '1' -> answer1, '2' -> answer2,...
     private int correctAnswer;
 
-    public GameMessage(User user, User opponent, int userScore, int opponentScore, Question question) {
+    //number of total rounds
+    private int totalRounds;
+
+    //number of current round
+    private int currentRound;
+
+    public GameMessage(User user, User opponent, int userScore, int opponentScore, Question question, int currentRound, int totalRounds) {
 
         //construct the extended class
         super(user, opponent, userScore, opponentScore);
@@ -59,5 +65,9 @@ public class GameMessage extends ScoreMessage {
         answer2 = answer.get(1);
         answer3 = answer.get(2);
         answer4 = answer.get(3);
+
+        //Set the round attributes
+        this.totalRounds = totalRounds;
+        this.currentRound = currentRound;
     }
 }

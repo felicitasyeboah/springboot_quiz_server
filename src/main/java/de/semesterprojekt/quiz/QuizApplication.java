@@ -1,6 +1,6 @@
 package de.semesterprojekt.quiz;
 
-import de.semesterprojekt.quiz.fileservice.FilesStorageService;
+import de.semesterprojekt.quiz.fileservice.storageservice.FilesStorageService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import javax.annotation.Resource;

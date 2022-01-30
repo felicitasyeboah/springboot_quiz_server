@@ -148,11 +148,11 @@ public class Game extends Observable {
         //Return the GameMessage object for the specified user
         if(user == this.user1) {
 
-            return new GameMessage(this.user1, this.user2, this.scoreUser1, this.scoreUser2, this.question.get(round));
+            return new GameMessage(this.user1, this.user2, this.scoreUser1, this.scoreUser2, this.question.get(round), round + 1, question.size());
 
         } else if (user == this.user2) {
 
-            return new GameMessage(this.user2, this.user1, this.scoreUser2, this.scoreUser1, this.question.get(round));
+            return new GameMessage(this.user2, this.user1, this.scoreUser2, this.scoreUser1, this.question.get(round), round + 1, question.size());
 
         }
 

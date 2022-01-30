@@ -2,19 +2,18 @@ package de.semesterprojekt.quiz.fileservice.controller;
 
 import de.semesterprojekt.quiz.database.entity.User;
 import de.semesterprojekt.quiz.database.repository.UserRepository;
-import de.semesterprojekt.quiz.fileservice.FilesStorageService;
+import de.semesterprojekt.quiz.fileservice.storageservice.FilesStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.io.File;
-import java.nio.file.Files;
 import java.util.Random;
 import java.util.UUID;
 
 @Controller
 @CrossOrigin
-public class FileRenamer {
+public class ProfileImageRenamer {
 
     @Autowired
     FilesStorageService storageService;
