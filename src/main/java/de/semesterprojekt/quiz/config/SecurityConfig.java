@@ -59,6 +59,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/profileImage/**") // /get profile image by username
                 .permitAll()
 
+                //TODO: WTF
+                .and()
+                .authorizeRequests()
+                .antMatchers("/websocket", "/websocket/**", "/ws", "/topic", "/topic/**", "/topic/user", "/app", "/app/**", "/app/user", "/files/**", "/hello", "/resources/**", "/webjars/**", "/app.js", "/")
+                .permitAll()
+
                 //Allow use of websockets without authentication / jwt will be checked during the communication
                 .and()
                 .authorizeRequests()
