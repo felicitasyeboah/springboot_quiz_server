@@ -53,48 +53,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //makes every session unique
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-                //allows users to upload images
-                /*
-                .and()
-                .authorizeRequests()
-                .antMatchers("/files/**") // /upload
-                .permitAll()
-                */
-
                 //allows users to view the profile images without token
-                //TODO: KANN WEG
                 .and()
                 .authorizeRequests()
                 .antMatchers("/profileImage/**") // /get profile image by username
                 .permitAll()
 
-                //TODO: Allow use of websockets without authentication
+                //Allow use of websockets without authentication / jwt will be checked during the communication
                 .and()
                 .authorizeRequests()
-                .antMatchers("/app", "/topic","/websocket","/topic/user","/app/user","/websocket/**","/topic/**","/app/**") // /Websockets
+                .antMatchers("/websocket","/topic/user") // /Websockets
                 .permitAll()
-
-                //TODO: KANN WEG
-                /*
-                .and()
-                .authorizeRequests()
-                .antMatchers("/app","/ws","/hello","/topic","/websocket","/resources/**","/topic/user","/app/user","/websocket/**","/topic/**","/app/**","/webjars/**","/app.js") // /Websockets
-                .permitAll()
-                */
-
-
-                //TODO: KANN WEG
-                /*
-                .and()
-                .authorizeRequests()
-                .antMatchers("/").permitAll()
-                .requestMatchers(PathRequest
-                        .toStaticResources()
-                        .atCommonLocations())
-                .permitAll()
-                */
-
-
 
                 //allows a user to register and login
                 .and()
