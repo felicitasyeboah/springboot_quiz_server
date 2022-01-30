@@ -5,7 +5,8 @@ import de.semesterprojekt.quiz.database.controller.PlayedGameController;
 import de.semesterprojekt.quiz.database.controller.QuestionController;
 import de.semesterprojekt.quiz.game.model.Game;
 import de.semesterprojekt.quiz.database.entity.User;
-import de.semesterprojekt.quiz.game.model.message.DisconnectMessage;
+import de.semesterprojekt.quiz.game.model.message.GenericMessage;
+import de.semesterprojekt.quiz.game.model.message.MessageType;
 import de.semesterprojekt.quiz.websocket.controller.WebsocketMessageSender;
 import de.semesterprojekt.quiz.database.repository.UserRepository;
 import de.semesterprojekt.quiz.security.jwt.JwtTokenProvider;
@@ -74,11 +75,16 @@ public class LobbyController implements Observer{
                     addUserToLobby(user, uuid);
                 } else {
 
+                    //Print error message
                     System.out.println("No user available.");
                 }
 
             } else {
 
+                //Send an invalid token message
+                messageSender.sendMessage(uuid, new GenericMessage(MessageType.INVALID_TOKEN_MESSAGE));
+
+                //Print error message
                 System.out.println("The token is not valid.");
             }
         }
@@ -108,11 +114,13 @@ public class LobbyController implements Observer{
                     }
                 } else {
 
+                    //Print error message
                     System.out.println("User is not authenticated.");
                 }
 
             } else {
 
+                //Print error message
                 System.out.println("The websocket message is not valid.");
             }
         }
@@ -158,7 +166,7 @@ public class LobbyController implements Observer{
                     removeUser(user);
 
                     //Send a Disconnect Message
-                    messageSender.sendMessage(oldLoginUuid,new DisconnectMessage());
+                    messageSender.sendMessage(oldLoginUuid,new GenericMessage(MessageType.DISCONNECT_MESSAGE));
 
                     //Add the new user
                     addUserToLobby(user, uuid);
