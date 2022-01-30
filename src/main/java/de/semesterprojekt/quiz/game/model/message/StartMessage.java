@@ -15,8 +15,10 @@ public class StartMessage extends GenericMessage {
 
     public StartMessage(User opponent) {
 
+
+
         //construct the extended class
-        super.setType(MessageType.START_MESSAGE);
+        super(MessageType.START_MESSAGE);
 
         //Set the opponent
         if(opponent != null) {

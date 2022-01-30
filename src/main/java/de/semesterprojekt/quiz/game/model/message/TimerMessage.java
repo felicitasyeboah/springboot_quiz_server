@@ -14,10 +14,7 @@ public class TimerMessage extends GenericMessage {
     public TimerMessage(MessageType type, int timeLeft) {
 
         //construct the extended class
-        super();
-
-        //Set the type
-        super.setType(type);
+        super(type);
 
         //Set the value
         this.timeLeft = timeLeft;

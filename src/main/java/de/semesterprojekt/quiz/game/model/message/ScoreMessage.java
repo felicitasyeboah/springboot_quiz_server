@@ -21,10 +21,7 @@ public class ScoreMessage extends GenericMessage {
     public ScoreMessage(User user, User opponent, int userScore, int opponentScore) {
 
         //construct the extended class
-        super();
-
-        //Set the type
-        super.setType(MessageType.SCORE_MESSAGE);
+        super(MessageType.SCORE_MESSAGE);
 
         //Set the users
         this.user = user.getSimpleUser();

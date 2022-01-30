@@ -10,9 +10,9 @@ public class GenericMessage {
 
     private MessageType type;
 
-    public GenericMessage() {
+    public GenericMessage(MessageType messageType) {
 
         //Set the type
-        this.type = MessageType.GENERIC_MESSAGE;
+        this.type = messageType;
     }
 }
