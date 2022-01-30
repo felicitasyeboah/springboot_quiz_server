@@ -21,11 +21,11 @@ public class WebsocketMessageSender {
     Gson gson = new Gson();
 
     /**
-     * The method sends a websocket message to a specific user (by token)
-     * @param token token of the user
+     * The method sends a websocket message to a specific user (by websocket uuid)
+     * @param uuid token of the user
      * @param message message
      */
-    public void sendMessage(String token, GenericMessage message) {
+    public void sendMessage(String uuid, GenericMessage message) {
 
         //Create a map and add the message-type header
         Map<String, List<String>> nativeHeaders = new HashMap<>();
@@ -39,6 +39,6 @@ public class WebsocketMessageSender {
         System.out.println("type: \"" + message.getType().toString() + "\", message: " + gson.toJson(message));
 
         //Send message to user
-        template.convertAndSendToUser(token , "/topic/game", gson.toJson(message), headers);
+        template.convertAndSendToUser(uuid , "/topic/game", gson.toJson(message), headers);
     }
 }
