@@ -11,6 +11,9 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
+/**
+ * The class offers a jwt generator, a method to get the user out of the token and a token validation
+ */
 @Component
 @Slf4j
 public class JwtTokenProvider {

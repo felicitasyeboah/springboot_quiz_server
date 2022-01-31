@@ -11,6 +11,9 @@ import java.io.File;
 import java.util.Random;
 import java.util.UUID;
 
+/**
+ * The class offers a method to uniquely rename profile images
+ */
 @Controller
 @CrossOrigin
 public class ProfileImageRenamer {

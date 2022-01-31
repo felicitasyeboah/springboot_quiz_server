@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
- * The class represents an answer object from a user
+ * The class represents an answer message from a user
  */
 @Data
 @AllArgsConstructor

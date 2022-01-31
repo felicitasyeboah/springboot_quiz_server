@@ -21,6 +21,9 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import java.security.Principal;
 import java.util.*;
 
+/**
+ * The class implements the logic of the game lobby and handles incoming websocket messages
+ */
 @Controller
 public class LobbyController implements Observer{
 

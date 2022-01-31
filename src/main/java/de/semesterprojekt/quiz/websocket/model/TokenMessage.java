@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
- * The class represents a token object from a user
+ * The class represents a token message from a user
  */
 @Data
 @AllArgsConstructor

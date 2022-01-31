@@ -1,5 +1,8 @@
 package de.semesterprojekt.quiz.security.model;
 
+/**
+ * The class represents a http message
+ */
 public class ResponseMessage {
     private String message;
 

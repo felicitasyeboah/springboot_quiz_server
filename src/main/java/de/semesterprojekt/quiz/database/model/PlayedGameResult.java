@@ -1,10 +1,12 @@
 package de.semesterprojekt.quiz.database.model;
 
-import de.semesterprojekt.quiz.database.entity.User;
 import lombok.Getter;
-
 import java.util.List;
 
+/**
+ * The class represents a result for the last played games
+ * if offers a list of all games, an average score, the won, lost and drawed games and the total count of the games
+ */
 @Getter
 public class PlayedGameResult {
 
@@ -15,6 +17,10 @@ public class PlayedGameResult {
     int averageScore = 0;
     int gameCount;
 
+    /**
+     * Contructor
+     * @param playedGames list of played games
+     */
     public PlayedGameResult(List<UserScoreEntry> playedGames) {
 
         //Set the attributes

@@ -10,6 +10,9 @@ import java.security.Principal;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * The class sets the principal for each websocket connection
+ */
 public class UserHandshakeHandler extends DefaultHandshakeHandler {
 
     @Autowired

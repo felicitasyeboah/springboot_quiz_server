@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.*;
 
 /**
- * The class controls the REST-mapping for the PlayedGames-entity
+ * The class controls the REST-mapping and offers a public method for the PlayedGames-entity
  */
 @CrossOrigin
 @RestController

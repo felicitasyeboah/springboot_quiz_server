@@ -14,6 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * The class offer the profile image upload and download
+ */
 @Controller
 @CrossOrigin
 public class ProfileImageController {

@@ -8,8 +8,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
-/**
- * The class controls the REST-mapping for the User-entity
+/** TODO: DELETE CrossOrigin/RestController -> Controller
+ * The class offers a few methods for the User-entity
  */
 @CrossOrigin("http://localhost:8080")
 @RestController
@@ -27,6 +27,7 @@ public class UserController {
     }
 
     /**
+     * TODO: DELETE
      * Returns the user object of the calling user
      * @return All users
      */

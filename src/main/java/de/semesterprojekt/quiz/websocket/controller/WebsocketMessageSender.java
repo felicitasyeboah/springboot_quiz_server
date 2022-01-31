@@ -12,6 +12,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The class offers a method to send messages to websocket users
+ */
 @Controller
 public class WebsocketMessageSender {
 

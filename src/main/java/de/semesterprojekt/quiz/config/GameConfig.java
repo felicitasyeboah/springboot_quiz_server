@@ -1,5 +1,8 @@
 package de.semesterprojekt.quiz.config;
 
+/**
+ * The class configures the game settings
+ */
 public class GameConfig {
 
     //The count of the questions

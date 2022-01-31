@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * The class controls the methods for the Question-entity
+ * The class offers the methods for the Question-entity
  */
 @Controller
 public class QuestionController {

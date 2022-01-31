@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * The class represents an answer message from a user
+ * The class represents an answer message with the user from a user
  */
 @Getter
 @Setter

@@ -17,6 +17,13 @@ public class UserScoreEntry extends ScoreEntry {
     private int opponentScore;
     private SimpleUser opponent;
 
+    /**
+     * Contructor
+     * @param timeStamp timestamp
+     * @param userScore score of the user
+     * @param opponentScore score of the opponent
+     * @param opponent opponent user object
+     */
     public UserScoreEntry (Date timeStamp, int userScore, int opponentScore, User opponent) {
 
         super(timeStamp, userScore);
