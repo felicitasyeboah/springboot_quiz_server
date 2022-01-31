@@ -53,22 +53,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //makes every session unique
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-                //allows users to view the profile images without token
+                /**
+                 * Allow users to use following functions without authentication
+                 * "/auth/**": register and login
+                 * "/websocket/**": connect to the websocket
+                 * "/topic/user": subscribe to the websocket
+                 * "/profileImage/**": get profile images
+                 */
                 .and()
                 .authorizeRequests()
-                .antMatchers("/profileImage/**") // /get profile image by username
-                .permitAll()
-
-                //Allow use of websockets without authentication / jwt will be checked during the communication
-                .and()
-                .authorizeRequests()
-                .antMatchers("/websocket/**","/topic/user") // /Websockets
-                .permitAll()
-
-                //allows a user to register and login
-                .and()
-                .authorizeRequests()
-                .antMatchers("/auth/**") // /auth/register, /auth/login
+                .antMatchers("/auth/**", "/websocket/**", "/topic/user", "/profileImage/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated();
