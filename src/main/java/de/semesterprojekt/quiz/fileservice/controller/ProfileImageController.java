@@ -3,7 +3,6 @@ package de.semesterprojekt.quiz.fileservice.controller;
 import de.semesterprojekt.quiz.database.controller.UserController;
 import de.semesterprojekt.quiz.database.entity.User;
 import de.semesterprojekt.quiz.security.model.ResponseMessage;
-import de.semesterprojekt.quiz.fileservice.storageservice.FilesStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -15,14 +14,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * The class offer the profile image upload and download
+ * The class offers the rest mapping for the profile image upload and download
  */
-@Controller
+@RestController
 @CrossOrigin
 public class ProfileImageController {
 
     @Autowired
-    FilesStorageService storageService;
+    FileStorageService storageService;
 
     @Autowired
     UserController userController;
@@ -96,7 +95,7 @@ public class ProfileImageController {
             file = storageService.load(defaultFileName);
 
             //Print error message
-            System.out.println("Profile image not found. Returning a default image.");
+            System.out.println("Profile image of '" + userName + "' not found. Returning a default image.");
         }
 
         //Return the image
