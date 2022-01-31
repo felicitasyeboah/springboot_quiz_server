@@ -166,7 +166,7 @@ public class LobbyController implements Observer{
                     removeUser(user);
 
                     //Send a Disconnect Message
-                    messageSender.sendMessage(oldLoginUuid,new GenericMessage(MessageType.DISCONNECT_MESSAGE));
+                    messageSender.sendMessage(oldLoginUuid,new GenericMessage(MessageType.SESSION_EXPIRED_MESSAGE));
 
                     //Add the new user
                     addUserToLobby(user, uuid);
