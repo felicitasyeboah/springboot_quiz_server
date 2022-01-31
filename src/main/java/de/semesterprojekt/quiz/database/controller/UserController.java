@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
-/** TODO: DELETE CrossOrigin/RestController -> Controller
+/**
  * The class offers a few methods for the User-entity
  */
 @CrossOrigin("http://localhost:8080")
@@ -27,12 +27,11 @@ public class UserController {
     }
 
     /**
-     * TODO: DELETE
      * Returns the user object of the calling user
      * @return All users
      */
     @GetMapping(path = "/user")
-    public User index(){
+    public User getUser(){
 
         //Get the user from the securityContext
         return getUserFromSecurityContext(SecurityContextHolder.getContext());
