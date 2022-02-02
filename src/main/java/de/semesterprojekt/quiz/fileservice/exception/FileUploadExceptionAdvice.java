@@ -17,9 +17,15 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class FileUploadExceptionAdvice extends ResponseEntityExceptionHandler {
 
+    //Get the max file size
     @Value("${spring.servlet.multipart.max-file-size}")
     private String maxFileSize;
 
+    /**
+     * Print an error message and send a 417 http response
+     * @param exc Exception
+     * @return ResponseEntity
+     */
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ResponseEntity<ResponseMessage> handleMaxSizeException(MaxUploadSizeExceededException exc) {
 
