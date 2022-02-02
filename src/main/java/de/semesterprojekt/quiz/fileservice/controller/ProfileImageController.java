@@ -88,7 +88,7 @@ public class ProfileImageController {
         }
 
         //Create a message
-        message = "Could not upload the file: '" + fileName + "'";
+        message = "Could not upload the file. (Wrong file type)";
 
         //Print error message
         System.out.println(message);
