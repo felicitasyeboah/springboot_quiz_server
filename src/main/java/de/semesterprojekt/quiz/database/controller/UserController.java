@@ -11,7 +11,7 @@ import java.util.Optional;
 /**
  * The class offers a few methods for the User-entity
  */
-@CrossOrigin("http://localhost:8080")
+@CrossOrigin
 @RestController
 public class UserController {
 

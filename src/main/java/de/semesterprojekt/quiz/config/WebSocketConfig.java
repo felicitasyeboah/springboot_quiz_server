@@ -17,19 +17,20 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
+
+        //Endpoint for the Android client
         registry.addEndpoint("/websocket")
                 .setHandshakeHandler(new UserHandshakeHandler());
+
+        //Endpoint for the Vue client
         registry.addEndpoint("/websocket").setAllowedOrigins("http://localhost:4000")
                 .setHandshakeHandler(new UserHandshakeHandler()).withSockJS();
-        registry.addEndpoint("/websocket").setAllowedOrigins("http://192.168.178.95:4000")
-                .setHandshakeHandler(new UserHandshakeHandler());
-        registry.addEndpoint("/websocket").setAllowedOrigins("http://localhost:4000")
-                .setHandshakeHandler(new UserHandshakeHandler());
     }
 
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
+
         registry.enableSimpleBroker("/topic");
         registry.setApplicationDestinationPrefixes("/app");
     }
