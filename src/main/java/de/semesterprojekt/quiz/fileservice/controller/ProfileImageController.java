@@ -48,6 +48,8 @@ public class ProfileImageController {
 
         try {
 
+            System.out.println("ContentType: " + file.getContentType());
+
             //Check if the file is an image
             if(file.getContentType().contains("image/")) {
                 //Get the user from the securityContext
