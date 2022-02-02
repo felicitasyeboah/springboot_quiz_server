@@ -31,7 +31,7 @@ public class ProfileImageRenamer {
      * @param fileName New file name
      * @return
      */
-    public String rename(User user, String fileName) {
+    public String rename(User user, String fileName, String extension) {
 
         if(user != null) {
             try {
@@ -44,13 +44,6 @@ public class ProfileImageRenamer {
 
                 //Get the file
                 File file = new File(root + fileName);
-
-                //Get the file extension
-                String extension = "";
-                int i = fileName.lastIndexOf('.');
-                if (i > 0) {
-                    extension = fileName.substring(i+1);
-                }
 
                 //Create an unique file name
                 String uniqueFileName = UUID.randomUUID() + "." + extension.toLowerCase();

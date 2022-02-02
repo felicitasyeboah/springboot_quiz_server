@@ -31,4 +31,7 @@ public class GameConfig {
 
     //The length of the user-game-history-list
     public final static int LENGTH_USER_PLAYED_GAMES_LIST = 20;
+
+    //The allowed file types for the uploaded profile images
+    public final static String[] ALLOWED_FILE_TYPE = {"png", "jpg", "jpeg", "gif", "tiff", "bmp"};
 }

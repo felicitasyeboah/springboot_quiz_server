@@ -1,5 +1,6 @@
 package de.semesterprojekt.quiz.fileservice.controller;
 
+import de.semesterprojekt.quiz.config.GameConfig;
 import de.semesterprojekt.quiz.database.controller.UserController;
 import de.semesterprojekt.quiz.database.entity.User;
 import de.semesterprojekt.quiz.security.model.ResponseMessage;
@@ -46,12 +47,21 @@ public class ProfileImageController {
         //Message for the console
         String message;
 
+        //Get the fileName
+        String fileName = file.getOriginalFilename();
+
         try {
 
-            System.out.println("ContentType: " + file.getContentType());
+            //Get the file extension
+            String extension = "";
+            int i = fileName.lastIndexOf('.');
+            if (i > 0) {
+                extension = fileName.substring(i+1);
+            }
 
-            //Check if the file is an image
-            if(file.getContentType().contains("image/")) {
+            //Check if the file has an image extension
+            if(Arrays.asList(GameConfig.ALLOWED_FILE_TYPE).contains(extension)) {
+
                 //Get the user from the securityContext
                 User user = userController.getUserFromSecurityContext(SecurityContextHolder.getContext());
 
@@ -59,16 +69,16 @@ public class ProfileImageController {
                 storageService.save(file);
 
                 //Rename the file uniquely and set it as profile image
-                String newFileName = profileImageRenamer.rename(user, file.getOriginalFilename());
+                String newFileName = profileImageRenamer.rename(user, fileName, extension);
 
                 //Create a message
-                message = user.getUserName() + " uploaded the file '" + file.getOriginalFilename() + "' successfully.";
+                message = user.getUserName() + " uploaded the file '" + fileName + "' successfully.";
 
                 //Print message
                 System.out.println(message);
 
                 //Print the new filename
-                System.out.println("'" + file.getOriginalFilename() + "' successfully renamed to '" + newFileName + "'");
+                System.out.println("'" + fileName + "' successfully renamed to '" + newFileName + "'");
 
                 //Return a HTTP response
                 return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
@@ -78,7 +88,7 @@ public class ProfileImageController {
         }
 
         //Create a message
-        message = "Could not upload the file: '" + file.getOriginalFilename() + "'";
+        message = "Could not upload the file: '" + fileName + "'";
 
         //Print error message
         System.out.println(message);
