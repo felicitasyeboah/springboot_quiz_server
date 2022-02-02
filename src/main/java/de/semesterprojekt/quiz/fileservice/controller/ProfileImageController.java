@@ -13,6 +13,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * The class offers the rest mapping for the profile image upload and download
  */
@@ -29,6 +33,8 @@ public class ProfileImageController {
     @Autowired
     ProfileImageRenamer profileImageRenamer;
 
+    //private List<String> allowedContentType = Arrays.asList("image/","Ben","Gregor","Peter");
+
     /**
      * The method gets the file and sets it as profile image
      * @param file new profile image
@@ -37,22 +43,46 @@ public class ProfileImageController {
     @PostMapping("/upload")
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
 
+        //Message for the console
+        String message;
+
         try {
 
-            //Get the user from the securityContext
-            User user = userController.getUserFromSecurityContext(SecurityContextHolder.getContext());
+            //Check if the file is an image
+            if(file.getContentType().contains("image/")) {
+                //Get the user from the securityContext
+                User user = userController.getUserFromSecurityContext(SecurityContextHolder.getContext());
 
-            //Save the file
-            storageService.save(file);
+                //Save the file
+                storageService.save(file);
 
-            //Rename the file uniquely and set it as profile image
-            profileImageRenamer.rename(user, file.getOriginalFilename());
+                //Rename the file uniquely and set it as profile image
+                String newFileName = profileImageRenamer.rename(user, file.getOriginalFilename());
 
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("Uploaded the file successfully: " + file.getOriginalFilename()));
+                //Create a message
+                message = user.getUserName() + " uploaded the file '" + file.getOriginalFilename() + "' successfully.";
+
+                //Print message
+                System.out.println(message);
+
+                //Print the new filename
+                System.out.println("'" + file.getOriginalFilename() + "' successfully renamed to '" + newFileName + "'");
+
+                //Return a HTTP response
+                return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
+            }
         } catch (Exception e) {
 
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage("Could not upload the file: " + file.getOriginalFilename() + "."));
         }
+
+        //Create a message
+        message = "Could not upload the file: '" + file.getOriginalFilename() + "'";
+
+        //Print error message
+        System.out.println(message);
+
+        //Return a HTTP response
+        return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
     }
 
     /**

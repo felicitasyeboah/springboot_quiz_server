@@ -29,8 +29,9 @@ public class ProfileImageRenamer {
      * The method renames the uploaded file to an unique file name and sets it as profile image of a user
      * @param user User, which profile image shall be changed
      * @param fileName New file name
+     * @return
      */
-    public void rename(User user, String fileName) {
+    public String rename(User user, String fileName) {
 
         if(user != null) {
             try {
@@ -83,5 +84,8 @@ public class ProfileImageRenamer {
             //Print error message when no user is available
             System.out.println("No user available.");
         }
+
+        //Return new profile image
+        return user.getProfileImage();
     }
 }
