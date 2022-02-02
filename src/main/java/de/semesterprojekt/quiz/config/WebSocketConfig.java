@@ -27,7 +27,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setHandshakeHandler(new UserHandshakeHandler()).withSockJS();
     }
 
-
+    /**
+     * The methods configures the message broker
+     * @param registry
+     */
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
 
