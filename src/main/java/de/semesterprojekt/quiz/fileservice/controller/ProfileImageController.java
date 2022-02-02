@@ -10,13 +10,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * The class offers the rest mapping for the profile image upload and download
@@ -33,8 +29,6 @@ public class ProfileImageController {
 
     @Autowired
     ProfileImageRenamer profileImageRenamer;
-
-    //private List<String> allowedContentType = Arrays.asList("image/","Ben","Gregor","Peter");
 
     /**
      * The method gets the file and sets it as profile image
