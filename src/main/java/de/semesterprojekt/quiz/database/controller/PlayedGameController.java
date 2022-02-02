@@ -35,7 +35,6 @@ public class PlayedGameController {
      * index method that returns all played games
      * @return
      */
-    @GetMapping(path = "/all")
     private List<PlayedGame> index() {
         return playedGameRepository.findAll();
     }
@@ -65,13 +64,10 @@ public class PlayedGameController {
             if(highscoreList.size() > GameConfig.LENGTH_HIGHSCORE_LIST) {
                 highscoreList = highscoreList.subList(0, GameConfig.LENGTH_HIGHSCORE_LIST);
             }
-
-            //Return the List
-            return ResponseEntity.ok(highscoreList);
         }
 
-        //No played games found, return a bad request
-        return ResponseEntity.badRequest().build();
+        //Return the List, null when no games have been played
+        return ResponseEntity.ok(highscoreList);
     }
 
     /**
@@ -128,8 +124,8 @@ public class PlayedGameController {
             }
         }
 
-        //No User or played games found, return a bad request
-        return ResponseEntity.badRequest().build();
+        //No User or played games found, return an empty object
+        return ResponseEntity.ok(new PlayedGameResult(null));
     }
 
     /**

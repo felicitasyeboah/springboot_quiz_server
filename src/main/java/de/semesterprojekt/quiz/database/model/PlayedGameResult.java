@@ -15,7 +15,7 @@ public class PlayedGameResult {
     int lostGames = 0;
     int drawGames = 0;
     int averageScore = 0;
-    int gameCount;
+    int gameCount = 0;
 
     /**
      * Contructor
@@ -23,9 +23,8 @@ public class PlayedGameResult {
      */
     public PlayedGameResult(List<UserScoreEntry> playedGames) {
 
-        //Set the attributes
+        //Set the attribute
         this.playedGames = playedGames;
-        this.gameCount = playedGames.size();
 
         //Calculate the values
         calculateValues();
@@ -36,6 +35,9 @@ public class PlayedGameResult {
      */
     private void calculateValues() {
         if(playedGames != null) {
+
+            gameCount = playedGames.size();
+
             for(UserScoreEntry entry : playedGames) {
 
                 //Add won/lost games
