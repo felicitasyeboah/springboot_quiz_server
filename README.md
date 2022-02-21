@@ -3,7 +3,7 @@
 # Spring Boot Server für das Quiz
 #
 # Gruppenmitglieder:
-# M.W.
-# Felicitas Yeboah
-# C.K.
+# MW - verantwortlich für den Vue.js-Client
+# Felicitas Yeboah - verantwortlich für den Android-Client
+# C.K. - verantwortlich für den Spring-Server
 #
